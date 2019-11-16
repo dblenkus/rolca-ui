@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <h1>Home</h1>
+        <h1>Profile</h1>
       </v-col>
     </v-row>
   </v-container>
@@ -12,6 +12,6 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'home',
+  name: 'profile',
 })
 </script>
