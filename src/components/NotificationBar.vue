@@ -1,14 +1,9 @@
 <template>
-  <v-snackbar
-    :value="true"
-    :top="true"
-    :right="true"
-    :color="notification.type"
-  >
-      {{ notification.message }}
-      <v-btn dark text rounded @click="closeSnackbar()">
-        Close
-      </v-btn>
+  <v-snackbar :value="true" :top="true" :right="true" :color="notification.type">
+    {{ notification.message }}
+    <v-btn dark text rounded @click="closeSnackbar()">
+      Close
+    </v-btn>
   </v-snackbar>
 </template>
 

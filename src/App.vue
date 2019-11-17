@@ -1,7 +1,6 @@
 <template>
   <v-app>
-
-    <app-header :title='app_name' />
+    <app-header :title="app_name" />
 
     <v-content>
       <notification-container></notification-container>
@@ -9,12 +8,11 @@
     </v-content>
 
     <app-footer />
-
   </v-app>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from 'vue'
 import { mapState } from 'vuex'
 
 import Footer from './components/Footer.vue'
@@ -26,10 +24,8 @@ export default Vue.extend({
   components: {
     'app-footer': Footer,
     'app-header': Header,
-    'notification-container': NotificationContainer,
+    'notification-container': NotificationContainer
   },
-  computed: mapState([
-    'app_name'
-  ])
-});
+  computed: mapState(['app_name'])
+})
 </script>

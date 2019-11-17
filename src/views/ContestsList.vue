@@ -7,14 +7,11 @@
     </v-row>
     <v-row>
       <v-col cols="4" v-for="contest in contests" :key="contest.slug">
-        <contest-card :contest="contest">
-
-        </contest-card>
+        <contest-card :contest="contest"> </contest-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
-
 
 <script lang="ts">
 import Vue from 'vue'
@@ -27,9 +24,6 @@ export default Vue.extend({
   components: {
     'contest-card': ContestCard
   },
-  computed: mapState('contest', [
-    'contests'
-  ])
+  computed: mapState('contest', ['contests'])
 })
 </script>
-

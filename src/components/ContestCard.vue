@@ -23,9 +23,7 @@ export default Vue.extend({
   props: ['contest'],
   methods: {
     contestLink() {
-      this.$router.push(
-        {'name': 'contest-details', params: {'slug': this.contest.slug}}
-      )
+      this.$router.push({ name: 'contest-details', params: { slug: this.contest.slug } })
     }
   }
 })
