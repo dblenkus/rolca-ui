@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  dev:
+    image: rolca/frontend-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: installer
+    volumes:
+      - '.:/node/app'
+      # Shade mounted modules to force node to use ones from the parent dir.
+      - 'empty:/node/app/node_modules'
+    environment:
+      # This is required for watching files on network drives, which is
+      # the case in Docker for Mac and Windows.
+      CHOKIDAR_USEPOLLING: 'true'
+    entrypoint: ['npm']
+    command: ['run', 'serve']
+    ports:
+      - '8081:8080'
+
+volumes:
+  empty:
