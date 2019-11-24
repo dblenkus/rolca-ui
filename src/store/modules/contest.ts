@@ -1,27 +1,35 @@
 import find from 'lodash/find'
 
 import { ContestType } from '@/types/api'
+import ContestService from '@/services/ContestService'
 import { ContestStateType } from '@/types/store'
 
 export const namespaced = true
 
 export const state: ContestStateType = {
-  contests: [
-    {
-      title: 'Celjska fotografska razstava 2019',
-      slug: 'celjska-fotografska-razstava-2019',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      image: ''
-    },
-    {
-      title: 'Dnevi mladinske fotografije 2020',
-      slug: 'dnevi-mladinske-fotografije-2020',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      image: ''
+  contests: []
+}
+
+export const mutations = {
+  SET_CONTESTS(state: ContestStateType, payload: Array<ContestType>) {
+    state.contests = payload
+  }
+}
+
+export const actions = {
+  async getContests({ commit, dispatch }: { commit: Function; dispatch: Function }) {
+    try {
+      const response = await ContestService.getContests()
+      commit('SET_CONTESTS', response)
+    } catch (error) {
+      let notification = {
+        type: 'error',
+        message: error.toString()
+      }
+      console.log(error.toString())
+      await dispatch('notification/add', notification, { root: true })
     }
-  ]
+  }
 }
 
 export const getters = {

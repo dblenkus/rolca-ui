@@ -21,6 +21,9 @@ import ContestCard from '../components/ContestCard.vue'
 
 export default Vue.extend({
   name: 'contests-list',
+  created() {
+    this.$store.dispatch('contest/getContests', null, { root: true })
+  },
   components: {
     'contest-card': ContestCard
   },

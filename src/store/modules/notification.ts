@@ -5,18 +5,7 @@ import { NotificationType, NotificationStateType, NotificationWithoutIdType } fr
 export const namespaced = true
 
 export const state: NotificationStateType = {
-  notifications: [
-    {
-      id: -1,
-      type: 'success',
-      message: 'This is a notification.'
-    },
-    {
-      id: -2,
-      type: 'error',
-      message: 'This is an error'
-    }
-  ]
+  notifications: []
 }
 
 let nextId: number = 1
