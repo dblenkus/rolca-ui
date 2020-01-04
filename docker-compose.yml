@@ -15,8 +15,8 @@ services:
       # This is required for watching files on network drives, which is
       # the case in Docker for Mac and Windows.
       CHOKIDAR_USEPOLLING: 'true'
-    entrypoint: ['npm']
-    command: ['run', 'serve']
+    entrypoint: ['vue-cli-service']
+    command: ['serve']
     ports:
       - '8081:8080'
 
