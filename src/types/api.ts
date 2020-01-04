@@ -4,3 +4,8 @@ export type ContestType = {
   description: string
   image: string
 }
+
+export type TokenType = {
+  token: string
+  expires: string
+}

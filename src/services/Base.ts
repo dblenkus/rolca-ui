@@ -1,10 +1,24 @@
-import axios from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+import store from '@/store/index'
 
-export const apiClient = axios.create({
-  baseURL: 'http://localhost:8000/api',
-  withCredentials: false,
+let config: AxiosRequestConfig = {
+  baseURL: 'http://localhost:8080/api',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'
   }
-})
+}
+
+const apiClient: AxiosInstance = axios.create(config)
+
+const authInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig => {
+  let token = store.getters['user/getToken']
+  if (token) {
+    config.headers['Authorization'] = `Token ${token}`
+  }
+  return config
+}
+
+apiClient.interceptors.request.use(authInterceptor)
+
+export { apiClient }
