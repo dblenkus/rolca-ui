@@ -4,7 +4,7 @@ FROM base as installer
 WORKDIR /node
 # Copy "postcss.config.js" to prevent error when Vutify doesn't find it.
 COPY package*.json postcss.config.js ./
-RUN npm install --no-progress
+RUN npm install --no-progress && npm cache clean --force
 ENV PATH /node/node_modules/.bin:$PATH
 WORKDIR /node/app
 COPY . .
