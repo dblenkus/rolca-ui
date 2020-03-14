@@ -21,7 +21,7 @@ export const actions: ActionTree<ContestStateType, RootStateType> = {
   async getContests({ commit, dispatch }) {
     try {
       const response = await ContestService.getContests()
-      commit('SET_CONTESTS', <ContestType>response.data)
+      commit('SET_CONTESTS', <ContestType>response.data.results)
     } catch (error) {
       let notification: NotificationWithoutIdType = {
         type: 'error',

@@ -2,6 +2,6 @@ import { apiClient } from './Base'
 
 export default {
   getContests() {
-    return apiClient.get('/contests')
+    return apiClient.get('contest')
   }
 }
