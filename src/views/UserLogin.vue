@@ -75,7 +75,7 @@ export default Vue.extend({
           password: this.password
         })
 
-        let next: string | null = this.$route.query.next[0]
+        let next: string | null = this.$route.query.next
         if (next) {
           this.$router.push({ path: next })
         } else {
