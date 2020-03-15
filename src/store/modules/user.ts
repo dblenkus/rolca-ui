@@ -30,6 +30,17 @@ export const actions: ActionTree<UserStateType, RootStateType> = {
   },
   logout({ commit }) {
     commit('CLEAR_TOKEN')
+  },
+  loadToken({ commit }) {
+    let tokenString = localStorage.getItem('token')
+    if (!tokenString) return
+
+    try {
+      let tokenData = JSON.parse(tokenString)
+      commit('SET_TOKEN', tokenData)
+    } catch {
+      localStorage.removeItem('token')
+    }
   }
 }
 

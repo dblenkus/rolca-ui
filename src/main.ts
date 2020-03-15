@@ -8,20 +8,12 @@ import '@mdi/font/css/materialdesignicons.css'
 
 Vue.config.productionTip = false
 
+// This must be executed before Vue is initialized for guard to use the token.
+store.dispatch('user/loadToken')
+
 new Vue({
   router,
   store,
   vuetify,
-  created() {
-    let userString = localStorage.getItem('user')
-    if (userString) {
-      try {
-        let userData = JSON.parse(userString)
-        this.$store.commit('user/SET_USER', userData)
-      } catch {
-        localStorage.removeItem('user')
-      }
-    }
-  },
   render: h => h(App)
 }).$mount('#app')
