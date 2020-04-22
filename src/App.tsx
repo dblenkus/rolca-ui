@@ -4,6 +4,7 @@ import { CssBaseline, Container } from '@material-ui/core';
 
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import Upload from './components/Upload/Upload';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,12 +23,14 @@ const App = () => {
     const classes = useStyles();
 
     return (
-        <React.Fragment>
+        <div className={classes.root}>
             <CssBaseline />
             <Header />
-            <Container className={classes.container}></Container>
+            <Container className={classes.container}>
+                <Upload />
+            </Container>
             <Footer />
-        </React.Fragment>
+        </div>
     );
 };
 
