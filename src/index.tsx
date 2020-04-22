@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-function App() {
-  return <React.Fragment></React.Fragment>;
-}
+import 'typeface-roboto';
+
+import App from './App';
 
 ReactDOM.render(<App />, document.getElementById('root'));
