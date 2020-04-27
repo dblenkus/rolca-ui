@@ -19,7 +19,7 @@ const SelectImage: React.FC<SelectImageProps> = (props: SelectImageProps) => {
         <>
             <img
                 className={classes.image}
-                src={`${process.env.PUBLIC_URL}img/no-photo.png`}
+                src={`${process.env.PUBLIC_URL}/img/no-photo.png`}
                 alt="Missing"
             />
             <Button
