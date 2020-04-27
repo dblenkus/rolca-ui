@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -14,6 +16,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const CustomButton = ({ navigate, ...rest }: { navigate: Function }) => {
+    // Rendering element with the 'navigate' prop raises an error, so we have
+    // to strip it: Warning: Invalid value for prop `navigate` on <a> tag.
+    return React.createElement(Button, rest);
+};
+
 const Header: React.FC = () => {
     const classes = useStyles();
 
@@ -23,12 +31,22 @@ const Header: React.FC = () => {
                 <Typography variant="h6" className={classes.title}>
                     Rolca
                 </Typography>
-                <Button className={classes.menuButton} color="inherit">
+                <Link
+                    to="/contests"
+                    component={CustomButton}
+                    className={classes.menuButton}
+                    color="inherit"
+                >
                     Active contests
-                </Button>
-                <Button className={classes.menuButton} color="inherit">
+                </Link>
+                <Link
+                    to="/results"
+                    component={CustomButton}
+                    className={classes.menuButton}
+                    color="inherit"
+                >
                     Results
-                </Button>
+                </Link>
                 <Dropdown loggedin={false} />
             </Toolbar>
         </AppBar>
