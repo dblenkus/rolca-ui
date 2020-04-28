@@ -47,7 +47,7 @@ const Header: React.FC = () => {
                 >
                     Results
                 </Link>
-                <Dropdown loggedin={false} />
+                <Dropdown />
             </Toolbar>
         </AppBar>
     );

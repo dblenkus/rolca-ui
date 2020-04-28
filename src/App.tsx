@@ -14,6 +14,9 @@ import RegisterView from './views/Register';
 import ResultsListView from './views/ResultsList';
 import UploadView from './views/Upload';
 
+import AuthProvider from './components/Auth/AuthProvider';
+import PrivateRoute from './components/Auth/PrivateRoute';
+
 const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: theme.spacing(2),
@@ -31,21 +34,23 @@ const App = () => {
 
     return (
         <div className={classes.root}>
-            <BrowserRouter>
-                <CssBaseline />
-                <Header />
-                <Container className={classes.container}>
-                    <Switch>
-                        <Route exact path="/" render={() => <Redirect to="/contests" />} />
-                        <Route path="/contests" component={ContestsListView} />
-                        <Route path="/contest/:id/upload" component={UploadView} />
-                        <Route path="/login" component={LoginView} />
-                        <Route path="/register" component={RegisterView} />
-                        <Route path="/results" component={ResultsListView} />
-                    </Switch>
-                </Container>
-                <Footer />
-            </BrowserRouter>
+            <AuthProvider>
+                <BrowserRouter>
+                    <CssBaseline />
+                    <Header />
+                    <Container className={classes.container}>
+                        <Switch>
+                            <Route exact path="/" render={() => <Redirect to="/contests" />} />
+                            <Route path="/contests" component={ContestsListView} />
+                            <PrivateRoute path="/contest/:id/upload" component={UploadView} />
+                            <Route path="/login" component={LoginView} />
+                            <Route path="/register" component={RegisterView} />
+                            <Route path="/results" component={ResultsListView} />
+                        </Switch>
+                    </Container>
+                    <Footer />
+                </BrowserRouter>
+            </AuthProvider>
         </div>
     );
 };

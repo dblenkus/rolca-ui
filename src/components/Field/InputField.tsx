@@ -11,6 +11,7 @@ interface InputFieldProps {
     name: string;
     label: string;
     value: string;
+    error: string | null;
     autoComplete: string;
     type: string;
     required: boolean;
@@ -23,6 +24,7 @@ class InputField extends React.Component<InputFieldProps> {
     static defaultProps = {
         type: 'text',
         value: '',
+        error: 'null',
         required: false,
         rows: 1,
         autoFocus: false,
@@ -35,7 +37,17 @@ class InputField extends React.Component<InputFieldProps> {
     };
 
     render(): React.ReactNode {
-        const { autoComplete, autoFocus, label, name, required, rows, type, value } = this.props;
+        const {
+            autoComplete,
+            autoFocus,
+            label,
+            name,
+            required,
+            rows,
+            type,
+            value,
+            error,
+        } = this.props;
 
         return (
             <TextField
@@ -52,6 +64,8 @@ class InputField extends React.Component<InputFieldProps> {
                 autoFocus={autoFocus}
                 onChange={this.onChange}
                 value={value}
+                error={error !== null}
+                helperText={error || ''}
             />
         );
     }

@@ -2,13 +2,13 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
+import { useLocation } from 'react-router-dom';
+
 import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { makeStyles } from '@material-ui/core/styles';
 
-interface Props {
-    loggedin: boolean;
-}
+import { userContext } from '../../components/Auth/AuthProvider';
 
 const useStyles = makeStyles({
     menuItem: {
@@ -17,7 +17,10 @@ const useStyles = makeStyles({
     },
 });
 
-const Dropdown: React.FC<Props> = (props: Props) => {
+const Dropdown: React.FC = () => {
+    const user = React.useContext(userContext);
+    const location = useLocation();
+
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | Element>(null);
 
@@ -29,11 +32,24 @@ const Dropdown: React.FC<Props> = (props: Props) => {
         setAnchorEl(null);
     };
 
+    const logOut = (): void => {
+        user.logout();
+        setAnchorEl(null);
+    };
+
     const publicMenu = [
         <Link to="/register" className={classes.menuItem} onClick={closeMenu} key="link-1">
             <MenuItem>Register</MenuItem>
         </Link>,
-        <Link to="/login" className={classes.menuItem} onClick={closeMenu} key="link-2">
+        <Link
+            to={{
+                pathname: '/login',
+                state: { from: location },
+            }}
+            className={classes.menuItem}
+            onClick={closeMenu}
+            key="link-2"
+        >
             <MenuItem>Login</MenuItem>
         </Link>,
     ];
@@ -42,12 +58,10 @@ const Dropdown: React.FC<Props> = (props: Props) => {
         <MenuItem key="item-1" onClick={closeMenu}>
             Profile
         </MenuItem>,
-        <MenuItem key="item-2" onClick={closeMenu}>
+        <MenuItem key="item-2" onClick={logOut}>
             Logout
         </MenuItem>,
     ];
-
-    const { loggedin } = props;
 
     return (
         <>
@@ -75,7 +89,7 @@ const Dropdown: React.FC<Props> = (props: Props) => {
                 open={Boolean(anchorEl)}
                 onClose={closeMenu}
             >
-                {loggedin ? privateMenu : publicMenu}
+                {user.isLoggedIn() ? privateMenu : publicMenu}
             </Menu>
         </>
     );

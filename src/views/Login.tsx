@@ -1,5 +1,7 @@
 import React from 'react';
 
-const LoginView = () => <>Login</>;
+import Login from '../components/Auth/Login';
+
+const LoginView = () => <Login />;
 
 export default LoginView;
