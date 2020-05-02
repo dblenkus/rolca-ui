@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link as RouterLink, Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { Card, CardContent, CardHeader, Grid, Link } from '@material-ui/core';
 
@@ -79,12 +79,16 @@ class LoginView extends React.Component<LoginViewProps, LoginViewState> {
                             />
                             <Grid container>
                                 <Grid item xs>
-                                    <Link href="#" variant="body2">
+                                    <Link
+                                        component={RouterLink}
+                                        to="/password-reset/request"
+                                        variant="body2"
+                                    >
                                         Forgot password?
                                     </Link>
                                 </Grid>
                                 <Grid item>
-                                    <Link href="#" variant="body2">
+                                    <Link component={RouterLink} to="/register" variant="body2">
                                         Don't have an account? Register
                                     </Link>
                                 </Grid>

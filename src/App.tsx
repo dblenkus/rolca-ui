@@ -12,8 +12,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import ContestsListView from './views/ContestsList';
 import LoginView from './views/Login';
 import RegisterView from './views/Register';
+import RegisterActivateView from './views/RegisterActivate';
 import ResultsListView from './views/ResultsList';
 import UploadView from './views/Upload';
+import PasswordResetRequestView from './views/PasswordResetRequest';
+import PasswordResetView from './views/PasswordReset';
 
 import AuthProvider from './components/Auth/AuthProvider';
 import Notifications from './components/Notifications/Notifications';
@@ -50,7 +53,13 @@ const App = () => {
                                 <Route path="/contests" component={ContestsListView} />
                                 <PrivateRoute path="/contest/:id/upload" component={UploadView} />
                                 <Route path="/login" component={LoginView} />
-                                <Route path="/register" component={RegisterView} />
+                                <Route exact path="/password-reset" component={PasswordResetView} />
+                                <Route
+                                    path="/password-reset/request"
+                                    component={PasswordResetRequestView}
+                                />
+                                <Route exact path="/register" component={RegisterView} />
+                                <Route path="/register/activate" component={RegisterActivateView} />
                                 <Route path="/results" component={ResultsListView} />
                             </Switch>
                         </Container>
