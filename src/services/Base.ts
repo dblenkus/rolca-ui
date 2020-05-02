@@ -1,4 +1,7 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
+
+import store from '../store/index';
+import { addNotificationError } from '../store/notifications/actions';
 
 let config: AxiosRequestConfig = {
     baseURL: 'http://localhost:8080/api/v1',
@@ -18,6 +21,12 @@ const authInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig => {
     return config;
 };
 
+const notificationsInterceptor = (error: AxiosError) => {
+    store.dispatch(addNotificationError('Network error occurred.'));
+    return Promise.reject(error);
+};
+
 apiClient.interceptors.request.use(authInterceptor);
+apiClient.interceptors.response.use((response) => response, notificationsInterceptor);
 
 export { apiClient };
