@@ -2,7 +2,7 @@ import React from 'react';
 
 import { isEmpty } from 'lodash';
 
-import UserService from '../../services/UserService';
+import UserService, { LoginPayload } from '../../services/UserService';
 
 interface AuthProviderProps {
     children: React.ReactNode;
@@ -14,7 +14,7 @@ interface AuthProviderState {
 
 export const userContext = React.createContext({
     user: {},
-    login: (email: string, password: string) => {},
+    login: (payload: LoginPayload) => {},
     logout: () => {},
     isLoggedIn: (): boolean => {
         return false;
@@ -49,8 +49,8 @@ class AuthProvider extends React.Component<AuthProviderProps, AuthProviderState>
         return user;
     };
 
-    login = async (email: string, password: string): Promise<void> => {
-        const { data } = await UserService.login(email, password);
+    login = async (payload: LoginPayload): Promise<void> => {
+        const { data } = await UserService.login(payload);
         this.setState({ user: data });
         this.saveData(data);
     };

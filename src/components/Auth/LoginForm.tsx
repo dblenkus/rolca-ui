@@ -1,41 +1,32 @@
 import React from 'react';
 
 import { Button } from '@material-ui/core';
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
-
-import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import InputField, { IInputChangeEvent } from '../Field/InputField';
 
-import { userContext } from './AuthProvider';
-
-interface LoginFormProps extends WithStyles<typeof styles>, RouteComponentProps {}
-
-interface IFields {
+export interface Fields {
     email: string;
     password: string;
     [key: string]: string;
 }
 
-interface Errors {
+export interface Errors {
     email: null | Array<string>;
     password: null | Array<string>;
     non_field_errors: null | Array<string>;
     [key: string]: any;
 }
 
-interface LoginFormState {
-    fields: IFields;
+interface LoginFormProps {
+    fields: Fields;
     errors: Errors;
-    redirect: boolean;
+    onChange: (event: IInputChangeEvent) => void;
+    onSubmit: () => Promise<void>;
 }
 
-interface LocationState {
-    from?: { pathname: string };
-}
-
-const styles = ({ spacing }: Theme) => ({
+const useStyles = makeStyles(({ spacing }) => ({
     submit: {
         margin: spacing(2, 0, 2),
         padding: spacing(1),
@@ -43,103 +34,61 @@ const styles = ({ spacing }: Theme) => ({
     alert: {
         margin: spacing(2, 0, 0),
     },
-});
+}));
 
-class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
-    static contextType = userContext;
+const LoginForm: React.FC<LoginFormProps> = (props) => {
+    const classes = useStyles();
+    const { errors, fields, onChange, onSubmit } = props;
 
-    state = {
-        fields: {
-            email: '',
-            password: '',
-        },
-        errors: {
-            email: null,
-            password: null,
-            non_field_errors: null,
-        },
-        redirect: false,
-    };
-
-    handleLogin = async (event: React.FormEvent): Promise<void> => {
-        event.preventDefault();
-        try {
-            const { email, password } = this.state.fields;
-            await this.context.login(email, password);
-            this.setState({ redirect: true });
-        } catch (error) {
-            this.setState({ errors: error.response.data });
-        }
-    };
-
-    onInputChange = ({ name, value }: IInputChangeEvent): void => {
-        this.setState((state) => {
-            const fields: IFields = Object.assign({}, state.fields);
-            const errors: Errors = Object.assign({}, state.errors);
-            fields[name] = value;
-            errors[name] = null;
-            errors.non_field_errors = null;
-            return { fields, errors };
-        });
-    };
-
-    getError = (field: string): string => {
-        const errors: Errors = this.state.errors;
+    const getError = (field: string): string => {
         return errors[field] ? errors[field].join(' ') : null;
     };
 
-    render() {
-        const { redirect } = this.state;
-        if (redirect) {
-            const { location } = this.props;
-            const state = location.state as LocationState;
-            const from = state?.from?.pathname || '/';
-            return <Redirect to={from} />;
-        }
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        onSubmit();
+    };
 
-        const { classes } = this.props;
+    return (
+        <form onSubmit={handleSubmit}>
+            <InputField
+                name="email"
+                label="Email"
+                value={fields.email}
+                error={getError('email')}
+                autoComplete="email"
+                autoFocus
+                required
+                onChange={onChange}
+            />
+            <InputField
+                name="password"
+                label="Password"
+                value={fields.password}
+                error={getError('password')}
+                autoComplete="current-password"
+                type="password"
+                required
+                onChange={onChange}
+            />
+            {getError('non_field_errors') !== null ? (
+                <Alert severity="error" className={classes.alert}>
+                    {getError('non_field_errors')}
+                </Alert>
+            ) : (
+                false
+            )}
+            <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+            >
+                Sign In
+            </Button>
+        </form>
+    );
+};
 
-        return (
-            <form onSubmit={this.handleLogin}>
-                <InputField
-                    name="email"
-                    label="Email"
-                    value={this.state.fields.email}
-                    error={this.getError('email')}
-                    autoComplete="email"
-                    autoFocus
-                    required
-                    onChange={this.onInputChange}
-                />
-                <InputField
-                    name="password"
-                    label="Password"
-                    value={this.state.fields.password}
-                    error={this.getError('password')}
-                    autoComplete="current-password"
-                    type="password"
-                    required
-                    onChange={this.onInputChange}
-                />
-                {this.getError('non_field_errors') !== null ? (
-                    <Alert severity="error" className={classes.alert}>
-                        {this.getError('non_field_errors')}
-                    </Alert>
-                ) : (
-                    false
-                )}
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                >
-                    Sign In
-                </Button>
-            </form>
-        );
-    }
-}
-
-export default withStyles(styles)(withRouter(LoginForm));
+export default LoginForm;
