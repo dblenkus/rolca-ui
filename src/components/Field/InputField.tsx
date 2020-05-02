@@ -24,7 +24,7 @@ class InputField extends React.Component<InputFieldProps> {
     static defaultProps = {
         type: 'text',
         value: '',
-        error: 'null',
+        error: null,
         required: false,
         rows: 1,
         autoFocus: false,
