@@ -8,7 +8,7 @@ import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { userContext } from '../../components/Auth/AuthProvider';
+import { userContext } from '../Auth/AuthProvider';
 
 const useStyles = makeStyles({
     menuItem: {

@@ -5,8 +5,8 @@ import { Provider } from 'react-redux';
 
 import { CssBaseline, Container } from '@material-ui/core';
 
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
+import Header from './components/Layout/Header';
+import Footer from './components/Layout/Footer';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ContestsListView from './views/ContestsList';
