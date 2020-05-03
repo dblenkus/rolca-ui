@@ -2,10 +2,10 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import notificationsReducer from './notifications/reducer';
+import notifications from './notifications/reducer';
 
 const rootReducer = combineReducers({
-    notifications: notificationsReducer,
+    notifications,
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

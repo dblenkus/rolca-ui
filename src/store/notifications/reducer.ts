@@ -6,26 +6,21 @@ import {
     NotificationsState,
 } from './types';
 
-const initialState: { notifications: Notification[] } = {
-    notifications: [],
-};
+const initialState: Notification[] = [];
 
 let nextId = 1;
 
 const reducer = (state = initialState, action: NotificationsActionTypes): NotificationsState => {
     switch (action.type) {
         case ADD_NOTIFICATION:
-            const { message, severity } = action.payload;
-            const newNotification = { id: nextId, message, severity };
+            const newNotification = { id: nextId, ...action.payload };
             nextId += 1;
-            return { notifications: [...state.notifications, newNotification] };
+            return [...state, newNotification];
 
         case DELETE_NOTIFICATION:
-            return {
-                notifications: state.notifications.filter(
-                    (notification: Notification) => notification.id !== action.meta.notificationId,
-                ),
-            };
+            return state.filter(
+                (notification: Notification) => notification.id !== action.meta.notificationId,
+            );
 
         default:
             return state;

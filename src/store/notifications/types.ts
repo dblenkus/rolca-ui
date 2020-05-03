@@ -7,7 +7,7 @@ export interface Notification {
 }
 
 export interface NotificationsState {
-    notifications: Notification[];
+    [index: number]: Notification;
 }
 
 export const ADD_NOTIFICATION = 'ADD_NOTIFICATION';

@@ -11,7 +11,7 @@ import { isUndefined } from 'util';
 const Notifications: React.FC = () => {
     const dispatch = useDispatch();
     const notification: Notification | undefined = useSelector((store: any) => {
-        const { notifications } = store.notifications;
+        const { notifications } = store;
         return notifications[notifications.length - 1];
     });
     if (notification) {
