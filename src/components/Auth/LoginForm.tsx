@@ -6,6 +6,8 @@ import { Alert } from '@material-ui/lab';
 
 import InputField, { IInputChangeEvent } from '../Field/InputField';
 
+import { authStyles } from '../../styles/general';
+
 export interface Fields {
     email: string;
     password: string;
@@ -26,15 +28,7 @@ interface LoginFormProps {
     onSubmit: () => Promise<void>;
 }
 
-const useStyles = makeStyles(({ spacing }) => ({
-    submit: {
-        margin: spacing(2, 0, 2),
-        padding: spacing(1),
-    },
-    alert: {
-        margin: spacing(2, 0, 0),
-    },
-}));
+const useStyles = makeStyles(authStyles);
 
 const LoginForm: React.FC<LoginFormProps> = (props) => {
     const classes = useStyles();

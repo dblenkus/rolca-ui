@@ -3,16 +3,14 @@ import React, { ReactNode } from 'react';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { authStyles } from '../../../styles/general';
+
 interface RegisterConfirmProps {
     title: string;
     children: ReactNode;
 }
 
-const useStyles = makeStyles(({ spacing }) => ({
-    paragraph: {
-        marginTop: spacing(2),
-    },
-}));
+const useStyles = makeStyles(authStyles);
 
 const RegisterConfirm: React.FC<RegisterConfirmProps> = (props) => {
     const classes = useStyles();

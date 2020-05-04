@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import InputField, { IInputChangeEvent } from '../Field/InputField';
 
+import { authStyles } from '../../styles/general';
+
 export interface Fields {
     new_password: string;
     [key: string]: string;
@@ -24,15 +26,7 @@ interface PasswordReserFormProps {
     onSubmit: () => Promise<void>;
 }
 
-const useStyles = makeStyles(({ spacing }) => ({
-    submit: {
-        margin: spacing(2, 0, 2),
-        padding: spacing(1),
-    },
-    alert: {
-        margin: spacing(2, 0, 0),
-    },
-}));
+const useStyles = makeStyles(authStyles);
 
 const PasswordResetForm: React.FC<PasswordReserFormProps> = (props) => {
     const classes = useStyles();

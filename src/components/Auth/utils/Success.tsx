@@ -3,21 +3,15 @@ import React from 'react';
 import { Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { authStyles } from '../../../styles/general';
+
 interface RegisterActivateSuccessProps {
     title: string;
     buttonText: string;
     onClick: () => void;
 }
 
-const useStyles = makeStyles(({ spacing }) => ({
-    button: {
-        margin: spacing(2, 0, 2),
-        padding: spacing(1),
-    },
-    paragraph: {
-        marginTop: spacing(2),
-    },
-}));
+const useStyles = makeStyles(authStyles);
 
 const RegisterActivateSuccess: React.FC<RegisterActivateSuccessProps> = (props) => {
     const classes = useStyles();
@@ -33,7 +27,7 @@ const RegisterActivateSuccess: React.FC<RegisterActivateSuccessProps> = (props) 
                 fullWidth
                 variant="contained"
                 color="primary"
-                className={classes.button}
+                className={classes.submit}
                 onClick={() => onClick()}
             >
                 {buttonText}

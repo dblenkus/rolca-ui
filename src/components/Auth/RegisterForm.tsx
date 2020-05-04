@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import InputField, { IInputChangeEvent } from '../Field/InputField';
 
+import { authStyles } from '../../styles/general';
+
 export interface Fields {
     first_name: string;
     last_name: string;
@@ -30,15 +32,7 @@ interface RegisterFormProps {
     onSubmit: () => Promise<void>;
 }
 
-const useStyles = makeStyles(({ spacing }) => ({
-    submit: {
-        margin: spacing(2, 0, 2),
-        padding: spacing(1),
-    },
-    alert: {
-        margin: spacing(2, 0, 0),
-    },
-}));
+const useStyles = makeStyles(authStyles);
 
 const RegisterForm: React.FC<RegisterFormProps> = (props) => {
     const classes = useStyles();
