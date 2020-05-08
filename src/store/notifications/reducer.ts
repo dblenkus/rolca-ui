@@ -6,7 +6,7 @@ import {
     NotificationsState,
 } from './types';
 
-const initialState: Notification[] = [];
+const initialState: NotificationsState = [];
 
 let nextId = 1;
 
