@@ -3,6 +3,10 @@ export interface ImageModel {
     file: File | undefined;
 }
 
+export interface ImageError {
+    error: string | null;
+}
+
 export interface SubmissionMeta {
     imageNumber: number;
     showDescription: boolean;
@@ -15,6 +19,13 @@ export interface SubmissionModel {
     files: ImageModel[];
 }
 
+export interface SubmissionError {
+    titleError: string | null;
+    imageErrors: {
+        [index: number]: ImageError;
+    };
+}
+
 export interface ThemeMeta {
     id: number;
     imageNumber: number;
@@ -25,4 +36,16 @@ export interface ThemeMeta {
 export interface ThemeModel {
     id: number;
     submissions: SubmissionModel[];
+}
+
+export interface ThemeError {
+    submissionErrors: {
+        [index: number]: SubmissionError;
+    };
+}
+
+export interface ContestErrors {
+    themeErrors: {
+        [index: number]: ThemeError;
+    };
 }

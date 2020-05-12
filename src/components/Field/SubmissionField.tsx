@@ -6,11 +6,18 @@ import { Grid } from '@material-ui/core';
 import InputField, { IInputChangeEvent } from './InputField';
 import ImageField from './ImageField';
 
-import { SubmissionMeta, SubmissionModel, ImageModel } from '../../types/models';
+import {
+    SubmissionError,
+    SubmissionMeta,
+    SubmissionModel,
+    ImageError,
+    ImageModel,
+} from '../../types/models';
 
 interface SubmissionFieldProps {
     inputs: SubmissionModel;
     submission: SubmissionMeta;
+    error: SubmissionError;
     onChange: (event: SubmissionModel) => void;
 }
 
@@ -41,9 +48,12 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
         file: undefined,
     });
 
+    emptyError = (): ImageError => ({ error: null });
+
     render(): React.ReactNode {
         const {
             inputs: { files, title, description },
+            error,
             submission: { imageNumber, showDescription },
         } = this.props;
 
@@ -51,6 +61,7 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
             <InputField
                 name="title"
                 value={title}
+                error={error.titleError}
                 label="Title"
                 autoComplete=""
                 required={files.length !== 0}
@@ -64,7 +75,11 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
                     const file = find(files, (f) => f.id === index) || this.newImage(index);
                     return (
                         <Grid item xs={12} sm={6} md={4} key={index}>
-                            <ImageField image={file} onChange={this.handleImageChange} />
+                            <ImageField
+                                image={file}
+                                error={error.imageErrors[file.id] || this.emptyError()}
+                                onChange={this.handleImageChange}
+                            />
                             {imageNumber === 1 ? titleField : false}
                         </Grid>
                     );

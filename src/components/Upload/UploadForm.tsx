@@ -6,7 +6,8 @@ import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 
 import ThemeField from '../Field/ThemeField';
 
-import { ThemeMeta, ThemeModel } from '../../types/models';
+import { ContestErrors, ThemeError, ThemeMeta, ThemeModel } from '../../types/models';
+import validate from '../../utils/validate';
 
 const themes: ThemeMeta[] = [
     {
@@ -25,6 +26,7 @@ const themes: ThemeMeta[] = [
 
 interface UploadFormState {
     inputs: ThemeModel[];
+    errors: ContestErrors;
 }
 
 const styles = ({ spacing }: Theme) => ({
@@ -36,12 +38,19 @@ const styles = ({ spacing }: Theme) => ({
 class UploadForm extends React.Component<WithStyles<typeof styles>, UploadFormState> {
     state = {
         inputs: [] as Array<ThemeModel>,
+        errors: { themeErrors: {} } as ContestErrors,
     };
 
-    handleUpload = (event: React.FormEvent): void => {
+    handleUpload = async (event: React.FormEvent): Promise<void> => {
         event.preventDefault();
         const { inputs } = this.state;
-        console.log(inputs);
+
+        const errors = await validate(inputs);
+        if (errors === null) {
+            console.log(inputs);
+        } else {
+            this.setState({ errors });
+        }
     };
 
     handleChange = ({ id, submissions }: ThemeModel): void => {
@@ -58,12 +67,14 @@ class UploadForm extends React.Component<WithStyles<typeof styles>, UploadFormSt
         submissions: [],
     });
 
+    emptyError = (): ThemeError => ({ submissionErrors: {} });
+
     render(): React.ReactNode {
         const { classes } = this.props;
-        const { inputs } = this.state;
+        const { errors, inputs } = this.state;
 
         return (
-            <form onSubmit={this.handleUpload}>
+            <form onSubmit={this.handleUpload} noValidate>
                 {map(themes, (theme) => {
                     const input = find(inputs, (i) => i.id === theme.id) || this.newTheme(theme.id);
                     return (
@@ -71,6 +82,7 @@ class UploadForm extends React.Component<WithStyles<typeof styles>, UploadFormSt
                             key={theme.id}
                             theme={theme}
                             inputs={input}
+                            error={errors.themeErrors[theme.id] || this.emptyError()}
                             onChange={this.handleChange}
                         />
                     );

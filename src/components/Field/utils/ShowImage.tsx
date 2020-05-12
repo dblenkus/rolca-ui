@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -7,36 +7,41 @@ import { uploadFormStyles } from '../../../styles/general';
 
 interface ShowImageProps {
     image: File;
+    error: boolean;
     handleChange: (event: React.MouseEvent) => void;
     handleRemove: (event: React.MouseEvent) => void;
 }
 
 const useStyles = makeStyles(uploadFormStyles);
 
-const ShowImage: React.FC<ShowImageProps> = React.memo((props: ShowImageProps) => {
+const ShowImage: React.FC<ShowImageProps> = (props: ShowImageProps) => {
     const classes = useStyles();
-    const { handleChange, handleRemove, image } = props;
+    const { error, handleChange, handleRemove, image } = props;
 
     const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-    if (image) {
-        const reader = new FileReader();
-        reader.onloadend = (): void => {
-            if (typeof reader.result === 'string' && reader.result !== imageUrl)
-                setImageUrl(reader.result);
-        };
-        reader.readAsDataURL(image);
-    } else {
-        setImageUrl(null);
-    }
+    useMemo(() => {
+        if (image) {
+            const reader = new FileReader();
+            reader.onload = (): void => {
+                if (typeof reader.result === 'string') setImageUrl(reader.result);
+            };
+            reader.readAsDataURL(image);
+        } else {
+            setImageUrl(null);
+        }
+    }, [image]);
+
+    let className = classes.image;
+    if (error) className += ` ${classes.error}`;
 
     return (
         <>
             {imageUrl !== null ? (
-                <img className={classes.image} src={imageUrl} alt="Preview" />
+                <img className={className} src={imageUrl} alt="Preview" />
             ) : (
                 // TODO: Loading icon
-                <img className={classes.image} src="" alt="Loading" />
+                <img className={className} src="" alt="Loading" />
             )}
             <Grid container spacing={1}>
                 <Grid item xs={6}>
@@ -64,6 +69,6 @@ const ShowImage: React.FC<ShowImageProps> = React.memo((props: ShowImageProps) =
             </Grid>
         </>
     );
-});
+};
 
 export default ShowImage;

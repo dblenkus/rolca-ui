@@ -11,6 +11,9 @@ export const uploadFormStyles = ({ spacing }: Theme) => ({
     button: {
         padding: spacing(1),
     },
+    error: {
+        border: '1px solid #f00',
+    },
 });
 
 export const authStyles = ({ spacing }: Theme) => ({

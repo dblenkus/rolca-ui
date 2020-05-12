@@ -1,14 +1,16 @@
 import React from 'react';
 
+import { FormControl, FormHelperText } from '@material-ui/core';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import SelectImage from './utils/SelectImage';
 import ShowImage from './utils/ShowImage';
 
-import { ImageModel } from '../../types/models';
+import { ImageError, ImageModel } from '../../types/models';
 
 interface ImageFieldProps {
     image: ImageModel;
+    error: ImageError;
     onChange: (event: ImageModel) => void;
 }
 
@@ -41,10 +43,14 @@ class ImageField extends React.Component<ImageFieldProps & WithStyles<typeof sty
     };
 
     render(): React.ReactNode {
-        const { classes, image } = this.props;
+        const {
+            classes,
+            image,
+            error: { error },
+        } = this.props;
 
         return (
-            <>
+            <FormControl error={!!error}>
                 <input
                     className={classes.input}
                     type="file"
@@ -56,11 +62,13 @@ class ImageField extends React.Component<ImageFieldProps & WithStyles<typeof sty
                 ) : (
                     <ShowImage
                         image={image.file}
+                        error={error !== null}
                         handleChange={this.handleClick}
                         handleRemove={this.handleRemove}
                     />
                 )}
-            </>
+                {error === null ? null : <FormHelperText>{error}</FormHelperText>}
+            </FormControl>
         );
     }
 }

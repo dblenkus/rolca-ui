@@ -7,11 +7,19 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/s
 
 import SubmissionField from './SubmissionField';
 
-import { SubmissionModel, ThemeModel, ThemeMeta, SubmissionMeta } from '../../types/models';
+import {
+    SubmissionError,
+    SubmissionModel,
+    ThemeError,
+    ThemeModel,
+    ThemeMeta,
+    SubmissionMeta,
+} from '../../types/models';
 
 interface ThemeFieldProps {
     theme: ThemeMeta;
     inputs: ThemeModel;
+    error: ThemeError;
     onChange: (event: ThemeModel) => void;
 }
 
@@ -43,10 +51,13 @@ class ThemeField extends React.Component<ThemeFieldProps & WithStyles<typeof sty
         files: [],
     });
 
+    emptyError = (): SubmissionError => ({ imageErrors: {}, titleError: null });
+
     render(): React.ReactNode {
         const {
             classes,
             inputs: { submissions },
+            error,
             theme: { isSeries, imageNumber, title },
         } = this.props;
 
@@ -74,6 +85,9 @@ class ThemeField extends React.Component<ThemeFieldProps & WithStyles<typeof sty
                                     key={index}
                                     submission={submissionMeta}
                                     inputs={submission}
+                                    error={
+                                        error.submissionErrors[submission.id] || this.emptyError()
+                                    }
                                     onChange={this.handleChange}
                                 />
                             );
