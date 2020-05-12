@@ -57,7 +57,7 @@ class UploadView extends React.Component<WithStyles<typeof styles>, UploadViewSt
         this.setState((state) => {
             let { inputs } = state;
             inputs = filter(inputs, (i) => i.id !== id);
-            inputs.push({ id, submissions });
+            if (submissions.length) inputs.push({ id, submissions });
             return { inputs };
         });
     };
