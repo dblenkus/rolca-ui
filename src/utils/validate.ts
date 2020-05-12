@@ -54,7 +54,7 @@ const validateImage = async (image: ImageModel): Promise<ImageError | null> => {
 const validateSubmission = async (submission: SubmissionModel): Promise<SubmissionError | null> => {
     const { id } = submission;
     const title = submission.title ? null : 'Please enter title.';
-    const images = await getErrors(submission.files, validateImage);
+    const images = await getErrors(submission.images, validateImage);
     return isEmpty(images) && title === null ? null : { id, title, images };
 };
 

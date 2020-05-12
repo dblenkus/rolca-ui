@@ -17,7 +17,7 @@ export interface SubmissionModel {
     id: number;
     title: string | undefined;
     description: string | undefined;
-    files: ImageModel[];
+    images: ImageModel[];
 }
 
 export interface SubmissionError {

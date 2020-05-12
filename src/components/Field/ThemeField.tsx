@@ -36,11 +36,11 @@ class ThemeField extends React.Component<ThemeFieldProps & WithStyles<typeof sty
         if (onChange) onChange(theme);
     };
 
-    handleChange = ({ id, title, description, files }: SubmissionModel): void => {
+    handleChange = ({ id, title, description, images }: SubmissionModel): void => {
         const { inputs } = this.props;
         const submissions = filter(inputs.submissions, (sub) => sub.id !== id);
-        if (some([description, title, files.length]))
-            submissions.push({ id, title, description, files });
+        if (some([description, title, images.length]))
+            submissions.push({ id, title, description, images });
         this.propagateInputs({ ...inputs, submissions });
     };
 
@@ -48,7 +48,7 @@ class ThemeField extends React.Component<ThemeFieldProps & WithStyles<typeof sty
         id,
         title: undefined,
         description: undefined,
-        files: [],
+        images: [],
     });
 
     emptyError = (id: number): SubmissionError => ({ id, images: [], title: null });

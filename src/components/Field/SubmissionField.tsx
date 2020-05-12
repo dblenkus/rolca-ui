@@ -38,9 +38,9 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
 
     handleImageChange = ({ id, file }: ImageModel): void => {
         const { inputs } = this.props;
-        const files = filter(inputs.files, (f) => f.id !== id);
-        if (file !== undefined) files.push({ id, file });
-        this.propagateInputs({ ...inputs, files });
+        const images = filter(inputs.images, (i) => i.id !== id);
+        if (file !== undefined) images.push({ id, file });
+        this.propagateInputs({ ...inputs, images });
     };
 
     newImage = (id: number): ImageModel => ({ id, file: undefined });
@@ -48,7 +48,7 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
 
     render(): React.ReactNode {
         const {
-            inputs: { files, title, description },
+            inputs: { images, title, description },
             errors,
             submission: { imageNumber, showDescription },
         } = this.props;
@@ -60,7 +60,7 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
                 error={errors.title}
                 label="Title"
                 autoComplete=""
-                required={files.length !== 0}
+                required={images.length !== 0}
                 onChange={this.handleChange}
             />
         );
@@ -68,13 +68,13 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
         return (
             <>
                 {map(range(imageNumber), (index) => {
-                    const file = find(files, (f) => f.id === index) || this.newImage(index);
+                    const image = find(images, (i) => i.id === index) || this.newImage(index);
                     const error =
-                        find(errors.images, (f) => f.id === index) || this.emptyError(index);
+                        find(errors.images, (i) => i.id === index) || this.emptyError(index);
                     return (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <ImageField
-                                image={file}
+                                image={image}
                                 errors={error}
                                 onChange={this.handleImageChange}
                             />
@@ -96,7 +96,7 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
                             value={description}
                             label="Description"
                             autoComplete=""
-                            required={files.length !== 0}
+                            required={images.length !== 0}
                             rows={3}
                             onChange={this.handleChange}
                         />
