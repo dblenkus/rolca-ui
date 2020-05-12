@@ -40,7 +40,6 @@ const validateImage = async (image: ImageModel): Promise<ImageError | null> => {
     let img: HTMLImageElement;
     try {
         img = await imageReader(file);
-        console.log(img.width, img.height);
     } catch (error) {
         return constructError('Invalid file.');
     }
