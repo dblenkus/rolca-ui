@@ -37,7 +37,7 @@ const styles = ({ spacing }: Theme) => ({
 
 class UploadView extends React.Component<WithStyles<typeof styles>, UploadViewState> {
     state = {
-        inputs: [] as Array<ThemeModel>,
+        inputs: [] as ThemeModel[],
         errors: [] as ThemeError[],
     };
 
@@ -62,11 +62,7 @@ class UploadView extends React.Component<WithStyles<typeof styles>, UploadViewSt
         });
     };
 
-    newTheme = (id: number): ThemeModel => ({
-        id,
-        submissions: [],
-    });
-
+    newTheme = (id: number): ThemeModel => ({ id, submissions: [] });
     emptyError = (id: number): ThemeError => ({ id, submissions: [] });
 
     render(): React.ReactNode {

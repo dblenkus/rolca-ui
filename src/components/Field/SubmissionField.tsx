@@ -43,11 +43,7 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
         this.propagateInputs({ ...inputs, files });
     };
 
-    newImage = (id: number): ImageModel => ({
-        id,
-        file: undefined,
-    });
-
+    newImage = (id: number): ImageModel => ({ id, file: undefined });
     emptyError = (id: number): ImageError => ({ id, file: null });
 
     render(): React.ReactNode {
