@@ -4,7 +4,8 @@ export interface ImageModel {
 }
 
 export interface ImageError {
-    error: string | null;
+    id: number;
+    file: string | null;
 }
 
 export interface SubmissionMeta {
@@ -20,10 +21,9 @@ export interface SubmissionModel {
 }
 
 export interface SubmissionError {
-    titleError: string | null;
-    imageErrors: {
-        [index: number]: ImageError;
-    };
+    id: number;
+    title: string | null;
+    images: ImageError[];
 }
 
 export interface ThemeMeta {
@@ -39,13 +39,6 @@ export interface ThemeModel {
 }
 
 export interface ThemeError {
-    submissionErrors: {
-        [index: number]: SubmissionError;
-    };
-}
-
-export interface ContestErrors {
-    themeErrors: {
-        [index: number]: ThemeError;
-    };
+    id: number;
+    submissions: SubmissionError[];
 }

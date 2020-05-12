@@ -17,7 +17,7 @@ import {
 interface SubmissionFieldProps {
     inputs: SubmissionModel;
     submission: SubmissionMeta;
-    error: SubmissionError;
+    errors: SubmissionError;
     onChange: (event: SubmissionModel) => void;
 }
 
@@ -48,12 +48,12 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
         file: undefined,
     });
 
-    emptyError = (): ImageError => ({ error: null });
+    emptyError = (id: number): ImageError => ({ id, file: null });
 
     render(): React.ReactNode {
         const {
             inputs: { files, title, description },
-            error,
+            errors,
             submission: { imageNumber, showDescription },
         } = this.props;
 
@@ -61,7 +61,7 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
             <InputField
                 name="title"
                 value={title}
-                error={error.titleError}
+                error={errors.title}
                 label="Title"
                 autoComplete=""
                 required={files.length !== 0}
@@ -73,11 +73,13 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
             <>
                 {map(range(imageNumber), (index) => {
                     const file = find(files, (f) => f.id === index) || this.newImage(index);
+                    const error =
+                        find(errors.images, (f) => f.id === index) || this.emptyError(index);
                     return (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <ImageField
                                 image={file}
-                                error={error.imageErrors[file.id] || this.emptyError()}
+                                errors={error}
                                 onChange={this.handleImageChange}
                             />
                             {imageNumber === 1 ? titleField : false}

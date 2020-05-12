@@ -6,7 +6,7 @@ import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 
 import ThemeField from '../components/Field/ThemeField';
 
-import { ContestErrors, ThemeError, ThemeMeta, ThemeModel } from '../types/models';
+import { ThemeError, ThemeMeta, ThemeModel } from '../types/models';
 import validate from '../utils/validate';
 
 const themes: ThemeMeta[] = [
@@ -26,7 +26,7 @@ const themes: ThemeMeta[] = [
 
 interface UploadViewState {
     inputs: ThemeModel[];
-    errors: ContestErrors;
+    errors: ThemeError[];
 }
 
 const styles = ({ spacing }: Theme) => ({
@@ -38,7 +38,7 @@ const styles = ({ spacing }: Theme) => ({
 class UploadView extends React.Component<WithStyles<typeof styles>, UploadViewState> {
     state = {
         inputs: [] as Array<ThemeModel>,
-        errors: { themeErrors: {} } as ContestErrors,
+        errors: [] as ThemeError[],
     };
 
     handleUpload = async (event: React.FormEvent): Promise<void> => {
@@ -67,7 +67,7 @@ class UploadView extends React.Component<WithStyles<typeof styles>, UploadViewSt
         submissions: [],
     });
 
-    emptyError = (): ThemeError => ({ submissionErrors: {} });
+    emptyError = (id: number): ThemeError => ({ id, submissions: [] });
 
     render(): React.ReactNode {
         const { classes } = this.props;
@@ -80,12 +80,15 @@ class UploadView extends React.Component<WithStyles<typeof styles>, UploadViewSt
                         {map(themes, (theme) => {
                             const input =
                                 find(inputs, (i) => i.id === theme.id) || this.newTheme(theme.id);
+                            const error =
+                                find(errors, (i) => i.id === theme.id) || this.emptyError(theme.id);
+
                             return (
                                 <ThemeField
                                     key={theme.id}
                                     theme={theme}
                                     inputs={input}
-                                    error={errors.themeErrors[theme.id] || this.emptyError()}
+                                    errors={error}
                                     onChange={this.handleChange}
                                 />
                             );

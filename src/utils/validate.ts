@@ -1,39 +1,14 @@
-import { Dictionary, isEmpty, keyBy, mapValues, omit, without } from 'lodash';
+import { isEmpty, without } from 'lodash';
 
 import {
-    ContestErrors,
+    ImageError,
     ImageModel,
+    SubmissionError,
     SubmissionModel,
     ThemeError,
     ThemeModel,
 } from '../types/models';
 import imageReader from './imageReader';
-
-interface ImageError {
-    error: string;
-}
-
-interface ImageErrorWithId extends ImageError {
-    id: number;
-}
-
-interface SubmissionError {
-    titleError: string | null;
-    imageErrors: null | {
-        [index: number]: ImageError;
-    };
-}
-
-interface SubErrorWithId extends SubmissionError {
-    id: number;
-}
-
-interface ThemeErrorWithId {
-    id: number;
-    submissionErrors: null | {
-        [index: number]: SubmissionError;
-    };
-}
 
 const asyncMap = async <T, R>(array: T[], fn: (item: T) => Promise<R>): Promise<R[]> => {
     const promises = array.map((element) => fn(element));
@@ -45,13 +20,11 @@ const getErrors = async <T, R extends object>(
     validationFn: (item: T) => Promise<R | null>,
 ) => {
     const errors = await asyncMap(values, validationFn);
-    const actualErrors = without(errors, null) as R[];
-    const errorsDict = keyBy(actualErrors, 'id');
-    return mapValues(errorsDict, (obj) => omit(obj, 'id'));
+    return without(errors, null) as R[];
 };
 
-const validateImage = async (image: ImageModel): Promise<ImageErrorWithId | null> => {
-    const constructError = (error: string): ImageErrorWithId => ({ id: image.id, error });
+const validateImage = async (image: ImageModel): Promise<ImageError | null> => {
+    const constructError = (file: string): ImageError => ({ id: image.id, file });
 
     const { file } = image;
     if (file === undefined) {
@@ -78,20 +51,20 @@ const validateImage = async (image: ImageModel): Promise<ImageErrorWithId | null
     return null;
 };
 
-const validateSubmission = async (submission: SubmissionModel): Promise<SubErrorWithId | null> => {
+const validateSubmission = async (submission: SubmissionModel): Promise<SubmissionError | null> => {
     const { id } = submission;
-    const titleError = submission.title ? null : 'Please enter title.';
-    const imageErrors = await getErrors(submission.files, validateImage);
-    return isEmpty(imageErrors) && titleError === null ? null : { id, titleError, imageErrors };
+    const title = submission.title ? null : 'Please enter title.';
+    const images = await getErrors(submission.files, validateImage);
+    return isEmpty(images) && title === null ? null : { id, title, images };
 };
 
-const validateTheme = async (theme: ThemeModel): Promise<ThemeErrorWithId | null> => {
+const validateTheme = async (theme: ThemeModel): Promise<ThemeError | null> => {
     const { id } = theme;
-    const submissionErrors = await getErrors(theme.submissions, validateSubmission);
-    return isEmpty(submissionErrors) ? null : { id, submissionErrors };
+    const submissions = await getErrors(theme.submissions, validateSubmission);
+    return isEmpty(submissions) ? null : { id, submissions };
 };
 
-export default async (inputs: ThemeModel[]): Promise<ContestErrors | null> => {
-    const themeErrors = await getErrors(inputs, validateTheme);
-    return isEmpty(themeErrors) ? null : { themeErrors: themeErrors as Dictionary<ThemeError> };
+export default async (inputs: ThemeModel[]): Promise<ThemeError[] | null> => {
+    const themes = await getErrors(inputs, validateTheme);
+    return isEmpty(themes) ? null : themes;
 };

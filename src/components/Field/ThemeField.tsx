@@ -19,7 +19,7 @@ import {
 interface ThemeFieldProps {
     theme: ThemeMeta;
     inputs: ThemeModel;
-    error: ThemeError;
+    errors: ThemeError;
     onChange: (event: ThemeModel) => void;
 }
 
@@ -51,13 +51,13 @@ class ThemeField extends React.Component<ThemeFieldProps & WithStyles<typeof sty
         files: [],
     });
 
-    emptyError = (): SubmissionError => ({ imageErrors: {}, titleError: null });
+    emptyError = (id: number): SubmissionError => ({ id, images: [], title: null });
 
     render(): React.ReactNode {
         const {
             classes,
             inputs: { submissions },
-            error,
+            errors,
             theme: { isSeries, imageNumber, title },
         } = this.props;
 
@@ -80,14 +80,15 @@ class ThemeField extends React.Component<ThemeFieldProps & WithStyles<typeof sty
                             const submission =
                                 find(submissions, (s) => s.id === index) ||
                                 this.newSubmission(index);
+                            const error =
+                                find(errors.submissions, (s) => s.id === index) ||
+                                this.emptyError(index);
                             return (
                                 <SubmissionField
                                     key={index}
                                     submission={submissionMeta}
                                     inputs={submission}
-                                    error={
-                                        error.submissionErrors[submission.id] || this.emptyError()
-                                    }
+                                    errors={error}
                                     onChange={this.handleChange}
                                 />
                             );

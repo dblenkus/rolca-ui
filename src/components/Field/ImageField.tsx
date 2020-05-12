@@ -10,7 +10,7 @@ import { ImageError, ImageModel } from '../../types/models';
 
 interface ImageFieldProps {
     image: ImageModel;
-    error: ImageError;
+    errors: ImageError;
     onChange: (event: ImageModel) => void;
 }
 
@@ -43,14 +43,10 @@ class ImageField extends React.Component<ImageFieldProps & WithStyles<typeof sty
     };
 
     render(): React.ReactNode {
-        const {
-            classes,
-            image,
-            error: { error },
-        } = this.props;
+        const { classes, image, errors } = this.props;
 
         return (
-            <FormControl error={!!error}>
+            <FormControl error={!!errors.file}>
                 <input
                     className={classes.input}
                     type="file"
@@ -62,12 +58,12 @@ class ImageField extends React.Component<ImageFieldProps & WithStyles<typeof sty
                 ) : (
                     <ShowImage
                         image={image.file}
-                        error={error !== null}
+                        error={errors.file !== null}
                         handleChange={this.handleClick}
                         handleRemove={this.handleRemove}
                     />
                 )}
-                {error === null ? null : <FormHelperText>{error}</FormHelperText>}
+                {errors.file === null ? null : <FormHelperText>{errors.file}</FormHelperText>}
             </FormControl>
         );
     }
