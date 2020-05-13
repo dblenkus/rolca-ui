@@ -1,5 +1,6 @@
 import { filter, find, map, range } from 'lodash';
 import React from 'react';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import { Grid } from '@material-ui/core';
 
@@ -13,8 +14,9 @@ import {
     ImageError,
     ImageModel,
 } from '../../types/models';
+import { uploadFormStyles } from '../../styles/general';
 
-interface SubmissionFieldProps {
+interface SubmissionFieldProps extends WithStyles<typeof uploadFormStyles> {
     inputs: SubmissionModel;
     submission: SubmissionMeta;
     errors: SubmissionError;
@@ -22,10 +24,6 @@ interface SubmissionFieldProps {
 }
 
 class SubmissionField extends React.Component<SubmissionFieldProps> {
-    static defaultProps = {
-        showDescription: false,
-    };
-
     propagateInputs = (inputs: SubmissionModel): void => {
         const { onChange } = this.props;
         if (onChange) onChange(inputs);
@@ -48,6 +46,7 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
 
     render(): React.ReactNode {
         const {
+            classes,
             inputs: { images, title, description },
             errors,
             submission: { imageNumber, showDescription },
@@ -72,7 +71,7 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
                     const error =
                         find(errors.images, (i) => i.id === index) || this.emptyError(index);
                     return (
-                        <Grid item xs={12} sm={6} md={4} key={index}>
+                        <Grid item xs={12} sm={6} md={4} key={index} className={classes.imageGrid}>
                             <ImageField
                                 image={image}
                                 errors={error}
@@ -83,15 +82,19 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
                     );
                 })}
                 {imageNumber !== 1 ? (
-                    <Grid item xs={12} sm={6} md={4}>
-                        {titleField}
-                    </Grid>
+                    <>
+                        <Grid item xs={12} className={classes.seriesClearfix}></Grid>
+                        <Grid item xs={12} sm={6} md={4} className={classes.seriesMetaGrid}>
+                            {titleField}
+                        </Grid>
+                    </>
                 ) : (
                     false
                 )}
                 {showDescription ? (
-                    <Grid item xs={12}>
+                    <Grid item xs={12} className={classes.seriesMetaGrid}>
                         <InputField
+                            className={classes.seriesMetaInput}
                             name="description"
                             value={description}
                             label="Description"
@@ -109,4 +112,4 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
     }
 }
 
-export default SubmissionField;
+export default withStyles(uploadFormStyles)(SubmissionField);

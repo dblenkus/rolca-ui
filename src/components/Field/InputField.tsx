@@ -8,6 +8,7 @@ export interface IInputChangeEvent {
 }
 
 interface InputFieldProps {
+    className: string;
     name: string;
     label: string;
     value: string;
@@ -22,6 +23,7 @@ interface InputFieldProps {
 
 class InputField extends React.Component<InputFieldProps> {
     static defaultProps = {
+        className: '',
         type: 'text',
         value: '',
         error: null,
@@ -40,6 +42,7 @@ class InputField extends React.Component<InputFieldProps> {
         const {
             autoComplete,
             autoFocus,
+            className,
             label,
             name,
             required,
@@ -51,6 +54,7 @@ class InputField extends React.Component<InputFieldProps> {
 
         return (
             <TextField
+                className={className}
                 name={name}
                 variant="outlined"
                 margin="normal"

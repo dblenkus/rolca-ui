@@ -2,11 +2,12 @@ import { filter, find, map } from 'lodash';
 import React from 'react';
 
 import { Button, Grid } from '@material-ui/core';
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import ThemeField from '../components/Field/ThemeField';
 
 import { ThemeError, ThemeMeta, ThemeModel } from '../types/models';
+import { uploadFormStyles } from '../styles/general';
 import validate from '../utils/validate';
 
 const themes: ThemeMeta[] = [
@@ -24,18 +25,14 @@ const themes: ThemeMeta[] = [
     },
 ];
 
+interface UploadViewProps extends WithStyles<typeof uploadFormStyles> {}
+
 interface UploadViewState {
     inputs: ThemeModel[];
     errors: ThemeError[];
 }
 
-const styles = ({ spacing }: Theme) => ({
-    submit: {
-        padding: spacing(2),
-    },
-});
-
-class UploadView extends React.Component<WithStyles<typeof styles>, UploadViewState> {
+class UploadView extends React.Component<UploadViewProps, UploadViewState> {
     state = {
         inputs: [] as ThemeModel[],
         errors: [] as ThemeError[],
@@ -94,7 +91,7 @@ class UploadView extends React.Component<WithStyles<typeof styles>, UploadViewSt
                             fullWidth
                             variant="contained"
                             color="primary"
-                            className={classes.submit}
+                            className={classes.submitButton}
                         >
                             Upload
                         </Button>
@@ -105,4 +102,4 @@ class UploadView extends React.Component<WithStyles<typeof styles>, UploadViewSt
     }
 }
 
-export default withStyles(styles)(UploadView);
+export default withStyles(uploadFormStyles)(UploadView);

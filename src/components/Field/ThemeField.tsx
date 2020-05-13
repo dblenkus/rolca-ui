@@ -3,10 +3,11 @@ import { filter, find, map, range, some } from 'lodash';
 import React from 'react';
 
 import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
-import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import SubmissionField from './SubmissionField';
 
+import { uploadFormStyles } from '../../styles/general';
 import {
     SubmissionError,
     SubmissionModel,
@@ -16,21 +17,14 @@ import {
     SubmissionMeta,
 } from '../../types/models';
 
-interface ThemeFieldProps {
+interface ThemeFieldProps extends WithStyles<typeof uploadFormStyles> {
     theme: ThemeMeta;
     inputs: ThemeModel;
     errors: ThemeError;
     onChange: (event: ThemeModel) => void;
 }
 
-const styles = ({ spacing }: Theme) =>
-    createStyles({
-        root: {
-            margin: spacing(4, 0),
-        },
-    });
-
-class ThemeField extends React.Component<ThemeFieldProps & WithStyles<typeof styles>> {
+class ThemeField extends React.Component<ThemeFieldProps> {
     propagateInputs = (theme: ThemeModel): void => {
         const { onChange } = this.props;
         if (onChange) onChange(theme);
@@ -69,7 +63,7 @@ class ThemeField extends React.Component<ThemeFieldProps & WithStyles<typeof sty
         };
 
         return (
-            <Card className={classes.root} raised>
+            <Card className={classes.themeCard} raised>
                 <CardHeader
                     title={title}
                     titleTypographyProps={{ align: 'center', variant: 'h3' }}
@@ -100,4 +94,4 @@ class ThemeField extends React.Component<ThemeFieldProps & WithStyles<typeof sty
     }
 }
 
-export default withStyles(styles)(ThemeField);
+export default withStyles(uploadFormStyles)(ThemeField);

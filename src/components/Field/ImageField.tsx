@@ -7,20 +7,15 @@ import SelectImage from './utils/SelectImage';
 import ShowImage from './utils/ShowImage';
 
 import { ImageError, ImageModel } from '../../types/models';
+import { uploadFormStyles } from '../../styles/general';
 
-interface ImageFieldProps {
+interface ImageFieldProps extends WithStyles<typeof uploadFormStyles> {
     image: ImageModel;
     errors: ImageError;
     onChange: (event: ImageModel) => void;
 }
 
-const styles = {
-    input: {
-        display: 'none',
-    },
-};
-
-class ImageField extends React.Component<ImageFieldProps & WithStyles<typeof styles>> {
+class ImageField extends React.Component<ImageFieldProps> {
     imageRef = React.createRef<HTMLInputElement>();
 
     handleClick = (): void => {
@@ -48,7 +43,7 @@ class ImageField extends React.Component<ImageFieldProps & WithStyles<typeof sty
         return (
             <FormControl error={!!errors.file}>
                 <input
-                    className={classes.input}
+                    className={classes.fileInput}
                     type="file"
                     onChange={this.handleChange}
                     ref={this.imageRef}
@@ -69,4 +64,4 @@ class ImageField extends React.Component<ImageFieldProps & WithStyles<typeof sty
     }
 }
 
-export default withStyles(styles)(ImageField);
+export default withStyles(uploadFormStyles)(ImageField);
