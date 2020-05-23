@@ -5,6 +5,25 @@ export interface PaginatedResponse<R> {
     previous: string | null;
 }
 
+export interface Image {
+    id: number;
+    file: string;
+}
+
+export interface Author {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+}
+
+export interface Submission {
+    id: number;
+    title: string;
+    description: string;
+    images: Image[];
+}
+
 export interface Theme {
     id: number;
     title: string;

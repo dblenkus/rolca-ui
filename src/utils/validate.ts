@@ -1,6 +1,10 @@
 import { isEmpty, without } from 'lodash';
 
 import {
+    AuthorError,
+    AuthorModel,
+    ContestError,
+    ContestModel,
     ImageError,
     ImageModel,
     SubmissionError,
@@ -63,7 +67,18 @@ const validateTheme = async (theme: ThemeModel): Promise<ThemeError | null> => {
     return isEmpty(submissions) ? null : { id, submissions };
 };
 
-export default async (inputs: ThemeModel[]): Promise<ThemeError[] | null> => {
-    const themes = await getErrors(inputs, validateTheme);
-    return isEmpty(themes) ? null : themes;
+const validateAuthor = (author: AuthorModel): AuthorError => {
+    return {
+        first_name: !author.first_name ? 'Please enter the first name.' : null,
+        last_name: !author.last_name ? 'Please enter the last name.' : null,
+        email: !author.email ? 'Please enter the email.' : null,
+    };
+};
+
+export default async (inputs: ContestModel): Promise<ContestError | null> => {
+    const themes = await getErrors(inputs.themes, validateTheme);
+    const author = validateAuthor(inputs.author);
+    return isEmpty(themes) && !author.email && !author.first_name && !author.last_name
+        ? null
+        : { author, themes };
 };
