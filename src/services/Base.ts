@@ -4,7 +4,7 @@ import store from '../store/index';
 import { addNotificationError } from '../store/notifications/actions';
 
 let config: AxiosRequestConfig = {
-    baseURL: 'http://localhost:8080/api/v1',
+    baseURL: 'http://localhost:8000/api/v1',
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -14,10 +14,13 @@ let config: AxiosRequestConfig = {
 const apiClient: AxiosInstance = axios.create(config);
 
 const authInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig => {
-    // let token = store.getters['user/getToken'];
-    // if (token) {
-    //     config.headers['Authorization'] = `Token ${token}`;
-    // }
+    const tokenString = localStorage.getItem('token');
+    if (tokenString) {
+        const token: { token: string; expires: string } = JSON.parse(tokenString);
+        if (!!token) {
+            config.headers['Authorization'] = `Token ${token['token']}`;
+        }
+    }
     return config;
 };
 
