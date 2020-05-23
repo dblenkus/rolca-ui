@@ -57,7 +57,7 @@ class AuthProvider extends React.Component<AuthProviderProps, AuthProviderState>
 
     logout = () => {
         this.setState({ user: {} });
-        this.saveData({});
+        localStorage.removeItem('token');
     };
 
     isLoggedIn = (): boolean => !isEmpty(this.state.user);
