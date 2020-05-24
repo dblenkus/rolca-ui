@@ -12,7 +12,15 @@ import { uploadFormStyles } from '../../styles/general';
 interface ImageFieldProps extends WithStyles<typeof uploadFormStyles> {
     image: ImageModel;
     errors: ImageError;
-    onChange: (event: ImageModel) => void;
+    theme_id: number;
+    submission_id: number;
+    handleImageRemove: (theme_id: number, submission_id: number, image_id: number) => void;
+    handleImageUpdate: (
+        theme_id: number,
+        submission_id: number,
+        image_id: number,
+        payload: { file: File },
+    ) => void;
 }
 
 class ImageField extends React.Component<ImageFieldProps> {
@@ -22,23 +30,17 @@ class ImageField extends React.Component<ImageFieldProps> {
         if (this.imageRef.current) this.imageRef.current.click();
     };
 
-    handleRemove = (): void => {
-        if (this.imageRef.current) this.imageRef.current.value = '';
-        const { onChange, image } = this.props;
-        onChange({ id: image.id, file: undefined });
-    };
-
     handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         event.preventDefault();
         if (event.target.files && event.target.files.length > 0) {
-            const { onChange, image } = this.props;
+            const { handleImageUpdate, theme_id, submission_id, image } = this.props;
             const file = event.target.files[0];
-            onChange({ id: image.id, file });
+            handleImageUpdate(theme_id, submission_id, image.id, { file });
         }
     };
 
     render(): React.ReactNode {
-        const { classes, image, errors } = this.props;
+        const { classes, image, errors, handleImageRemove, submission_id, theme_id } = this.props;
 
         return (
             <FormControl error={!!errors.file}>
@@ -52,10 +54,12 @@ class ImageField extends React.Component<ImageFieldProps> {
                     <SelectImage handleClick={this.handleClick} />
                 ) : (
                     <ShowImage
-                        image={image.file}
+                        imageUrl={image.url}
                         error={errors.file !== null}
                         handleChange={this.handleClick}
-                        handleRemove={this.handleRemove}
+                        handleRemove={() => {
+                            handleImageRemove(theme_id, submission_id, image.id);
+                        }}
                     />
                 )}
                 {errors.file === null ? null : <FormHelperText>{errors.file}</FormHelperText>}

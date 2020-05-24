@@ -1,4 +1,4 @@
-import { flatten } from 'lodash';
+import { flatten, without } from 'lodash';
 
 import ImageService from '../services/ImageService';
 import { ContestModel, ImageModel, SubmissionModel, ThemeModel } from '../types/models';
@@ -18,12 +18,16 @@ const asyncMap = async <T, R>(array: T[], fn: (item: T) => Promise<R>): Promise<
 
 const processImage = async (image: ImageModel): Promise<any> => {
     const { file } = image;
-    const { data } = await ImageService.uploadImage(file!);
-    return data;
+    if (image.file) {
+        const { data } = await ImageService.uploadImage(file!);
+        return data;
+    }
+    return undefined;
 };
 
 const processSubmission = async (submission: SubmissionModel): Promise<any> => {
-    const files = await asyncMap(submission.images, processImage);
+    let files = await asyncMap(submission.images, processImage);
+    files = without(files, undefined);
     const { title, description } = submission;
     return { files, title, description };
 };

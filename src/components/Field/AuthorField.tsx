@@ -2,29 +2,19 @@ import React from 'react';
 
 import { Grid } from '@material-ui/core';
 
-import InputField, { IInputChangeEvent } from './InputField';
+import InputField from './InputField';
 
-import { AuthorError, AuthorModel } from '../../types/models';
+import { AuthorError, AuthorModel, InputChange } from '../../types/models';
 
 interface AuthorFieldProps {
     inputs: AuthorModel;
     errors: AuthorError;
-    onChange: (event: AuthorModel) => void;
+    handleAUthorChange: (payload: InputChange) => void;
 }
 
 class AuthorField extends React.Component<AuthorFieldProps> {
-    propagateInputs = (inputs: AuthorModel): void => {
-        const { onChange } = this.props;
-        if (onChange) onChange(inputs);
-    };
-
-    handleChange = ({ name, value }: IInputChangeEvent): void => {
-        const { inputs } = this.props;
-        this.propagateInputs({ ...inputs, [name]: value });
-    };
-
     render(): React.ReactNode {
-        const { inputs, errors } = this.props;
+        const { inputs, errors, handleAUthorChange } = this.props;
 
         return (
             <Grid item xs={12} sm={6} md={4}>
@@ -36,7 +26,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                     autoComplete="given-name"
                     autoFocus={true}
                     required={true}
-                    onChange={this.handleChange}
+                    onChange={handleAUthorChange}
                 />
                 <InputField
                     name="last_name"
@@ -45,7 +35,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                     label="last name"
                     autoComplete="family-name"
                     required={true}
-                    onChange={this.handleChange}
+                    onChange={handleAUthorChange}
                 />
                 <InputField
                     name="email"
@@ -54,7 +44,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                     label="Email"
                     autoComplete="email"
                     required={true}
-                    onChange={this.handleChange}
+                    onChange={handleAUthorChange}
                 />
             </Grid>
         );

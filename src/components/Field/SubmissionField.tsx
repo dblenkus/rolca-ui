@@ -1,112 +1,101 @@
-import { filter, find, map, range } from 'lodash';
+import { find, map } from 'lodash';
 import React from 'react';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import { Grid } from '@material-ui/core';
 
-import InputField, { IInputChangeEvent } from './InputField';
+import InputField from './InputField';
 import ImageField from './ImageField';
 
-import {
-    SubmissionError,
-    SubmissionMeta,
-    SubmissionModel,
-    ImageError,
-    ImageModel,
-} from '../../types/models';
+import { SubmissionError, SubmissionModel, InputChange, ImageError } from '../../types/models';
 import { uploadFormStyles } from '../../styles/general';
 
 interface SubmissionFieldProps extends WithStyles<typeof uploadFormStyles> {
-    inputs: SubmissionModel;
-    submission: SubmissionMeta;
+    submission: SubmissionModel;
     errors: SubmissionError;
-    onChange: (event: SubmissionModel) => void;
+    theme_id: number;
+    handleSubmissionChange: (theme_id: number, submission_id: number, payload: InputChange) => void;
+    handleImageRemove: (theme_id: number, submission_id: number, image_id: number) => void;
+    handleImageUpdate: (
+        theme_id: number,
+        submission_id: number,
+        image_id: number,
+        payload: { file: File },
+    ) => void;
 }
 
 class SubmissionField extends React.Component<SubmissionFieldProps> {
-    propagateInputs = (inputs: SubmissionModel): void => {
-        const { onChange } = this.props;
-        if (onChange) onChange(inputs);
-    };
-
-    handleChange = ({ name, value }: IInputChangeEvent): void => {
-        const { inputs } = this.props;
-        this.propagateInputs({ ...inputs, [name]: value });
-    };
-
-    handleImageChange = ({ id, file }: ImageModel): void => {
-        const { inputs } = this.props;
-        const images = filter(inputs.images, (i) => i.id !== id);
-        if (file !== undefined) images.push({ id, file });
-        this.propagateInputs({ ...inputs, images });
-    };
-
-    newImage = (id: number): ImageModel => ({ id, file: undefined });
-    emptyError = (id: number): ImageError => ({ id, file: null });
-
     render(): React.ReactNode {
         const {
             classes,
-            inputs: { images, title, description },
+            submission,
             errors,
-            submission: { imageNumber, showDescription },
+            theme_id,
+            handleSubmissionChange,
+            handleImageRemove,
+            handleImageUpdate,
         } = this.props;
+
+        const handleChange = (payload: { name: string; value: string }): void =>
+            handleSubmissionChange(theme_id, submission.id, payload);
 
         const titleField = (
             <InputField
                 name="title"
-                value={title}
+                value={submission.title}
                 error={errors.title}
                 label="Title"
                 autoComplete=""
-                required={images.length !== 0}
-                onChange={this.handleChange}
+                required={submission.titleRequired}
+                onChange={handleChange}
             />
         );
 
         return (
             <>
-                {map(range(imageNumber), (index) => {
-                    const image = find(images, (i) => i.id === index) || this.newImage(index);
-                    const error =
-                        find(errors.images, (i) => i.id === index) || this.emptyError(index);
+                {map(submission.images, (image) => {
+                    const error = find(errors.images, (i) => i.id === image.id) as ImageError;
                     return (
-                        <Grid item xs={12} sm={6} md={4} key={index} className={classes.imageGrid}>
+                        <Grid
+                            item
+                            xs={12}
+                            sm={6}
+                            md={4}
+                            key={image.id}
+                            className={classes.imageGrid}
+                        >
                             <ImageField
                                 image={image}
                                 errors={error}
-                                onChange={this.handleImageChange}
+                                theme_id={theme_id}
+                                submission_id={submission.id}
+                                handleImageRemove={handleImageRemove}
+                                handleImageUpdate={handleImageUpdate}
                             />
-                            {imageNumber === 1 ? titleField : false}
+                            {!submission.isSeries ? titleField : null}
                         </Grid>
                     );
                 })}
-                {imageNumber !== 1 ? (
+                {submission.isSeries ? (
                     <>
                         <Grid item xs={12} className={classes.seriesClearfix}></Grid>
                         <Grid item xs={12} sm={6} md={4} className={classes.seriesMetaGrid}>
                             {titleField}
                         </Grid>
+                        <Grid item xs={12} className={classes.seriesMetaGrid}>
+                            <InputField
+                                className={classes.seriesMetaInput}
+                                name="description"
+                                value={submission.description}
+                                label="Description"
+                                autoComplete=""
+                                required={submission.descriptionRequired}
+                                rows={3}
+                                onChange={handleChange}
+                            />
+                        </Grid>
                     </>
-                ) : (
-                    false
-                )}
-                {showDescription ? (
-                    <Grid item xs={12} className={classes.seriesMetaGrid}>
-                        <InputField
-                            className={classes.seriesMetaInput}
-                            name="description"
-                            value={description}
-                            label="Description"
-                            autoComplete=""
-                            required={images.length !== 0}
-                            rows={3}
-                            onChange={this.handleChange}
-                        />
-                    </Grid>
-                ) : (
-                    false
-                )}
+                ) : null}
             </>
         );
     }

@@ -1,103 +1,79 @@
-import { filter, find, map } from 'lodash';
+import { find, map } from 'lodash';
 import React from 'react';
+
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Button, Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
-import AuthorField from '../components/Field/AuthodField';
+import { AppState } from '../store';
+import {
+    authorUpdate,
+    imageRemove,
+    imageUpdate,
+    submissionUpdate,
+    uploadInit,
+    uploadSubmit,
+} from '../store/upload/actions';
+
+import AuthorField from '../components/Field/AuthorField';
 import ThemeField from '../components/Field/ThemeField';
 
-import {
-    AuthorModel,
-    ContestError,
-    ContestMeta,
-    ContestModel,
-    ThemeError,
-    ThemeModel,
-} from '../types/models';
+import { InputChange, ThemeError } from '../types/models';
+import { Contest } from '../types/api';
 import { uploadFormStyles } from '../styles/general';
-import upload from '../utils/upload';
-import validate from '../utils/validate';
 
-const contest: ContestMeta = {
+const contest: Contest = {
+    id: 1,
+    title: 'Test contest',
     themes: [
         {
             id: 1,
             title: 'My theme',
-            imageNumber: 3,
-            isSeries: false,
+            n_photos: 3,
+            is_series: false,
         },
         {
             id: 2,
             title: 'My series',
-            imageNumber: 4,
-            isSeries: true,
+            n_photos: 4,
+            is_series: true,
         },
     ],
+    start_date: '2020-01-01T00:00:00Z',
+    end_date: '2020-12-31T23:59:59Z',
 };
 
-interface UploadViewProps extends WithStyles<typeof uploadFormStyles> {}
+interface UploadViewProps extends WithStyles<typeof uploadFormStyles>, PropsFromRedux {}
 
-interface UploadViewState {
-    inputs: ContestModel;
-    errors: ContestError;
-}
-
-class UploadView extends React.Component<UploadViewProps, UploadViewState> {
-    state = {
-        inputs: {
-            author: { first_name: '', last_name: '', email: '' },
-            themes: [],
-        } as ContestModel,
-        errors: {
-            author: { first_name: null, last_name: null, email: null },
-            themes: [],
-        } as ContestError,
-    };
-
-    handleUpload = async (event: React.FormEvent): Promise<void> => {
-        event.preventDefault();
-        const { inputs } = this.state;
-
-        const errors = await validate(inputs);
-        if (errors === null) {
-            upload(inputs);
-        } else {
-            this.setState({ errors });
-        }
-    };
-
-    handleThemeChange = ({ id, submissions }: ThemeModel): void => {
-        this.setState((state) => {
-            let {
-                inputs: { themes, author },
-            } = state;
-            themes = filter(themes, (i) => i.id !== id);
-            if (submissions.length) themes.push({ id, submissions });
-            return { inputs: { author, themes } };
-        });
-    };
-
-    handleAuthorChange = (author: AuthorModel): void => {
-        this.setState((state) => {
-            const {
-                inputs: { themes },
-            } = state;
-            return { inputs: { author, themes } };
-        });
-    };
-
-    newTheme = (id: number): ThemeModel => ({ id, submissions: [] });
-    emptyError = (id: number): ThemeError => ({ id, submissions: [] });
+class UploadView extends React.Component<UploadViewProps> {
+    componentDidMount() {
+        const { uploadInit } = this.props;
+        uploadInit(contest);
+    }
 
     render(): React.ReactNode {
         const { classes } = this.props;
-        const { errors, inputs } = this.state;
+
+        const {
+            errors,
+            inputs,
+            handleAuthorChange,
+            handleSubmissionChange,
+            handleImageChange,
+            handleImageRemove,
+            handleSubmit,
+        } = this.props;
+
+        const handleClick = (event: React.FormEvent): void => {
+            event.preventDefault();
+            handleSubmit();
+        };
 
         return (
             <Grid container>
                 <Grid item xs={12}>
-                    <form onSubmit={this.handleUpload} noValidate>
+                    <form onSubmit={handleClick} noValidate>
                         <Card className={classes.themeCard} raised>
                             <CardHeader
                                 title="Author"
@@ -106,7 +82,7 @@ class UploadView extends React.Component<UploadViewProps, UploadViewState> {
                             <CardContent>
                                 <Grid container justify="center" spacing={2}>
                                     <AuthorField
-                                        onChange={this.handleAuthorChange}
+                                        handleAUthorChange={handleAuthorChange}
                                         inputs={inputs.author}
                                         errors={errors.author}
                                     />
@@ -114,21 +90,20 @@ class UploadView extends React.Component<UploadViewProps, UploadViewState> {
                             </CardContent>
                         </Card>
 
-                        {map(contest.themes, (theme) => {
-                            const input =
-                                find(inputs.themes, (i) => i.id === theme.id) ||
-                                this.newTheme(theme.id);
-                            const error =
-                                find(errors.themes, (i) => i.id === theme.id) ||
-                                this.emptyError(theme.id);
+                        {map(inputs.themes, (theme) => {
+                            const error = find(
+                                errors.themes,
+                                (i) => i.id === theme.id,
+                            ) as ThemeError;
 
                             return (
                                 <ThemeField
                                     key={theme.id}
-                                    theme={theme}
-                                    inputs={input}
+                                    inputs={theme}
                                     errors={error}
-                                    onChange={this.handleThemeChange}
+                                    handleSubmissionChange={handleSubmissionChange}
+                                    handleImageRemove={handleImageRemove}
+                                    handleImageUpdate={handleImageChange}
                                 />
                             );
                         })}
@@ -148,4 +123,26 @@ class UploadView extends React.Component<UploadViewProps, UploadViewState> {
     }
 }
 
-export default withStyles(uploadFormStyles)(UploadView);
+const mapStateToProps = (state: AppState) => ({ ...state.upload });
+
+const mapDispatchToProps = (dispatch: any) => ({
+    uploadInit: (contest: Contest) => dispatch(uploadInit(contest)),
+    handleAuthorChange: (payload: InputChange) => dispatch(authorUpdate(payload)),
+    handleSubmissionChange: (theme_id: number, submission_id: number, payload: InputChange) =>
+        dispatch(submissionUpdate(theme_id, submission_id, payload)),
+    handleImageChange: (
+        theme_id: number,
+        submission_id: number,
+        image_id: number,
+        payload: { file: File },
+    ) => dispatch(imageUpdate(theme_id, submission_id, image_id, payload)),
+    handleImageRemove: (theme_id: number, submission_id: number, image_id: number) =>
+        dispatch(imageRemove(theme_id, submission_id, image_id)),
+    handleSubmit: () => dispatch(uploadSubmit()),
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default withStyles(uploadFormStyles)(connector(UploadView));

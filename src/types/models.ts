@@ -1,6 +1,17 @@
+export interface InputChange {
+    name: string;
+    value: string;
+}
+
+export interface FileChange {
+    file: File;
+    url: string;
+}
+
 export interface ImageModel {
     id: number;
     file: File | undefined;
+    url: string;
 }
 
 export interface ImageError {
@@ -8,15 +19,13 @@ export interface ImageError {
     file: string | null;
 }
 
-export interface SubmissionMeta {
-    imageNumber: number;
-    showDescription: boolean;
-}
-
 export interface SubmissionModel {
     id: number;
-    title: string | undefined;
-    description: string | undefined;
+    isSeries: boolean;
+    title: string;
+    titleRequired: boolean;
+    description: string;
+    descriptionRequired: boolean;
     images: ImageModel[];
 }
 
@@ -26,15 +35,9 @@ export interface SubmissionError {
     images: ImageError[];
 }
 
-export interface ThemeMeta {
-    id: number;
-    imageNumber: number;
-    isSeries: boolean;
-    title: string;
-}
-
 export interface ThemeModel {
     id: number;
+    title: string;
     submissions: SubmissionModel[];
 }
 
@@ -53,10 +56,6 @@ export interface AuthorError {
     first_name: string | null;
     last_name: string | null;
     email: string | null;
-}
-
-export interface ContestMeta {
-    themes: ThemeMeta[];
 }
 
 export interface ContestModel {

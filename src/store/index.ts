@@ -4,10 +4,12 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import contests from './contests/reducer';
 import notifications from './notifications/reducer';
+import upload from './upload/reducer';
 
 const rootReducer = combineReducers({
     contests,
     notifications,
+    upload,
 });
 
 export type AppState = ReturnType<typeof rootReducer>;
