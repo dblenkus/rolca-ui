@@ -1,10 +1,5 @@
-import { find, map } from 'lodash';
 import React from 'react';
-
 import { connect, ConnectedProps } from 'react-redux';
-
-import { Button, Card, CardContent, CardHeader, Grid } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import { AppState } from '../store';
 import {
@@ -16,12 +11,10 @@ import {
     uploadSubmit,
 } from '../store/upload/actions';
 
-import AuthorField from '../components/Field/AuthorField';
-import ThemeField from '../components/Field/ThemeField';
-
-import { InputChange, ThemeError } from '../types/models';
+import { InputChange } from '../types/models';
 import { Contest } from '../types/api';
-import { uploadFormStyles } from '../styles/general';
+
+import ContestField from '../components/Field/ContestField';
 
 const contest: Contest = {
     id: 1,
@@ -44,20 +37,16 @@ const contest: Contest = {
     end_date: '2020-12-31T23:59:59Z',
 };
 
-interface UploadViewProps extends WithStyles<typeof uploadFormStyles>, PropsFromRedux {}
-
-class UploadView extends React.Component<UploadViewProps> {
+class UploadView extends React.Component<PropsFromRedux> {
     componentDidMount() {
         const { uploadInit } = this.props;
         uploadInit(contest);
     }
 
     render(): React.ReactNode {
-        const { classes } = this.props;
-
         const {
-            errors,
             inputs,
+            errors,
             handleAuthorChange,
             handleSubmissionChange,
             handleImageChange,
@@ -65,60 +54,16 @@ class UploadView extends React.Component<UploadViewProps> {
             handleSubmit,
         } = this.props;
 
-        const handleClick = (event: React.FormEvent): void => {
-            event.preventDefault();
-            handleSubmit();
-        };
-
         return (
-            <Grid container>
-                <Grid item xs={12}>
-                    <form onSubmit={handleClick} noValidate>
-                        <Card className={classes.themeCard} raised>
-                            <CardHeader
-                                title="Author"
-                                titleTypographyProps={{ align: 'center', variant: 'h3' }}
-                            />
-                            <CardContent>
-                                <Grid container justify="center" spacing={2}>
-                                    <AuthorField
-                                        handleAUthorChange={handleAuthorChange}
-                                        inputs={inputs.author}
-                                        errors={errors.author}
-                                    />
-                                </Grid>
-                            </CardContent>
-                        </Card>
-
-                        {map(inputs.themes, (theme) => {
-                            const error = find(
-                                errors.themes,
-                                (i) => i.id === theme.id,
-                            ) as ThemeError;
-
-                            return (
-                                <ThemeField
-                                    key={theme.id}
-                                    inputs={theme}
-                                    errors={error}
-                                    handleSubmissionChange={handleSubmissionChange}
-                                    handleImageRemove={handleImageRemove}
-                                    handleImageUpdate={handleImageChange}
-                                />
-                            );
-                        })}
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submitButton}
-                        >
-                            Upload
-                        </Button>
-                    </form>
-                </Grid>
-            </Grid>
+            <ContestField
+                inputs={inputs}
+                errors={errors}
+                handleAuthorChange={handleAuthorChange}
+                handleSubmissionChange={handleSubmissionChange}
+                handleImageChange={handleImageChange}
+                handleImageRemove={handleImageRemove}
+                handleSubmit={handleSubmit}
+            />
         );
     }
 }
@@ -145,4 +90,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export default withStyles(uploadFormStyles)(connector(UploadView));
+export default connector(UploadView);
