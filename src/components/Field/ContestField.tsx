@@ -52,21 +52,11 @@ class ContestField extends React.Component<ContestFieldProps> {
                         {inputs.title}
                     </Typography>
                     <form onSubmit={handleClick} noValidate>
-                        <Card className={classes.themeCard} raised>
-                            <CardHeader
-                                title="Author"
-                                titleTypographyProps={{ align: 'center', variant: 'h3' }}
-                            />
-                            <CardContent>
-                                <Grid container justify="center" spacing={2}>
-                                    <AuthorField
-                                        handleAUthorChange={handleAuthorChange}
-                                        inputs={inputs.author}
-                                        errors={errors.author}
-                                    />
-                                </Grid>
-                            </CardContent>
-                        </Card>
+                        <AuthorField
+                            handleAUthorChange={handleAuthorChange}
+                            inputs={inputs.author}
+                            errors={errors.author}
+                        />
 
                         {map(inputs.themes, (theme) => {
                             const error = find(
