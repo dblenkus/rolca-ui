@@ -59,6 +59,7 @@ export interface AuthorError {
 }
 
 export interface ContestModel {
+    title: string;
     author: AuthorModel;
     themes: ThemeModel[];
 }

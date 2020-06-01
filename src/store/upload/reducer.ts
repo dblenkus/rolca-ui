@@ -3,7 +3,7 @@ import authorReducer from './reducerAuthor';
 import themeReducer from './reducerTheme';
 
 const initialState: UploadState = {
-    inputs: { themes: [], author: { first_name: '', last_name: '', email: '' } },
+    inputs: { title: '', themes: [], author: { first_name: '', last_name: '', email: '' } },
     errors: { themes: [], author: { first_name: null, last_name: null, email: null } },
 };
 
@@ -12,7 +12,7 @@ const reducer = (state = initialState, action: UploadActionTypes): UploadState =
         case UPLOAD_SET:
             return action.meta;
         case UPLOAD_SET_ERRORS:
-            return { inputs: state.inputs, errors: action.payload };
+            return { ...state, inputs: state.inputs, errors: action.payload };
         default:
             let { themes } = state.inputs;
             if ('theme_id' in action) {
@@ -21,7 +21,9 @@ const reducer = (state = initialState, action: UploadActionTypes): UploadState =
                 });
             }
             return {
+                ...state,
                 inputs: {
+                    ...state.inputs,
                     themes,
                     author: authorReducer(state.inputs.author, action),
                 },

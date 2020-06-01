@@ -3,7 +3,7 @@ import React from 'react';
 
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
-import { Button, Card, CardContent, CardHeader, Grid } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, Grid, Typography } from '@material-ui/core';
 
 import { uploadFormStyles } from '../../styles/general';
 import { InputChange, ThemeError, ContestModel, ContestError } from '../../types/models';
@@ -48,6 +48,9 @@ class ContestField extends React.Component<ContestFieldProps> {
         return (
             <Grid container>
                 <Grid item xs={12}>
+                    <Typography align="center" variant="h2">
+                        {inputs.title}
+                    </Typography>
                     <form onSubmit={handleClick} noValidate>
                         <Card className={classes.themeCard} raised>
                             <CardHeader

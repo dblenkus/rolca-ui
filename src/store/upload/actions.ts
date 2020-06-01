@@ -25,6 +25,7 @@ import {
 export const uploadInit = (contest: Contest): AppThunk => async (dispatch, getState) => {
     const inputs = {
         ...getState().upload.inputs,
+        title: contest.title,
         themes: contest.themes.map((theme) => themeReducer(undefined, themeInit(theme))),
     };
     const [, errors] = await validate(inputs, true);
