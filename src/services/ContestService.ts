@@ -8,4 +8,7 @@ export default {
     getContests(): AxiosPromise<PaginatedResponse<Contest>> {
         return apiClient.get('/contest');
     },
+    getContest(id: string): AxiosPromise<Contest> {
+        return apiClient.get(`/contest/${id}`);
+    },
 };

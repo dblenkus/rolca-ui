@@ -51,7 +51,10 @@ const App = () => {
                             <Switch>
                                 <Route exact path="/" render={() => <Redirect to="/contests" />} />
                                 <Route path="/contests" component={ContestsListView} />
-                                <PrivateRoute path="/contest/:id/upload" component={UploadView} />
+                                <PrivateRoute
+                                    path="/contest/:contestId/upload"
+                                    component={UploadView}
+                                />
                                 <Route path="/login" component={LoginView} />
                                 <Route exact path="/password-reset" component={PasswordResetView} />
                                 <Route

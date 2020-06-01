@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { withRouter, RouteComponentProps } from 'react-router';
 
 import { AppState } from '../store';
 import {
@@ -11,35 +12,25 @@ import {
     uploadSubmit,
 } from '../store/upload/actions';
 
+import ContestService from '../services/ContestService';
+
 import { InputChange } from '../types/models';
 import { Contest } from '../types/api';
 
 import ContestField from '../components/Field/ContestField';
 
-const contest: Contest = {
-    id: 1,
-    title: 'Test contest',
-    themes: [
-        {
-            id: 1,
-            title: 'My theme',
-            n_photos: 3,
-            is_series: false,
-        },
-        {
-            id: 2,
-            title: 'My series',
-            n_photos: 4,
-            is_series: true,
-        },
-    ],
-    start_date: '2020-01-01T00:00:00Z',
-    end_date: '2020-12-31T23:59:59Z',
-};
+interface RouteMatchParams {
+    contestId: string;
+}
 
-class UploadView extends React.Component<PropsFromRedux> {
-    componentDidMount() {
+interface UploadViewProps extends PropsFromRedux, RouteComponentProps<RouteMatchParams> {}
+
+class UploadView extends React.Component<UploadViewProps> {
+    async componentDidMount() {
         const { uploadInit } = this.props;
+        const { contestId } = this.props.match.params;
+        const { data: contest } = await ContestService.getContest(contestId);
+
         uploadInit(contest);
     }
 
@@ -90,4 +81,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(UploadView);
+export default connector(withRouter(UploadView));
