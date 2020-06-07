@@ -75,10 +75,14 @@ const validateSubmission = async (submission: SubmissionModel): Promise<Submissi
     const { id } = submission;
 
     const title = anyImage(submission.images) && !submission.title ? 'Please enter title.' : null;
+    const description =
+        submission.descriptionRequired && !submission.description
+            ? 'Please enter description.'
+            : null;
     const imagesResult = await getErrors(submission.images, validateImage);
-    const hasError = imagesResult.hasError || title !== null;
+    const hasError = imagesResult.hasError || title !== null || description !== null;
 
-    return { id, hasError, title, images: imagesResult.errors };
+    return { id, hasError, title, description, images: imagesResult.errors };
 };
 
 const validateTheme = async (theme: ThemeModel): Promise<ThemeError> => {

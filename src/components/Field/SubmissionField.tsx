@@ -87,6 +87,7 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
                                 className={classes.seriesMetaInput}
                                 name="description"
                                 value={submission.description}
+                                error={errors.description}
                                 label="Description"
                                 autoComplete=""
                                 required={submission.descriptionRequired}

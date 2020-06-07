@@ -6,6 +6,11 @@ import { imageInit } from './actions';
 import { SUBMISSION_INIT, SUBMISSION_UPDATE, UploadActionTypes } from './types';
 import imageReducer from './reducerImage';
 
+interface RequiredFields {
+    titleRequired?: boolean;
+    descriptionRequired?: boolean;
+}
+
 const initialSate: SubmissionModel = {
     id: 0,
     isSeries: false,
@@ -31,21 +36,37 @@ const reducer = (state = initialSate, action: UploadActionTypes): SubmissionMode
         }
         case SUBMISSION_UPDATE: {
             const { name, value } = action.payload;
+            const { isSeries } = state;
+
+            const requiredFields: RequiredFields = {};
+            if (name === 'title' || name === 'description') {
+                requiredFields.titleRequired = !!value;
+                requiredFields.descriptionRequired = isSeries && !!value;
+            }
+
             return {
                 ...state,
+                ...requiredFields,
                 [name]: value,
             };
         }
         default: {
             if ('image_id' in action) {
-                let { images, titleRequired, descriptionRequired, isSeries } = state;
+                let {
+                    description,
+                    descriptionRequired,
+                    images,
+                    isSeries,
+                    title,
+                    titleRequired,
+                } = state;
                 images = images.map((image) => {
                     return image.id === action.image_id ? imageReducer(image, action) : image;
                 });
 
                 const anyImage = images.some((image) => !!image.file);
-                titleRequired = anyImage;
-                descriptionRequired = anyImage && isSeries;
+                titleRequired = anyImage || (isSeries && !!description);
+                descriptionRequired = isSeries && (anyImage || !!title);
 
                 return { ...state, images, titleRequired, descriptionRequired };
             }

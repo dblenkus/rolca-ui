@@ -34,6 +34,7 @@ export interface SubmissionError {
     id: number;
     hasError: boolean;
     title: string | null;
+    description: string | null;
     images: ImageError[];
 }
 
