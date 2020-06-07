@@ -3,7 +3,8 @@ import React from 'react';
 
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
-import { Button, Card, CardContent, CardHeader, Grid, Typography } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 import { uploadFormStyles } from '../../styles/general';
 import { InputChange, ThemeError, ContestModel, ContestError } from '../../types/models';
@@ -75,6 +76,11 @@ class ContestField extends React.Component<ContestFieldProps> {
                                 />
                             );
                         })}
+                        {errors.hasError && (
+                            <Alert className={classes.errorAlert} severity="error">
+                                Please fix errors before uploading.
+                            </Alert>
+                        )}
                         <Button
                             type="submit"
                             fullWidth
