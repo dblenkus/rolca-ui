@@ -16,6 +16,7 @@ export interface ImageModel {
 
 export interface ImageError {
     id: number;
+    hasError: boolean;
     file: string | null;
 }
 
@@ -31,6 +32,7 @@ export interface SubmissionModel {
 
 export interface SubmissionError {
     id: number;
+    hasError: boolean;
     title: string | null;
     images: ImageError[];
 }
@@ -43,6 +45,7 @@ export interface ThemeModel {
 
 export interface ThemeError {
     id: number;
+    hasError: boolean;
     submissions: SubmissionError[];
 }
 
@@ -53,6 +56,7 @@ export interface AuthorModel {
 }
 
 export interface AuthorError {
+    hasError: boolean;
     first_name: string | null;
     last_name: string | null;
     email: string | null;
@@ -65,6 +69,7 @@ export interface ContestModel {
 }
 
 export interface ContestError {
+    hasError: boolean;
     author: AuthorError;
     themes: ThemeError[];
 }

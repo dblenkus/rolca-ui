@@ -14,6 +14,10 @@ import {
 import imageReader from './imageReader';
 import { anyImage } from './image';
 
+interface BaseError {
+    hasError: boolean;
+}
+
 const asyncMap = async <T, U extends any[], R>(
     array: T[],
     fn: (item: T, ...rest: U) => Promise<R>,
@@ -23,79 +27,81 @@ const asyncMap = async <T, U extends any[], R>(
     return await Promise.all(promises);
 };
 
-const getErrors = async <T, U extends any[], R extends object>(
+const getErrors = async <T, U extends any[], R extends BaseError>(
     values: T[],
-    validationFn: (item: T, ...rest: U) => Promise<[boolean, R]>,
+    validationFn: (item: T, ...rest: U) => Promise<R>,
     ...rest: U
-): Promise<[boolean, R[]]> => {
-    const results = await asyncMap(values, validationFn, ...rest);
-    const isValid = results.reduce((result, next) => result && next[0], true);
-    const errors = results.map((result) => result[1]);
+): Promise<{ hasError: boolean; errors: R[] }> => {
+    const errors = await asyncMap(values, validationFn, ...rest);
+    const hasError = errors.reduce((result, next) => result || next.hasError, false);
 
-    return [isValid, errors];
+    return { hasError, errors };
 };
 
-const validateImage = async (image: ImageModel): Promise<[boolean, ImageError]> => {
-    const constructError = (file: string | null): ImageError => ({ id: image.id, file });
+const validateImage = async (image: ImageModel): Promise<ImageError> => {
+    const constructError = (file: string | null): ImageError => ({
+        id: image.id,
+        file,
+        hasError: file !== null,
+    });
 
     const { file } = image;
     if (file) {
         if (file === undefined) {
-            return [false, constructError('Please select an image.')];
+            return constructError('Please select an image.');
         }
         if (file.type !== 'image/jpeg') {
-            return [false, constructError('File must be in JPEG format.')];
+            return constructError('File must be in JPEG format.');
         }
         if (file.size > 2 * 1024 ** 2) {
-            return [false, constructError('Image must be smaller than 2MB.')];
+            return constructError('Image must be smaller than 2MB.');
         }
 
         let img: HTMLImageElement;
         try {
             img = await imageReader(file);
         } catch (error) {
-            return [false, constructError('Invalid file.')];
+            return constructError('Invalid file.');
         }
 
         if (img.height > 1920 || img.width > 1920)
-            return [false, constructError('Longe edge should not exceed 1920.')];
+            return constructError('Longe edge should not exceed 1920.');
     }
 
-    return [true, constructError(null)];
+    return constructError(null);
 };
 
-const validateSubmission = async (
-    submission: SubmissionModel,
-): Promise<[boolean, SubmissionError]> => {
+const validateSubmission = async (submission: SubmissionModel): Promise<SubmissionError> => {
     const { id } = submission;
 
     const title = anyImage(submission.images) && !submission.title ? 'Please enter title.' : null;
-    const [imageValid, images] = await getErrors(submission.images, validateImage);
-    const isValid = imageValid && title === null;
+    const imagesResult = await getErrors(submission.images, validateImage);
+    const hasError = imagesResult.hasError || title !== null;
 
-    return [isValid, { id, title, images }];
+    return { id, hasError, title, images: imagesResult.errors };
 };
 
-const validateTheme = async (theme: ThemeModel): Promise<[boolean, ThemeError]> => {
+const validateTheme = async (theme: ThemeModel): Promise<ThemeError> => {
     const { id } = theme;
+    const { hasError, errors } = await getErrors(theme.submissions, validateSubmission);
 
-    const [submissionValid, submissions] = await getErrors(theme.submissions, validateSubmission);
-
-    return [submissionValid, { id, submissions }];
+    return { id, hasError, submissions: errors };
 };
 
-const validateAuthor = (author: AuthorModel, initial: boolean): [boolean, AuthorError] => {
+const validateAuthor = (author: AuthorModel, initial: boolean): AuthorError => {
     const error = {
         first_name: !author.first_name && !initial ? 'Please enter the first name.' : null,
         last_name: !author.last_name && !initial ? 'Please enter the last name.' : null,
         email: !author.email && !initial ? 'Please enter the email.' : null,
     };
-    return [error.first_name === null && error.last_name === null && error.email === null, error];
+    const hasError = error.first_name !== null || error.last_name !== null || error.email !== null;
+    return { ...error, hasError };
 };
 
-export default async (inputs: ContestModel, initial = false): Promise<[boolean, ContestError]> => {
-    const [themesValid, themes] = await getErrors(inputs.themes, validateTheme);
-    const [authorValid, author] = validateAuthor(inputs.author, initial);
+export default async (inputs: ContestModel, initial = false): Promise<ContestError> => {
+    const themes = await getErrors(inputs.themes, validateTheme);
+    const author = validateAuthor(inputs.author, initial);
+    const hasError = themes.hasError || author.hasError;
 
-    return [themesValid && authorValid, { author, themes }];
+    return { hasError, author, themes: themes.errors };
 };

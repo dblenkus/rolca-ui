@@ -4,7 +4,11 @@ import themeReducer from './reducerTheme';
 
 const initialState: UploadState = {
     inputs: { title: '', themes: [], author: { first_name: '', last_name: '', email: '' } },
-    errors: { themes: [], author: { first_name: null, last_name: null, email: null } },
+    errors: {
+        hasError: false,
+        themes: [],
+        author: { hasError: false, first_name: null, last_name: null, email: null },
+    },
 };
 
 const reducer = (state = initialState, action: UploadActionTypes): UploadState => {

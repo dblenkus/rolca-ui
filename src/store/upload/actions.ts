@@ -28,7 +28,7 @@ export const uploadInit = (contest: Contest): AppThunk => async (dispatch, getSt
         title: contest.title,
         themes: contest.themes.map((theme) => themeReducer(undefined, themeInit(theme))),
     };
-    const [, errors] = await validate(inputs, true);
+    const errors = await validate(inputs, true);
     dispatch(uploadSet({ inputs, errors }));
 };
 
@@ -37,8 +37,8 @@ export const uploadSet = (meta: UploadState): UploadActionTypes => ({ type: UPLO
 export const uploadSubmit = (): AppThunk => async (dispatch, getState) => {
     const { inputs } = getState().upload;
 
-    const [isValid, errors] = await validate(inputs);
-    if (isValid) {
+    const errors = await validate(inputs);
+    if (!errors.hasError) {
         upload(inputs);
     } else {
         dispatch(uploadSetErrors(errors));
