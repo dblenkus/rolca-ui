@@ -17,6 +17,7 @@ import {
     SUBMISSION_UPDATE,
     UPLOAD_SET,
     UPLOAD_SET_ERRORS,
+    UPLOAD_SET_REDIRECT,
     UploadActionTypes,
     IMAGE_REMOVE,
     IMAGE_STORE,
@@ -29,7 +30,7 @@ export const uploadInit = (contest: Contest): AppThunk => async (dispatch, getSt
         themes: contest.themes.map((theme) => themeReducer(undefined, themeInit(theme))),
     };
     const errors = await validate(inputs, true);
-    dispatch(uploadSet({ inputs, errors }));
+    dispatch(uploadSet({ inputs, errors, redirect: false }));
 };
 
 export const uploadSet = (meta: UploadState): UploadActionTypes => ({ type: UPLOAD_SET, meta });
@@ -40,6 +41,7 @@ export const uploadSubmit = (): AppThunk => async (dispatch, getState) => {
     const errors = await validate(inputs);
     if (!errors.hasError) {
         upload(inputs);
+        dispatch(uploadSetRedirect());
     } else {
         dispatch(uploadSetErrors(errors));
     }
@@ -48,6 +50,10 @@ export const uploadSubmit = (): AppThunk => async (dispatch, getState) => {
 export const uploadSetErrors = (errors: ContestError): UploadActionTypes => ({
     type: UPLOAD_SET_ERRORS,
     payload: errors,
+});
+
+export const uploadSetRedirect = (): UploadActionTypes => ({
+    type: UPLOAD_SET_REDIRECT,
 });
 
 export const authorUpdate = (payload: InputChange): UploadActionTypes => ({

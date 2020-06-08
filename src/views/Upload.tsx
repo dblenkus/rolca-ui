@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { Redirect } from 'react-router-dom';
 
 import { AppState } from '../store';
 import {
@@ -43,7 +44,13 @@ class UploadView extends React.Component<UploadViewProps> {
             handleImageChange,
             handleImageRemove,
             handleSubmit,
+            redirect,
         } = this.props;
+        const { contestId } = this.props.match.params;
+
+        if (redirect) {
+            return <Redirect to={`/contest/${contestId}/confirm`} />;
+        }
 
         return (
             <ContestField

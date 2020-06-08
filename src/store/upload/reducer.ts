@@ -1,4 +1,10 @@
-import { UPLOAD_SET, UPLOAD_SET_ERRORS, UploadActionTypes, UploadState } from './types';
+import {
+    UPLOAD_SET,
+    UPLOAD_SET_ERRORS,
+    UPLOAD_SET_REDIRECT,
+    UploadActionTypes,
+    UploadState,
+} from './types';
 import authorReducer from './reducerAuthor';
 import themeReducer from './reducerTheme';
 
@@ -9,6 +15,7 @@ const initialState: UploadState = {
         themes: [],
         author: { hasError: false, first_name: null, last_name: null, email: null },
     },
+    redirect: false,
 };
 
 const reducer = (state = initialState, action: UploadActionTypes): UploadState => {
@@ -17,6 +24,8 @@ const reducer = (state = initialState, action: UploadActionTypes): UploadState =
             return action.meta;
         case UPLOAD_SET_ERRORS:
             return { ...state, inputs: state.inputs, errors: action.payload };
+        case UPLOAD_SET_REDIRECT:
+            return { ...state, redirect: true };
         default:
             let { themes } = state.inputs;
             if ('theme_id' in action) {

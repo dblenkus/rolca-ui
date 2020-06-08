@@ -4,6 +4,7 @@ import { ContestError, ContestModel, InputChange } from '../../types/models';
 export interface UploadState {
     inputs: ContestModel;
     errors: ContestError;
+    redirect: boolean;
 }
 
 export interface ImageMeta {
@@ -18,6 +19,7 @@ export interface SubmissionMeta {
 
 export const UPLOAD_SET = 'UPLOAD_SET';
 export const UPLOAD_SET_ERRORS = 'UPLOAD_SET_ERRORS';
+export const UPLOAD_SET_REDIRECT = 'UPLOAD_SET_REDIRECT';
 export const AUTHOR_UPDATE = 'AUTHOR_UPDATE';
 export const THEME_INIT = 'THEME_INIT';
 export const SUBMISSION_INIT = 'SUBMISSION_INIT';
@@ -34,6 +36,10 @@ interface UploadSetAction {
 interface UploadSetErrorAction {
     type: typeof UPLOAD_SET_ERRORS;
     payload: ContestError;
+}
+
+interface UploadSetRedirectAction {
+    type: typeof UPLOAD_SET_REDIRECT;
 }
 
 interface AuthorUpdateAction {
@@ -81,6 +87,7 @@ interface ImageStoreAction {
 export type UploadActionTypes =
     | UploadSetAction
     | UploadSetErrorAction
+    | UploadSetRedirectAction
     | AuthorUpdateAction
     | ThemeInitAction
     | SubmissionInitAction
