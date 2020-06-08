@@ -12,5 +12,5 @@ FROM installer as builder
 RUN npm run build
 
 FROM nginx:1.16-alpine
-COPY --from=builder /node/app/dist /usr/share/nginx/html
+COPY --from=builder /node/app/build /usr/share/nginx/html
 COPY docker/default.conf /etc/nginx/conf.d/
