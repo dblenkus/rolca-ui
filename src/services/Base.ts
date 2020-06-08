@@ -3,8 +3,10 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import store from '../store/index';
 import { addNotificationError } from '../store/notifications/actions';
 
+const baseURL = `${process.env.REACT_APP_BASE_URL || ''}/api/v1`;
+
 let config: AxiosRequestConfig = {
-    baseURL: '/api/v1',
+    baseURL,
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
