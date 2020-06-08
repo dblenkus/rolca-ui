@@ -80,6 +80,12 @@ const validateSubmission = async (submission: SubmissionModel): Promise<Submissi
             ? 'Please enter description.'
             : null;
     const imagesResult = await getErrors(submission.images, validateImage);
+
+    if ((submission.title || submission.description) && !anyImage(submission.images)) {
+        imagesResult.errors[0].file = 'Please select an image';
+        imagesResult.hasError = true;
+    }
+
     const hasError = imagesResult.hasError || title !== null || description !== null;
 
     return { id, hasError, title, description, images: imagesResult.errors };

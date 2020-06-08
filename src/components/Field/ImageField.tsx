@@ -51,7 +51,7 @@ class ImageField extends React.Component<ImageFieldProps> {
                     ref={this.imageRef}
                 />
                 {image.file === undefined ? (
-                    <SelectImage handleClick={this.handleClick} />
+                    <SelectImage error={errors.file !== null} handleClick={this.handleClick} />
                 ) : (
                     <ShowImage
                         imageUrl={image.url}
