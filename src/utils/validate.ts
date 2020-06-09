@@ -53,8 +53,8 @@ const validateImage = async (image: ImageModel): Promise<ImageError> => {
         if (file.type !== 'image/jpeg') {
             return constructError('File must be in JPEG format.');
         }
-        if (file.size > 2 * 1024 ** 2) {
-            return constructError('Image must be smaller than 2MB.');
+        if (file.size > 5 * 1024 ** 2) {
+            return constructError('Image must be smaller than 5MB.');
         }
 
         let img: HTMLImageElement;
@@ -64,8 +64,8 @@ const validateImage = async (image: ImageModel): Promise<ImageError> => {
             return constructError('Invalid file.');
         }
 
-        if (img.height > 1920 || img.width > 1920)
-            return constructError('Longe edge should not exceed 1920.');
+        if (img.height > 3000 || img.width > 3000)
+            return constructError('Longe edge should not exceed 3000px.');
     }
 
     return constructError(null);
