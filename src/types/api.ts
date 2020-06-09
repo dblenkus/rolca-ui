@@ -34,6 +34,7 @@ export interface Theme {
 export interface Contest {
     id: number;
     title: string;
+    description: string;
     themes: Theme[];
     start_date: string;
     end_date: string;

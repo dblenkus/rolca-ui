@@ -27,6 +27,7 @@ export const uploadInit = (contest: Contest): AppThunk => async (dispatch, getSt
     const inputs = {
         ...getState().upload.inputs,
         title: contest.title,
+        description: contest.description,
         noticeHtml: contest.notice_html,
         headerImage: contest.header_image,
         themes: contest.themes.map((theme) => themeReducer(undefined, themeInit(theme))),

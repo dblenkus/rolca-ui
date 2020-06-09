@@ -11,6 +11,7 @@ import themeReducer from './reducerTheme';
 const initialState: UploadState = {
     inputs: {
         title: '',
+        description: '',
         noticeHtml: '',
         headerImage: null,
         themes: [],

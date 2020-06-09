@@ -39,7 +39,7 @@ const ContestCard: React.FC<ContestCardProps> = (props) => {
                     {contest.title}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    {/* {contest.description} */}
+                    {contest.description}
                 </Typography>
             </CardContent>
             <CardActions>
