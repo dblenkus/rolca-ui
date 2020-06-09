@@ -9,7 +9,13 @@ import authorReducer from './reducerAuthor';
 import themeReducer from './reducerTheme';
 
 const initialState: UploadState = {
-    inputs: { title: '', themes: [], author: { first_name: '', last_name: '', email: '' } },
+    inputs: {
+        title: '',
+        noticeHtml: '',
+        headerImage: null,
+        themes: [],
+        author: { first_name: '', last_name: '', email: '' },
+    },
     errors: {
         hasError: false,
         themes: [],

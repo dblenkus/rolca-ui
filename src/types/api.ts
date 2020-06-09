@@ -37,4 +37,6 @@ export interface Contest {
     themes: Theme[];
     start_date: string;
     end_date: string;
+    notice_html: string;
+    header_image: string | null;
 }
