@@ -9,6 +9,7 @@ import { Alert } from '@material-ui/lab';
 import { uploadFormStyles } from '../../styles/general';
 import { InputChange, ThemeError, ContestModel, ContestError } from '../../types/models';
 
+import HeaderImage from './../Layout/HeaderImage';
 import AuthorField from './AuthorField';
 import ThemeField from './ThemeField';
 
@@ -49,9 +50,15 @@ class ContestField extends React.Component<ContestFieldProps> {
         return (
             <Grid container>
                 <Grid item xs={12}>
-                    <Typography align="center" variant="h2">
-                        {inputs.title}
-                    </Typography>
+                    {inputs.headerImage ? (
+                        <HeaderImage src={inputs.headerImage} />
+                    ) : (
+                        <Typography align="center" variant="h2">
+                            {inputs.title}
+                        </Typography>
+                    )}
+                </Grid>
+                <Grid item xs={12}>
                     <form onSubmit={handleClick} noValidate>
                         <AuthorField
                             handleAUthorChange={handleAuthorChange}
