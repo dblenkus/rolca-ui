@@ -43,7 +43,7 @@ export const uploadSubmit = (): AppThunk => async (dispatch, getState) => {
 
     const errors = await validate(inputs);
     if (!errors.hasError) {
-        upload(inputs);
+        await upload(inputs);
         dispatch(uploadSetRedirect());
     } else {
         dispatch(uploadSetErrors(errors));
