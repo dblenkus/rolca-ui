@@ -44,7 +44,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                 name="last_name"
                                 value={inputs.last_name}
                                 error={errors.last_name}
-                                label="last name"
+                                label="Last name"
                                 autoComplete="family-name"
                                 required={true}
                                 onChange={handleAUthorChange}
