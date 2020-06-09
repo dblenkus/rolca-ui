@@ -15,12 +15,12 @@ const initialState: UploadState = {
         noticeHtml: '',
         headerImage: null,
         themes: [],
-        author: { first_name: '', last_name: '', email: '' },
+        author: { first_name: '', last_name: '' },
     },
     errors: {
         hasError: false,
         themes: [],
-        author: { hasError: false, first_name: null, last_name: null, email: null },
+        author: { hasError: false, first_name: null, last_name: null },
     },
     redirect: false,
 };

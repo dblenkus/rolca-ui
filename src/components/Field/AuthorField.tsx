@@ -38,21 +38,14 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                 required={true}
                                 onChange={handleAUthorChange}
                             />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={4}>
                             <InputField
                                 name="last_name"
                                 value={inputs.last_name}
                                 error={errors.last_name}
                                 label="last name"
                                 autoComplete="family-name"
-                                required={true}
-                                onChange={handleAUthorChange}
-                            />
-                            <InputField
-                                name="email"
-                                value={inputs.email}
-                                error={errors.email}
-                                label="Email"
-                                autoComplete="email"
                                 required={true}
                                 onChange={handleAUthorChange}
                             />

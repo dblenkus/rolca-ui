@@ -53,14 +53,12 @@ export interface ThemeError {
 export interface AuthorModel {
     first_name: string;
     last_name: string;
-    email: string;
 }
 
 export interface AuthorError {
     hasError: boolean;
     first_name: string | null;
     last_name: string | null;
-    email: string | null;
 }
 
 export interface ContestModel {

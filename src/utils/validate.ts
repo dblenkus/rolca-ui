@@ -102,9 +102,8 @@ const validateAuthor = (author: AuthorModel, initial: boolean): AuthorError => {
     const error = {
         first_name: !author.first_name && !initial ? 'Please enter the first name.' : null,
         last_name: !author.last_name && !initial ? 'Please enter the last name.' : null,
-        email: !author.email && !initial ? 'Please enter the email.' : null,
     };
-    const hasError = error.first_name !== null || error.last_name !== null || error.email !== null;
+    const hasError = error.first_name !== null || error.last_name !== null;
     return { ...error, hasError };
 };
 

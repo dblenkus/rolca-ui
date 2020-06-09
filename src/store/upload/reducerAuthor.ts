@@ -4,7 +4,6 @@ import { AUTHOR_UPDATE, UploadActionTypes } from './types';
 const initialSate: AuthorModel = {
     first_name: '',
     last_name: '',
-    email: '',
 };
 
 const reducer = (state = initialSate, action: UploadActionTypes): AuthorModel => {
