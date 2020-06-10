@@ -9,7 +9,7 @@ import { Alert } from '@material-ui/lab';
 import { uploadFormStyles } from '../../styles/general';
 import { InputChange, ThemeError, ContestModel, ContestError } from '../../types/models';
 
-import HeaderImage from './../Layout/HeaderImage';
+import HeaderImage from '../Layout/HeaderImage';
 import AuthorField from './AuthorField';
 import ThemeField from './ThemeField';
 

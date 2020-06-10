@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 
 import PasswordResetRequestForm, { Fields } from '../components/Auth/PasswordResetRequestForm';
 import PasswordResetRequestConfirm from '../components/Auth/PasswordResetRequestConfirm';
-import { IInputChangeEvent } from '../components/Field/InputField';
+import { IInputChangeEvent } from '../components/Upload/InputField';
 
 import UserService from '../services/UserService';
 

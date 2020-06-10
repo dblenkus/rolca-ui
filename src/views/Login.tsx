@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, Grid, Link } from '@material-ui/core';
 
 import { userContext } from '../components/Auth/AuthProvider';
 import LoginForm, { Errors, Fields } from '../components/Auth/LoginForm';
-import { IInputChangeEvent } from '../components/Field/InputField';
+import { IInputChangeEvent } from '../components/Upload/InputField';
 
 interface LoginViewProps extends RouteComponentProps {}
 

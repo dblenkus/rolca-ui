@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, Grid, Link } from '@material-ui/core';
 
 import RegisterForm, { Errors, Fields } from '../components/Auth/RegisterForm';
 import RegisterConfirm from '../components/Auth/RegisterConfirm';
-import { IInputChangeEvent } from '../components/Field/InputField';
+import { IInputChangeEvent } from '../components/Upload/InputField';
 
 import UserService from '../services/UserService';
 

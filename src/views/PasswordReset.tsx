@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 
 import PasswordResetForm, { Errors, Fields } from '../components/Auth/PasswordResetForm';
 import PasswordResetSuccess from '../components/Auth/PasswordResetSuccess';
-import { IInputChangeEvent } from '../components/Field/InputField';
+import { IInputChangeEvent } from '../components/Upload/InputField';
 
 import UserService from '../services/UserService';
 

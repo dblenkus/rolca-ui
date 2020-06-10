@@ -18,7 +18,7 @@ import ContestService from '../services/ContestService';
 import { InputChange } from '../types/models';
 import { Contest } from '../types/api';
 
-import ContestField from '../components/Field/ContestField';
+import ContestField from '../components/Upload/ContestField';
 
 interface RouteMatchParams {
     contestId: string;
