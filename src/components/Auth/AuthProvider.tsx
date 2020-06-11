@@ -41,11 +41,21 @@ class AuthProvider extends React.Component<AuthProviderProps, AuthProviderState>
         if (!tokenString) return {};
 
         let user = {};
+        let removeLocalData = false;
         try {
-            user = JSON.parse(tokenString);
+            const token = JSON.parse(tokenString);
+
+            const expireTimestamp = new Date(token.expires).getTime();
+            const nowTimestamp = new Date().getTime();
+            const deltaHour = 1000 * 60 * 60;
+
+            // Logout user if token expires in less than 6 hours.
+            if (nowTimestamp + 6 * deltaHour < expireTimestamp) user = token;
+            else removeLocalData = true;
         } catch {
-            localStorage.removeItem('token');
+            removeLocalData = true;
         }
+        if (removeLocalData) localStorage.removeItem('token');
         return user;
     };
 
