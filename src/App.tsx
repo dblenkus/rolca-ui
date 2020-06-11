@@ -10,6 +10,7 @@ import Footer from './components/Layout/Footer';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ContestsListView from './views/ContestsList';
+import ContestDetailsView from './views/ContestDetails';
 import LoginView from './views/Login';
 import RegisterView from './views/Register';
 import RegisterActivateView from './views/RegisterActivate';
@@ -52,6 +53,10 @@ const App = () => {
                             <Switch>
                                 <Route exact path="/" render={() => <Redirect to="/contests" />} />
                                 <Route path="/contests" component={ContestsListView} />
+                                <Route
+                                    path="/contest/:contestId/details"
+                                    component={ContestDetailsView}
+                                />
                                 <PrivateRoute
                                     path="/contest/:contestId/upload"
                                     component={UploadView}

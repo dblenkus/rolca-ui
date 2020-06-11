@@ -45,7 +45,7 @@ const ContestCard: React.FC<ContestCardProps> = (props) => {
             <CardActions>
                 <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                     <Link
-                        to={`/contest/${contest.id}/upload`}
+                        to={`/contest/${contest.id}/details`}
                         component={CustomButton}
                         color="primary"
                     >
