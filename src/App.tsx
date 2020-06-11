@@ -1,5 +1,7 @@
 import React from 'react';
 
+import * as Sentry from '@sentry/browser';
+
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
@@ -37,6 +39,8 @@ const useStyles = makeStyles((theme) => ({
         minHeight: '100vh',
     },
 }));
+
+Sentry.init({ dsn: 'https://59015e5be11d4433af471cfd3a8d194d@o74924.ingest.sentry.io/190302' });
 
 const App = () => {
     const classes = useStyles();
