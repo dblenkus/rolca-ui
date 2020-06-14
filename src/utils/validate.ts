@@ -1,13 +1,8 @@
 import {
-    AuthorError,
     AuthorModel,
-    ContestError,
     ContestModel,
-    ImageError,
     ImageModel,
-    SubmissionError,
     SubmissionModel,
-    ThemeError,
     ThemeModel,
 } from '../types/models';
 
@@ -18,32 +13,29 @@ interface BaseError {
     hasError: boolean;
 }
 
-const asyncMap = async <T, U extends any[], R>(
-    array: T[],
-    fn: (item: T, ...rest: U) => Promise<R>,
-    ...rest: U
-): Promise<R[]> => {
-    const promises = array.map((element) => fn(element, ...rest));
+interface BaseObject {
+    errors: BaseError;
+}
+
+const asyncMap = async <T>(array: T[], fn: (item: T) => Promise<T>): Promise<T[]> => {
+    const promises = array.map((element) => fn(element));
     return await Promise.all(promises);
 };
 
-const getErrors = async <T, U extends any[], R extends BaseError>(
-    values: T[],
-    validationFn: (item: T, ...rest: U) => Promise<R>,
-    ...rest: U
-): Promise<{ hasError: boolean; errors: R[] }> => {
-    const errors = await asyncMap(values, validationFn, ...rest);
-    const hasError = errors.reduce((result, next) => result || next.hasError, false);
-
-    return { hasError, errors };
+const hasError = (obj: BaseObject | BaseObject[]): boolean => {
+    if (Array.isArray(obj)) {
+        return obj.some((o) => o.errors.hasError);
+    } else {
+        return obj.errors.hasError;
+    }
 };
 
-const validateImage = async (image: ImageModel): Promise<ImageError> => {
-    const constructError = (file: string | null): ImageError => ({
-        id: image.id,
-        file,
-        hasError: file !== null,
-    });
+const validateImage = async (image: ImageModel): Promise<ImageModel> => {
+    // const constructError = (file: string | null): ImageError => ({
+    //     id: image.id,
+    //     file,
+    //     hasError: file !== null,
+    // });
 
     const { file } = image;
     if (file) {
@@ -71,46 +63,48 @@ const validateImage = async (image: ImageModel): Promise<ImageError> => {
     return constructError(null);
 };
 
-const validateSubmission = async (submission: SubmissionModel): Promise<SubmissionError> => {
-    const { id } = submission;
+const validateSubmission = async (submission: SubmissionModel): Promise<SubmissionModel> => {
+    const { title, description } = submission;
+    const { titleRequired, descriptionRequired } = submission.meta;
+    const images = await asyncMap(submission.images, validateImage);
 
-    const title = anyImage(submission.images) && !submission.title ? 'Please enter title.' : null;
-    const description =
-        submission.descriptionRequired && !submission.description
-            ? 'Please enter description.'
-            : null;
-    const imagesResult = await getErrors(submission.images, validateImage);
-
-    if ((submission.title || submission.description) && !anyImage(submission.images)) {
-        imagesResult.errors[0].file = 'Please select an image';
-        imagesResult.hasError = true;
+    if ((title || description) && !anyImage(images)) {
+        images[0].errors.file = 'Please select an image';
+        images[0].errors.hasError = true;
     }
 
-    const hasError = imagesResult.hasError || title !== null || description !== null;
-
-    return { id, hasError, title, description, images: imagesResult.errors };
-};
-
-const validateTheme = async (theme: ThemeModel): Promise<ThemeError> => {
-    const { id } = theme;
-    const { hasError, errors } = await getErrors(theme.submissions, validateSubmission);
-
-    return { id, hasError, submissions: errors };
-};
-
-const validateAuthor = (author: AuthorModel, initial: boolean): AuthorError => {
-    const error = {
-        first_name: !author.first_name && !initial ? 'Please enter the first name.' : null,
-        last_name: !author.last_name && !initial ? 'Please enter the last name.' : null,
+    const errors = {
+        description: descriptionRequired && !description ? 'Please enter description.' : null,
+        title: titleRequired && !title ? 'Please enter title.' : null,
+        hasError:
+            hasError(images) || (descriptionRequired && !description) || (titleRequired && !title),
     };
-    const hasError = error.first_name !== null || error.last_name !== null;
-    return { ...error, hasError };
+
+    return { meta: submission.meta, title, description, images, errors };
 };
 
-export default async (inputs: ContestModel, initial = false): Promise<ContestError> => {
-    const themes = await getErrors(inputs.themes, validateTheme);
-    const author = validateAuthor(inputs.author, initial);
-    const hasError = themes.hasError || author.hasError;
+const validateTheme = async (theme: ThemeModel): Promise<ThemeModel> => {
+    const submissions = await asyncMap(theme.submissions, validateSubmission);
+    const errors = { hasError: hasError(submissions) };
 
-    return { hasError, author, themes: themes.errors };
+    return { meta: theme.meta, submissions, errors };
+};
+
+const validateAuthor = (author: AuthorModel, initial: boolean): AuthorModel => {
+    const { first_name, last_name } = author;
+    const errors = {
+        first_name: !first_name && !initial ? 'Please enter the first name.' : null,
+        last_name: !last_name && !initial ? 'Please enter the last name.' : null,
+        hasError: !initial && (!first_name || !last_name),
+    };
+
+    return { first_name, last_name, errors };
+};
+
+export default async (contest: ContestModel, initial = false): Promise<ContestModel> => {
+    const author = validateAuthor(contest.author, initial);
+    const themes = await asyncMap(contest.themes, validateTheme);
+    const errors = { hasError: hasError(themes) || hasError(author) };
+
+    return { meta: contest.meta, author, themes, errors };
 };

@@ -1,5 +1,3 @@
-import { find, map } from 'lodash';
-
 import React from 'react';
 
 import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
@@ -8,11 +6,10 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 import SubmissionField from './SubmissionField';
 
 import { uploadFormStyles } from '../../styles/general';
-import { InputChange, SubmissionError, ThemeError, ThemeModel } from '../../types/models';
+import { InputChange, ThemeModel } from '../../types/models';
 
 interface ThemeFieldProps extends WithStyles<typeof uploadFormStyles> {
-    inputs: ThemeModel;
-    errors: ThemeError;
+    theme: ThemeModel;
     handleSubmissionChange: (theme_id: number, submission_id: number, payload: InputChange) => void;
     handleImageRemove: (theme_id: number, submission_id: number, image_id: number) => void;
     handleImageUpdate: (
@@ -27,32 +24,26 @@ class ThemeField extends React.Component<ThemeFieldProps> {
     render(): React.ReactNode {
         const {
             classes,
-            errors,
             handleSubmissionChange,
             handleImageRemove,
             handleImageUpdate,
-            inputs: { id, title, submissions },
+            theme,
         } = this.props;
 
         return (
             <Card className={classes.themeCard} raised>
                 <CardHeader
-                    title={title}
+                    title={theme.meta.title}
                     titleTypographyProps={{ align: 'center', variant: 'h3' }}
                 />
                 <CardContent>
                     <Grid container alignItems="center" spacing={2}>
-                        {map(submissions, (submission) => {
-                            const error = find(
-                                errors.submissions,
-                                (s) => s.id === submission.id,
-                            ) as SubmissionError;
+                        {theme.submissions.map((submission) => {
                             return (
                                 <SubmissionField
-                                    key={submission.id}
+                                    key={submission.meta.id}
                                     submission={submission}
-                                    errors={error}
-                                    theme_id={id}
+                                    theme_id={theme.meta.id}
                                     handleSubmissionChange={handleSubmissionChange}
                                     handleImageRemove={handleImageRemove}
                                     handleImageUpdate={handleImageUpdate}

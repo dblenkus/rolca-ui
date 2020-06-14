@@ -34,13 +34,13 @@ const processSubmission = async (submission: SubmissionModel): Promise<any> => {
 
 const processTheme = async (theme: ThemeModel): Promise<any> => {
     const submissions = await asyncMap(theme.submissions, processSubmission);
-    return flatten(submissions).map((submission) => ({ ...submission, theme: theme.id }));
+    return flatten(submissions).map((submission) => ({ ...submission, theme: theme.meta.id }));
 };
 
-export default async (inputs: ContestModel): Promise<void> => {
-    const themes = await asyncMap(inputs.themes, processTheme);
+export default async (contest: ContestModel): Promise<void> => {
+    const themes = await asyncMap(contest.themes, processTheme);
     let submissions = flatten(themes);
-    const { data: author } = await AuthorService.create(inputs.author);
+    const { data: author } = await AuthorService.create(contest.author);
     submissions = submissions.map((submission) => ({ ...submission, author }));
     SubmissionService.createSubmissions(submissions);
 };

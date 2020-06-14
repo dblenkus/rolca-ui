@@ -7,17 +7,16 @@ import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 import InputField from './InputField';
 
 import { uploadFormStyles } from '../../styles/general';
-import { AuthorError, AuthorModel, InputChange } from '../../types/models';
+import { AuthorModel, InputChange } from '../../types/models';
 
 interface AuthorFieldProps extends WithStyles<typeof uploadFormStyles> {
-    inputs: AuthorModel;
-    errors: AuthorError;
+    author: AuthorModel;
     handleAUthorChange: (payload: InputChange) => void;
 }
 
 class AuthorField extends React.Component<AuthorFieldProps> {
     render(): React.ReactNode {
-        const { classes, inputs, errors, handleAUthorChange } = this.props;
+        const { classes, author, handleAUthorChange } = this.props;
 
         return (
             <Card className={classes.themeCard} raised>
@@ -30,8 +29,8 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                         <Grid item xs={12} sm={6} md={4}>
                             <InputField
                                 name="first_name"
-                                value={inputs.first_name}
-                                error={errors.first_name}
+                                value={author.first_name}
+                                error={author.errors.first_name}
                                 label="First name"
                                 autoComplete="given-name"
                                 autoFocus={true}
@@ -42,8 +41,8 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                         <Grid item xs={12} sm={6} md={4}>
                             <InputField
                                 name="last_name"
-                                value={inputs.last_name}
-                                error={errors.last_name}
+                                value={author.last_name}
+                                error={author.errors.last_name}
                                 label="Last name"
                                 autoComplete="family-name"
                                 required={true}

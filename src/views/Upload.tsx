@@ -37,8 +37,7 @@ class UploadView extends React.Component<UploadViewProps> {
 
     render(): React.ReactNode {
         const {
-            inputs,
-            errors,
+            contest,
             handleAuthorChange,
             handleSubmissionChange,
             handleImageChange,
@@ -54,8 +53,7 @@ class UploadView extends React.Component<UploadViewProps> {
 
         return (
             <ContestField
-                inputs={inputs}
-                errors={errors}
+                contest={contest}
                 handleAuthorChange={handleAuthorChange}
                 handleSubmissionChange={handleSubmissionChange}
                 handleImageChange={handleImageChange}

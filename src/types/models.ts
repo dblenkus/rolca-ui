@@ -8,51 +8,57 @@ export interface FileChange {
     url: string;
 }
 
-export interface ImageModel {
-    id: number;
-    file: File | undefined;
-    url: string;
-}
-
 export interface ImageError {
-    id: number;
     hasError: boolean;
     file: string | null;
 }
 
-export interface SubmissionModel {
+export interface ImageMeta {
     id: number;
-    isSeries: boolean;
-    title: string;
-    titleRequired: boolean;
-    description: string;
-    descriptionRequired: boolean;
-    images: ImageModel[];
+}
+
+export interface ImageModel {
+    meta: ImageMeta;
+    file: File | undefined;
+    url: string;
+    errors: ImageError;
 }
 
 export interface SubmissionError {
-    id: number;
     hasError: boolean;
     title: string | null;
     description: string | null;
-    images: ImageError[];
 }
 
-export interface ThemeModel {
+export interface SubmissionMeta {
     id: number;
+    imageNumber: number;
+    isSeries: boolean;
+    titleRequired: boolean;
+    descriptionRequired: boolean;
+}
+
+export interface SubmissionModel {
+    meta: SubmissionMeta;
     title: string;
-    submissions: SubmissionModel[];
+    description: string;
+    images: ImageModel[];
+    errors: SubmissionError;
 }
 
 export interface ThemeError {
-    id: number;
     hasError: boolean;
-    submissions: SubmissionError[];
 }
 
-export interface AuthorModel {
-    first_name: string;
-    last_name: string;
+export interface ThemeMeta {
+    id: number;
+    title: string;
+}
+
+export interface ThemeModel {
+    meta: ThemeMeta;
+    submissions: SubmissionModel[];
+    errors: ThemeError;
 }
 
 export interface AuthorError {
@@ -61,17 +67,26 @@ export interface AuthorError {
     last_name: string | null;
 }
 
-export interface ContestModel {
-    title: string;
-    description: string;
-    noticeHtml: string;
-    headerImage: string | null;
-    author: AuthorModel;
-    themes: ThemeModel[];
+export interface AuthorModel {
+    first_name: string;
+    last_name: string;
+    errors: AuthorError;
 }
 
 export interface ContestError {
     hasError: boolean;
-    author: AuthorError;
-    themes: ThemeError[];
+}
+
+export interface ContestMeta {
+    title: string;
+    description: string;
+    noticeHtml: string;
+    headerImage: string | null;
+}
+
+export interface ContestModel {
+    meta: ContestMeta;
+    author: AuthorModel;
+    themes: ThemeModel[];
+    errors: ContestError;
 }
