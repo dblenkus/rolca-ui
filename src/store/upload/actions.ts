@@ -1,13 +1,10 @@
 import { AppThunk } from '..';
 
 import { Contest, Theme } from '../../types/api';
-import { ContestError, InputChange } from '../../types/models';
+import { ContestModel, ImageMeta, InputChange, SubmissionMeta } from '../../types/models';
 import imageReader from '../../utils/imageReader';
 import upload from '../../utils/upload';
 import validate from '../../utils/validate';
-
-import themeReducer from './reducerTheme';
-import { ImageMeta, SubmissionMeta, UploadState } from './types';
 
 import {
     AUTHOR_UPDATE,
@@ -15,44 +12,34 @@ import {
     THEME_INIT,
     SUBMISSION_INIT,
     SUBMISSION_UPDATE,
-    UPLOAD_SET,
-    UPLOAD_SET_ERRORS,
+    UPLOAD_INIT,
+    UPLOAD_SET_CONTEST,
     UPLOAD_SET_REDIRECT,
     UploadActionTypes,
     IMAGE_REMOVE,
     IMAGE_STORE,
 } from './types';
 
-export const uploadInit = (contest: Contest): AppThunk => async (dispatch, getState) => {
-    const inputs = {
-        ...getState().upload.inputs,
-        title: contest.title,
-        description: contest.description,
-        noticeHtml: contest.notice_html,
-        headerImage: contest.header_image,
-        themes: contest.themes.map((theme) => themeReducer(undefined, themeInit(theme))),
-    };
-    const errors = await validate(inputs, true);
-    dispatch(uploadSet({ inputs, errors, redirect: false }));
-};
-
-export const uploadSet = (meta: UploadState): UploadActionTypes => ({ type: UPLOAD_SET, meta });
+export const uploadInit = (payload: Contest): UploadActionTypes => ({
+    type: UPLOAD_INIT,
+    payload,
+});
 
 export const uploadSubmit = (): AppThunk => async (dispatch, getState) => {
-    const { inputs } = getState().upload;
+    const { contest } = getState().upload;
 
-    const errors = await validate(inputs);
-    if (!errors.hasError) {
-        await upload(inputs);
+    const newContest = await validate(contest);
+    if (newContest.errors.hasError) {
+        await upload(contest);
         dispatch(uploadSetRedirect());
     } else {
-        dispatch(uploadSetErrors(errors));
+        dispatch(uploadSetContest(newContest));
     }
 };
 
-export const uploadSetErrors = (errors: ContestError): UploadActionTypes => ({
-    type: UPLOAD_SET_ERRORS,
-    payload: errors,
+export const uploadSetContest = (payload: ContestModel): UploadActionTypes => ({
+    type: UPLOAD_SET_CONTEST,
+    payload,
 });
 
 export const uploadSetRedirect = (): UploadActionTypes => ({
@@ -64,11 +51,11 @@ export const authorUpdate = (payload: InputChange): UploadActionTypes => ({
     payload,
 });
 
-export const themeInit = (meta: Theme): UploadActionTypes => ({ type: THEME_INIT, meta });
+export const themeInit = (payload: Theme): UploadActionTypes => ({ type: THEME_INIT, payload });
 
-export const submissionInit = (meta: SubmissionMeta): UploadActionTypes => ({
+export const submissionInit = (payload: SubmissionMeta): UploadActionTypes => ({
     type: SUBMISSION_INIT,
-    meta,
+    payload,
 });
 
 export const submissionUpdate = (
@@ -77,7 +64,7 @@ export const submissionUpdate = (
     payload: InputChange,
 ): UploadActionTypes => ({ type: SUBMISSION_UPDATE, theme_id, submission_id, payload });
 
-export const imageInit = (meta: ImageMeta): UploadActionTypes => ({ type: IMAGE_INIT, meta });
+export const imageInit = (payload: ImageMeta): UploadActionTypes => ({ type: IMAGE_INIT, payload });
 
 export const imageRemove = (
     theme_id: number,

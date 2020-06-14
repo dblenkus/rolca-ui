@@ -1,24 +1,13 @@
-import { Theme } from '../../types/api';
-import { ContestError, ContestModel, InputChange } from '../../types/models';
+import { Contest, Theme } from '../../types/api';
+import { ContestModel, ImageMeta, InputChange, SubmissionMeta } from '../../types/models';
 
 export interface UploadState {
-    inputs: ContestModel;
-    errors: ContestError;
+    contest: ContestModel;
     redirect: boolean;
 }
 
-export interface ImageMeta {
-    id: number;
-}
-
-export interface SubmissionMeta {
-    id: number;
-    imageNumber: number;
-    isSeries: boolean;
-}
-
-export const UPLOAD_SET = 'UPLOAD_SET';
-export const UPLOAD_SET_ERRORS = 'UPLOAD_SET_ERRORS';
+export const UPLOAD_INIT = 'UPLOAD_INIT';
+export const UPLOAD_SET_CONTEST = 'UPLOAD_SET_CONTEST';
 export const UPLOAD_SET_REDIRECT = 'UPLOAD_SET_REDIRECT';
 export const AUTHOR_UPDATE = 'AUTHOR_UPDATE';
 export const THEME_INIT = 'THEME_INIT';
@@ -28,14 +17,14 @@ export const IMAGE_INIT = 'IMAGE_INIT';
 export const IMAGE_REMOVE = 'IMAGE_REMOVE';
 export const IMAGE_STORE = 'IMAGE_STORE';
 
-interface UploadSetAction {
-    type: typeof UPLOAD_SET;
-    meta: UploadState;
+interface UploadInitAction {
+    type: typeof UPLOAD_INIT;
+    payload: Contest;
 }
 
-interface UploadSetErrorAction {
-    type: typeof UPLOAD_SET_ERRORS;
-    payload: ContestError;
+interface UploadSetContestAction {
+    type: typeof UPLOAD_SET_CONTEST;
+    payload: ContestModel;
 }
 
 interface UploadSetRedirectAction {
@@ -49,12 +38,12 @@ interface AuthorUpdateAction {
 
 interface ThemeInitAction {
     type: typeof THEME_INIT;
-    meta: Theme;
+    payload: Theme;
 }
 
 interface SubmissionInitAction {
     type: typeof SUBMISSION_INIT;
-    meta: SubmissionMeta;
+    payload: SubmissionMeta;
 }
 
 interface SubmissionUpdateAction {
@@ -66,7 +55,7 @@ interface SubmissionUpdateAction {
 
 interface ImageInitAction {
     type: typeof IMAGE_INIT;
-    meta: ImageMeta;
+    payload: ImageMeta;
 }
 
 interface ImageRemoveAction {
@@ -85,8 +74,8 @@ interface ImageStoreAction {
 }
 
 export type UploadActionTypes =
-    | UploadSetAction
-    | UploadSetErrorAction
+    | UploadInitAction
+    | UploadSetContestAction
     | UploadSetRedirectAction
     | AuthorUpdateAction
     | ThemeInitAction

@@ -1,4 +1,3 @@
-import { find, map } from 'lodash';
 import React from 'react';
 
 import { withStyles, WithStyles } from '@material-ui/core/styles';
@@ -7,15 +6,14 @@ import { Button, Grid, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 import { uploadFormStyles } from '../../styles/general';
-import { InputChange, ThemeError, ContestModel, ContestError } from '../../types/models';
+import { InputChange, ContestModel } from '../../types/models';
 
 import HeaderImage from '../Layout/HeaderImage';
 import AuthorField from './AuthorField';
 import ThemeField from './ThemeField';
 
 interface ContestFieldProps extends WithStyles<typeof uploadFormStyles> {
-    inputs: ContestModel;
-    errors: ContestError;
+    contest: ContestModel;
     handleAuthorChange: (payload: InputChange) => void;
     handleSubmissionChange: (theme_id: number, submission_id: number, payload: InputChange) => void;
     handleImageChange: (
@@ -33,8 +31,7 @@ class ContestField extends React.Component<ContestFieldProps> {
         const { classes } = this.props;
 
         const {
-            errors,
-            inputs,
+            contest,
             handleAuthorChange,
             handleSubmissionChange,
             handleImageChange,
@@ -50,11 +47,11 @@ class ContestField extends React.Component<ContestFieldProps> {
         return (
             <Grid container>
                 <Grid item xs={12}>
-                    {inputs.headerImage ? (
-                        <HeaderImage src={inputs.headerImage} />
+                    {contest.meta.headerImage ? (
+                        <HeaderImage src={contest.meta.headerImage} />
                     ) : (
                         <Typography align="center" variant="h2">
-                            {inputs.title}
+                            {contest.meta.title}
                         </Typography>
                     )}
                 </Grid>
@@ -62,28 +59,21 @@ class ContestField extends React.Component<ContestFieldProps> {
                     <form onSubmit={handleClick} noValidate>
                         <AuthorField
                             handleAUthorChange={handleAuthorChange}
-                            inputs={inputs.author}
-                            errors={errors.author}
+                            author={contest.author}
                         />
 
-                        {map(inputs.themes, (theme) => {
-                            const error = find(
-                                errors.themes,
-                                (i) => i.id === theme.id,
-                            ) as ThemeError;
-
+                        {contest.themes.map((theme) => {
                             return (
                                 <ThemeField
-                                    key={theme.id}
-                                    inputs={theme}
-                                    errors={error}
+                                    key={theme.meta.id}
+                                    theme={theme}
                                     handleSubmissionChange={handleSubmissionChange}
                                     handleImageRemove={handleImageRemove}
                                     handleImageUpdate={handleImageChange}
                                 />
                             );
                         })}
-                        {errors.hasError && (
+                        {contest.errors.hasError && (
                             <Alert className={classes.errorAlert} severity="error">
                                 Please fix errors before uploading.
                             </Alert>

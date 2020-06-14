@@ -1,19 +1,16 @@
 import { ImageModel } from '../../types/models';
 
 import { IMAGE_INIT, IMAGE_REMOVE, IMAGE_STORE, UploadActionTypes } from './types';
+import { getEmptyImage } from './utils';
 
-const initialSate: ImageModel = {
-    id: 0,
-    file: undefined,
-    url: '',
-};
+const initialSate = getEmptyImage();
 
 const reducer = (state = initialSate, action: UploadActionTypes): ImageModel => {
     switch (action.type) {
         case IMAGE_INIT:
             return {
                 ...state,
-                id: action.meta.id,
+                meta: action.payload,
             };
         case IMAGE_REMOVE:
             return { ...state, file: undefined, url: '' };

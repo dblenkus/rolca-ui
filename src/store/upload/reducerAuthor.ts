@@ -1,10 +1,8 @@
 import { AuthorModel } from '../../types/models';
 import { AUTHOR_UPDATE, UploadActionTypes } from './types';
+import { getEmptyAuthor } from './utils';
 
-const initialSate: AuthorModel = {
-    first_name: '',
-    last_name: '',
-};
+const initialSate = getEmptyAuthor();
 
 const reducer = (state = initialSate, action: UploadActionTypes): AuthorModel => {
     switch (action.type) {

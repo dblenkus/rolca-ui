@@ -5,30 +5,22 @@ import { SubmissionModel } from '../../types/models';
 import { imageInit } from './actions';
 import { SUBMISSION_INIT, SUBMISSION_UPDATE, UploadActionTypes } from './types';
 import imageReducer from './reducerImage';
+import { getEmptySubmission } from './utils';
 
 interface RequiredFields {
     titleRequired?: boolean;
     descriptionRequired?: boolean;
 }
 
-const initialSate: SubmissionModel = {
-    id: 0,
-    isSeries: false,
-    title: '',
-    titleRequired: false,
-    description: '',
-    descriptionRequired: false,
-    images: [],
-};
+const initialSate = getEmptySubmission();
 
 const reducer = (state = initialSate, action: UploadActionTypes): SubmissionModel => {
     switch (action.type) {
         case SUBMISSION_INIT: {
-            let { id, imageNumber, isSeries } = action.meta;
+            let { imageNumber } = action.payload;
             return {
                 ...state,
-                id,
-                isSeries,
+                meta: action.payload,
                 images: range(imageNumber).map((image_id) =>
                     imageReducer(undefined, imageInit({ id: image_id })),
                 ),
@@ -36,7 +28,7 @@ const reducer = (state = initialSate, action: UploadActionTypes): SubmissionMode
         }
         case SUBMISSION_UPDATE: {
             const { name, value } = action.payload;
-            const { isSeries } = state;
+            const { isSeries } = state.meta;
 
             const requiredFields: RequiredFields = {};
             if (name === 'title' || name === 'description') {
@@ -46,29 +38,26 @@ const reducer = (state = initialSate, action: UploadActionTypes): SubmissionMode
 
             return {
                 ...state,
-                ...requiredFields,
+                meta: { ...state.meta, ...requiredFields },
                 [name]: value,
             };
         }
         default: {
             if ('image_id' in action) {
-                let {
-                    description,
-                    descriptionRequired,
-                    images,
-                    isSeries,
-                    title,
-                    titleRequired,
-                } = state;
+                let { description, images, meta, title } = state;
                 images = images.map((image) => {
-                    return image.id === action.image_id ? imageReducer(image, action) : image;
+                    return image.meta.id === action.image_id ? imageReducer(image, action) : image;
                 });
 
                 const anyImage = images.some((image) => !!image.file);
-                titleRequired = anyImage || (isSeries && !!description);
-                descriptionRequired = isSeries && (anyImage || !!title);
+                const titleRequired = anyImage || (meta.isSeries && !!description);
+                const descriptionRequired = meta.isSeries && (anyImage || !!title);
 
-                return { ...state, images, titleRequired, descriptionRequired };
+                return {
+                    ...state,
+                    meta: { ...state.meta, titleRequired, descriptionRequired },
+                    images,
+                };
             }
             return state;
         }
