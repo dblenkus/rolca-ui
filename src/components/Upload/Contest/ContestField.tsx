@@ -5,12 +5,12 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Button, Grid, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
-import { uploadFormStyles } from '../../styles/general';
-import { InputChange, ContestModel } from '../../types/models';
+import { uploadFormStyles } from '../../../styles/general';
+import { InputChange, ContestModel } from '../../../types/models';
 
-import HeaderImage from '../Layout/HeaderImage';
-import AuthorField from './AuthorField';
-import ThemeField from './ThemeField';
+import HeaderImage from '../../Layout/HeaderImage';
+import AuthorField from '../Author/AuthorField';
+import ThemeField from '../Theme/ThemeField';
 
 interface ContestFieldProps extends WithStyles<typeof uploadFormStyles> {
     contest: ContestModel;
@@ -20,9 +20,8 @@ interface ContestFieldProps extends WithStyles<typeof uploadFormStyles> {
         theme_id: number,
         submission_id: number,
         image_id: number,
-        payload: { file: File },
+        payload: { file: File | undefined },
     ) => void;
-    handleImageRemove: (theme_id: number, submission_id: number, image_id: number) => void;
     handleSubmit: () => void;
 }
 
@@ -35,13 +34,25 @@ class ContestField extends React.Component<ContestFieldProps> {
             handleAuthorChange,
             handleSubmissionChange,
             handleImageChange,
-            handleImageRemove,
             handleSubmit,
         } = this.props;
 
         const handleClick = (event: React.FormEvent): void => {
             event.preventDefault();
             handleSubmit();
+        };
+
+        const onSubmissionChange = (theme_id: number) => (
+            submission_id: number,
+            payload: { name: string; value: string },
+        ): void => handleSubmissionChange(theme_id, submission_id, payload);
+
+        const onImageChange = (theme_id: number) => (
+            submission_id: number,
+            image_id: number,
+            payload: { file: File | undefined },
+        ): void => {
+            handleImageChange(theme_id, submission_id, image_id, payload);
         };
 
         return (
@@ -67,9 +78,8 @@ class ContestField extends React.Component<ContestFieldProps> {
                                 <ThemeField
                                     key={theme.meta.id}
                                     theme={theme}
-                                    handleSubmissionChange={handleSubmissionChange}
-                                    handleImageRemove={handleImageRemove}
-                                    handleImageUpdate={handleImageChange}
+                                    handleSubmissionChange={onSubmissionChange(theme.meta.id)}
+                                    handleImageChange={onImageChange(theme.meta.id)}
                                 />
                             );
                         })}

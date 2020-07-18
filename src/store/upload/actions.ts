@@ -16,7 +16,6 @@ import {
     UPLOAD_SET_CONTEST,
     UPLOAD_SET_REDIRECT,
     UploadActionTypes,
-    IMAGE_REMOVE,
     IMAGE_STORE,
 } from './types';
 
@@ -29,7 +28,7 @@ export const uploadSubmit = (): AppThunk => async (dispatch, getState) => {
     const { contest } = getState().upload;
 
     const newContest = await validate(contest);
-    if (newContest.errors.hasError) {
+    if (!newContest.errors.hasError) {
         await upload(contest);
         dispatch(uploadSetRedirect());
     } else {
@@ -66,25 +65,20 @@ export const submissionUpdate = (
 
 export const imageInit = (payload: ImageMeta): UploadActionTypes => ({ type: IMAGE_INIT, payload });
 
-export const imageRemove = (
-    theme_id: number,
-    submission_id: number,
-    image_id: number,
-): UploadActionTypes => ({ type: IMAGE_REMOVE, theme_id, submission_id, image_id });
-
 export const imageStore = (
     theme_id: number,
     submission_id: number,
     image_id: number,
-    payload: { file: File; url: string },
+    payload: { file: File | undefined; url: string },
 ): UploadActionTypes => ({ type: IMAGE_STORE, theme_id, submission_id, image_id, payload });
 
 export const imageUpdate = (
     theme_id: number,
     submission_id: number,
     image_id: number,
-    payload: { file: File },
+    payload: { file: File | undefined },
 ): AppThunk => async (dispatch) => {
-    const { src: url } = await imageReader(payload.file);
-    dispatch(imageStore(theme_id, submission_id, image_id, { ...payload, url }));
+    const { file } = payload;
+    const url = !file ? '' : (await imageReader(file)).src;
+    dispatch(imageStore(theme_id, submission_id, image_id, { file, url }));
 };

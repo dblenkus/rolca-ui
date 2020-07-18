@@ -6,7 +6,6 @@ import { Redirect } from 'react-router-dom';
 import { AppState } from '../store';
 import {
     authorUpdate,
-    imageRemove,
     imageUpdate,
     submissionUpdate,
     uploadInit,
@@ -18,7 +17,7 @@ import ContestService from '../services/ContestService';
 import { InputChange } from '../types/models';
 import { Contest } from '../types/api';
 
-import ContestField from '../components/Upload/ContestField';
+import ContestField from '../components/Upload/Contest/ContestField';
 
 interface RouteMatchParams {
     contestId: string;
@@ -41,7 +40,6 @@ class UploadView extends React.Component<UploadViewProps> {
             handleAuthorChange,
             handleSubmissionChange,
             handleImageChange,
-            handleImageRemove,
             handleSubmit,
             redirect,
         } = this.props;
@@ -57,7 +55,6 @@ class UploadView extends React.Component<UploadViewProps> {
                 handleAuthorChange={handleAuthorChange}
                 handleSubmissionChange={handleSubmissionChange}
                 handleImageChange={handleImageChange}
-                handleImageRemove={handleImageRemove}
                 handleSubmit={handleSubmit}
             />
         );
@@ -75,10 +72,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         theme_id: number,
         submission_id: number,
         image_id: number,
-        payload: { file: File },
-    ) => dispatch(imageUpdate(theme_id, submission_id, image_id, payload)),
-    handleImageRemove: (theme_id: number, submission_id: number, image_id: number) =>
-        dispatch(imageRemove(theme_id, submission_id, image_id)),
+        payload: { file: File | undefined },
+    ): void => dispatch(imageUpdate(theme_id, submission_id, image_id, payload)),
     handleSubmit: () => dispatch(uploadSubmit()),
 });
 

@@ -7,7 +7,7 @@ export interface IInputChangeEvent {
     value: string;
 }
 
-interface InputFieldProps {
+export interface InputFieldProps {
     className: string;
     name: string;
     label: string;

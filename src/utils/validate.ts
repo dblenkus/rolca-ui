@@ -31,36 +31,35 @@ const hasError = (obj: BaseObject | BaseObject[]): boolean => {
 };
 
 const validateImage = async (image: ImageModel): Promise<ImageModel> => {
-    // const constructError = (file: string | null): ImageError => ({
-    //     id: image.id,
-    //     file,
-    //     hasError: file !== null,
-    // });
+    const constructResponse = (fileError: string | null): ImageModel => ({
+        ...image,
+        errors: { file: fileError, hasError: !!fileError },
+    });
 
     const { file } = image;
     if (file) {
         if (file === undefined) {
-            return constructError('Please select an image.');
+            return constructResponse('Please select an image.');
         }
         if (file.type !== 'image/jpeg') {
-            return constructError('File must be in JPEG format.');
+            return constructResponse('File must be in JPEG format.');
         }
         if (file.size > 5 * 1024 ** 2) {
-            return constructError('Image must be smaller than 5MB.');
+            return constructResponse('Image must be smaller than 5MB.');
         }
 
         let img: HTMLImageElement;
         try {
             img = await imageReader(file);
         } catch (error) {
-            return constructError('Invalid file.');
+            return constructResponse('Invalid file.');
         }
 
         if (img.height > 3000 || img.width > 3000)
-            return constructError('Longe edge should not exceed 3000px.');
+            return constructResponse('Longe edge should not exceed 3000px.');
     }
 
-    return constructError(null);
+    return constructResponse(null);
 };
 
 const validateSubmission = async (submission: SubmissionModel): Promise<SubmissionModel> => {
