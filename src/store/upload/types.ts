@@ -14,7 +14,6 @@ export const THEME_INIT = 'THEME_INIT';
 export const SUBMISSION_INIT = 'SUBMISSION_INIT';
 export const SUBMISSION_UPDATE = 'SUBMISSION_UPDATE';
 export const IMAGE_INIT = 'IMAGE_INIT';
-export const IMAGE_REMOVE = 'IMAGE_REMOVE';
 export const IMAGE_STORE = 'IMAGE_STORE';
 
 interface UploadInitAction {
@@ -58,19 +57,12 @@ interface ImageInitAction {
     payload: ImageMeta;
 }
 
-interface ImageRemoveAction {
-    type: typeof IMAGE_REMOVE;
-    theme_id: number;
-    submission_id: number;
-    image_id: number;
-}
-
 interface ImageStoreAction {
     type: typeof IMAGE_STORE;
     theme_id: number;
     submission_id: number;
     image_id: number;
-    payload: { file: File; url: string };
+    payload: { file: File | undefined; url: string };
 }
 
 export type UploadActionTypes =
@@ -82,5 +74,4 @@ export type UploadActionTypes =
     | SubmissionInitAction
     | SubmissionUpdateAction
     | ImageInitAction
-    | ImageRemoveAction
     | ImageStoreAction;

@@ -4,10 +4,10 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 
-import InputField from './InputField';
+import InputField from '../InputField';
 
-import { uploadFormStyles } from '../../styles/general';
-import { AuthorModel, InputChange } from '../../types/models';
+import { uploadFormStyles } from '../../../styles/general';
+import { AuthorModel, InputChange } from '../../../types/models';
 
 interface AuthorFieldProps extends WithStyles<typeof uploadFormStyles> {
     author: AuthorModel;

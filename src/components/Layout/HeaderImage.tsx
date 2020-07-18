@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 const HeaderImage: React.FC<HeaderImageProps> = ({ src }) => {
     const classes = useStyles();
 
-    return <img src={src} className={classes.image} />;
+    return <img src={src} alt="Header" className={classes.image} />;
 };
 
 export default HeaderImage;
