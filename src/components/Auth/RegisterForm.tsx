@@ -13,6 +13,10 @@ export interface Fields {
     last_name: string;
     email: string;
     password: string;
+    address: string;
+    city: string;
+    postal_code: string;
+    country: string;
     [key: string]: string;
 }
 
@@ -21,6 +25,10 @@ export interface Errors {
     last_name: null | Array<string>;
     email: null | Array<string>;
     password: null | Array<string>;
+    address: null | Array<string>;
+    city: null | Array<string>;
+    postal_code: null | Array<string>;
+    country: null | Array<string>;
     non_field_errors: null | Array<string>;
     [key: string]: any;
 }
@@ -92,6 +100,50 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
                         error={getError('password')}
                         autoComplete="new-password"
                         type="password"
+                        required
+                        onChange={onChange}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputField
+                        name="address"
+                        label="Address"
+                        value={fields.address}
+                        error={getError('address')}
+                        autoComplete="street-address"
+                        required
+                        onChange={onChange}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputField
+                        name="city"
+                        label="City"
+                        value={fields.city}
+                        error={getError('city')}
+                        autoComplete="address-level2"
+                        required
+                        onChange={onChange}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputField
+                        name="postal_code"
+                        label="Postal code"
+                        value={fields.postal_code}
+                        error={getError('postal_code')}
+                        autoComplete="postal-code"
+                        required
+                        onChange={onChange}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputField
+                        name="country"
+                        label="Country"
+                        value={fields.country}
+                        error={getError('country')}
+                        autoComplete="country-name"
                         required
                         onChange={onChange}
                     />

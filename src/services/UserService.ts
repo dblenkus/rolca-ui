@@ -12,6 +12,10 @@ export interface RegisterPayload {
     last_name: string;
     email: string;
     password: string;
+    address: string;
+    city: string;
+    postal_code: string;
+    country: string;
 }
 
 export interface ActivateUserPayload {
