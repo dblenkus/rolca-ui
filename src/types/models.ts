@@ -15,6 +15,8 @@ export interface ImageError {
 
 export interface ImageMeta {
     id: number;
+    isChanged: boolean;
+    isNew: boolean;
 }
 
 export interface ImageModel {
@@ -33,6 +35,8 @@ export interface SubmissionError {
 export interface SubmissionMeta {
     id: number;
     imageNumber: number;
+    isChanged: boolean;
+    isNew: boolean;
     isSeries: boolean;
     titleRequired: boolean;
     descriptionRequired: boolean;

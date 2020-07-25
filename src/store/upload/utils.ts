@@ -67,6 +67,8 @@ export const getEmptySubmission = (): SubmissionModel => ({
     meta: {
         id: 0,
         imageNumber: 0,
+        isChanged: false,
+        isNew: true,
         isSeries: false,
         titleRequired: false,
         descriptionRequired: false,
@@ -80,6 +82,8 @@ export const getEmptySubmission = (): SubmissionModel => ({
 export const getEmptyImage = (): ImageModel => ({
     meta: {
         id: 0,
+        isChanged: false,
+        isNew: true,
     },
     file: undefined,
     url: '',

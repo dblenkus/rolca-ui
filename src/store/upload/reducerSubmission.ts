@@ -18,11 +18,15 @@ const reducer = (state = initialSate, action: UploadActionTypes): SubmissionMode
     switch (action.type) {
         case SUBMISSION_INIT: {
             let { imageNumber } = action.payload;
+            const imageMeta = {
+                isNew: true,
+                isChanged: false,
+            };
             return {
                 ...state,
                 meta: action.payload,
                 images: range(imageNumber).map((image_id) =>
-                    imageReducer(undefined, imageInit({ id: image_id })),
+                    imageReducer(undefined, imageInit({ ...imageMeta, id: image_id })),
                 ),
             };
         }
@@ -38,7 +42,7 @@ const reducer = (state = initialSate, action: UploadActionTypes): SubmissionMode
 
             return {
                 ...state,
-                meta: { ...state.meta, ...requiredFields },
+                meta: { ...state.meta, ...requiredFields, isChanged: true },
                 [name]: value,
             };
         }

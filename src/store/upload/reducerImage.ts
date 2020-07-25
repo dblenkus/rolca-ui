@@ -13,7 +13,11 @@ const reducer = (state = initialSate, action: UploadActionTypes): ImageModel => 
                 meta: action.payload,
             };
         case IMAGE_STORE:
-            return { ...state, ...action.payload };
+            return {
+                ...state,
+                meta: { ...state.meta, isChanged: true },
+                ...action.payload,
+            };
         default:
             return state;
     }

@@ -17,6 +17,8 @@ const reducer = (state = initialState, action: UploadActionTypes): ThemeModel =>
             const submissionMeta = {
                 imageNumber: isSeries ? imageNumber : 1,
                 isSeries,
+                isNew: true,
+                isChanged: false,
                 titleRequired: false,
                 descriptionRequired: false,
             };
