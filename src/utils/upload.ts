@@ -5,16 +5,13 @@ import { ContestModel, ImageModel, SubmissionModel, ThemeModel } from '../types/
 import SubmissionService from '../services/SubmissionService';
 import AuthorService from '../services/AuthorService';
 
+import { asyncMap } from './async';
+
 // interface XXX {
 //     files: number[];
 //     title: string;
 //     description: string;
 // }
-
-const asyncMap = async <T, R>(array: T[], fn: (item: T) => Promise<R>): Promise<R[]> => {
-    const promises = array.map((element) => fn(element));
-    return await Promise.all(promises);
-};
 
 const processImage = async (image: ImageModel): Promise<any> => {
     const { file } = image;

@@ -8,6 +8,7 @@ import {
 
 import imageReader from './imageReader';
 import { anyImage } from './image';
+import { asyncMap } from './async';
 
 interface BaseError {
     hasError: boolean;
@@ -16,11 +17,6 @@ interface BaseError {
 interface BaseObject {
     errors: BaseError;
 }
-
-const asyncMap = async <T>(array: T[], fn: (item: T) => Promise<T>): Promise<T[]> => {
-    const promises = array.map((element) => fn(element));
-    return await Promise.all(promises);
-};
 
 const hasError = (obj: BaseObject | BaseObject[]): boolean => {
     if (Array.isArray(obj)) {
