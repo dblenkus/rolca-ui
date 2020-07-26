@@ -26,12 +26,14 @@ const CustomButton = ({ navigate, ...rest }: { navigate: Function }) => {
 
 const ContestCard: React.FC<ContestCardProps> = (props) => {
     const { contest } = props;
+    console.log(contest);
     return (
         <Card>
             <CardMedia
                 component="img"
-                image={`${process.env.PUBLIC_URL}/img/no-photo.png`}
-                height="210"
+                image={contest.header_image || `${process.env.PUBLIC_URL}/img/no-photo.png`}
+                width="100%"
+                max-height="210"
                 title="Contemplative Reptile"
             />
             <CardContent>
@@ -45,7 +47,8 @@ const ContestCard: React.FC<ContestCardProps> = (props) => {
             <CardActions>
                 <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                     <Link
-                        to={`/contest/${contest.id}/details`}
+                        to={`/contest/${contest.id}/upload`}
+                        // to={`/contest/${contest.id}/details`}
                         component={CustomButton}
                         color="primary"
                     >
