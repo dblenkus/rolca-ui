@@ -19,6 +19,7 @@ import RegisterActivateView from './views/RegisterActivate';
 import ResultsListView from './views/ResultsList';
 import UploadView from './views/Upload';
 import UploadConfirmView from './views/UploadConfirm';
+import EditSubmissionsList from './views/EditSubmissionsList';
 import PasswordResetRequestView from './views/PasswordResetRequest';
 import PasswordResetView from './views/PasswordReset';
 
@@ -68,6 +69,10 @@ const App = () => {
                                 <PrivateRoute
                                     path="/contest/:contestId/confirm"
                                     component={UploadConfirmView}
+                                />
+                                <PrivateRoute
+                                    path="/user/submissions"
+                                    component={EditSubmissionsList}
                                 />
                                 <Route path="/login" component={LoginView} />
                                 <Route exact path="/password-reset" component={PasswordResetView} />

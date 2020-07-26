@@ -54,3 +54,9 @@ export const authStyles = ({ spacing }: Theme) => ({
         padding: spacing(1),
     },
 });
+
+export const editListStyles = ({ spacing }: Theme) => ({
+    button: {
+        margin: spacing(0, 0, 0, 1),
+    },
+});

@@ -40,6 +40,14 @@ const Header: React.FC = () => {
                     Active contests
                 </Link>
                 <Link
+                    to="/user/submissions"
+                    component={CustomButton}
+                    className={classes.menuButton}
+                    color="inherit"
+                >
+                    Edit submissions
+                </Link>
+                <Link
                     to="/results"
                     component={CustomButton}
                     className={classes.menuButton}
