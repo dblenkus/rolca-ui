@@ -19,9 +19,11 @@ export interface Author {
 
 export interface Submission {
     id: number;
+    theme: number;
+    author: Author;
     title: string;
     description: string;
-    images: Image[];
+    files: Image[];
 }
 
 export interface Theme {
