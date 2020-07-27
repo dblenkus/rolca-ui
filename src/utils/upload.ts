@@ -39,5 +39,5 @@ export default async (contest: ContestModel): Promise<void> => {
     let submissions = flatten(themes);
     const { data: author } = await AuthorService.create(contest.author);
     submissions = submissions.map((submission) => ({ ...submission, author }));
-    SubmissionService.createSubmissions(submissions);
+    await SubmissionService.createSubmissions(submissions);
 };
