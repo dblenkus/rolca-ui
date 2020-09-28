@@ -22,6 +22,8 @@ import UploadConfirmView from './views/UploadConfirm';
 import EditSubmissionsList from './views/EditSubmissionsList';
 import PasswordResetRequestView from './views/PasswordResetRequest';
 import PasswordResetView from './views/PasswordReset';
+import AdminSubmissionSetList from './views/admin/SubmissionSetList';
+import AdminSubmissionSetView from './views/admin/SubmissionSetView';
 
 import AuthProvider from './components/Auth/AuthProvider';
 import Notifications from './components/Notifications/Notifications';
@@ -83,6 +85,15 @@ const App = () => {
                                 <Route exact path="/register" component={RegisterView} />
                                 <Route path="/register/activate" component={RegisterActivateView} />
                                 <Route path="/results" component={ResultsListView} />
+
+                                <PrivateRoute
+                                    path="/admin/contest/:contestId/submissions"
+                                    component={AdminSubmissionSetList}
+                                />
+                                <PrivateRoute
+                                    path="/admin/contest/:contestId/submission/:submissionSetId"
+                                    component={AdminSubmissionSetView}
+                                />
                             </Switch>
                         </Container>
                         <Footer />

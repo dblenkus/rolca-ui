@@ -26,6 +26,13 @@ export interface Submission {
     files: Image[];
 }
 
+export interface SubmissionSet {
+    id: number;
+    created: string;
+    modified: string;
+    submissions: Submission[];
+}
+
 export interface Theme {
     id: number;
     title: string;

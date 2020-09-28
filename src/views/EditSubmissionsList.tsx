@@ -138,7 +138,7 @@ class EditSubmissionsList extends React.Component<
                                         <Tooltip title="Not jet available." placement="top">
                                             <span>
                                                 <Button
-                                                    variant="contained"
+                                                    variant="text"
                                                     className={classes.button}
                                                     disabled
                                                 >
@@ -147,7 +147,7 @@ class EditSubmissionsList extends React.Component<
                                             </span>
                                         </Tooltip>
                                         <Button
-                                            variant="contained"
+                                            variant="text"
                                             className={classes.button}
                                             color="secondary"
                                             onClick={this.openDialog(group.submissions)}
