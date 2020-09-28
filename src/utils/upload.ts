@@ -26,11 +26,15 @@ const processSubmission = async (submission: SubmissionModel): Promise<any> => {
     let files = await asyncMap(submission.images, processImage);
     files = without(files, undefined);
     const { title, description } = submission;
+
+    if (!files.length) return undefined;
+
     return { files, title, description };
 };
 
 const processTheme = async (theme: ThemeModel): Promise<any> => {
-    const submissions = await asyncMap(theme.submissions, processSubmission);
+    let submissions = await asyncMap(theme.submissions, processSubmission);
+    submissions = without(submissions, undefined);
     return flatten(submissions).map((submission) => ({ ...submission, theme: theme.meta.id }));
 };
 
