@@ -1,23 +1,9 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { Link } from 'react-router-dom';
 
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
-import {
-    Button,
-    Grid,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableFooter,
-    TableHead,
-    TablePagination,
-    TableRow,
-    Typography,
-} from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 
 import ConfirmDialog from '../../components/Notifications/ConfirmDialog';
 
@@ -25,6 +11,7 @@ import { editListStyles } from '../../styles/general';
 import SubmissionSetService from '../../services/SubmissionSetService';
 import ContestService from '../../services/ContestService';
 import { Contest, SubmissionSet } from '../../types/api';
+import SubmissionSetTable from '../../components/SubmissionSetTable/SubmissionSetTable';
 
 interface RouteMatchParams {
     contestId: string;
@@ -36,7 +23,7 @@ interface PaginationState {
     pageSize: number;
 }
 
-interface SubmissionListState {
+interface SubmissionSetListState {
     contest: Contest | null;
     submissionSets: SubmissionSet[];
     pagination: PaginationState;
@@ -44,18 +31,12 @@ interface SubmissionListState {
     showDialog: boolean;
 }
 
-interface SubmissionListProps
+interface SubmissionSetListProps
     extends WithStyles<typeof editListStyles>,
         RouteComponentProps<RouteMatchParams> {}
 
-const CustomButton = ({ navigate, ...rest }: { navigate: Function }): React.ReactElement => {
-    // Rendering element with the 'navigate' prop raises an error, so we have
-    // to strip it: Warning: Invalid value for prop `navigate` on <a> tag.
-    return React.createElement(Button, rest);
-};
-
-class SubmissionList extends React.Component<SubmissionListProps, SubmissionListState> {
-    constructor(props: SubmissionListProps) {
+class SubmissionSetList extends React.Component<SubmissionSetListProps, SubmissionSetListState> {
+    constructor(props: SubmissionSetListProps) {
         super(props);
 
         this.state = {
@@ -98,13 +79,6 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
         }));
     };
 
-    getSubmissionSetAuthor = (submissionSet: SubmissionSet): string => {
-        if (!submissionSet.submissions.length) return '';
-
-        const { first_name: firstName, last_name: lastName } = submissionSet.submissions[0].author;
-        return `${firstName} ${lastName}`;
-    };
-
     changePage = (_: React.MouseEvent<HTMLButtonElement> | null, page: number): void => {
         this.setState(
             (state) => ({
@@ -117,13 +91,10 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
     };
 
     changePageSize = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        const pageSize = parseInt(event.target.value, 10);
         this.setState(
             (state) => ({
-                pagination: {
-                    ...state.pagination,
-                    pageSize: parseInt(event.target.value, 10),
-                    page: 0,
-                },
+                pagination: { ...state.pagination, pageSize, page: 0 },
             }),
             () => {
                 this.fetchData();
@@ -131,7 +102,7 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
         );
     };
 
-    openDialog = (pendingSubmissionSet: SubmissionSet) => (): void => {
+    handleDelete = (pendingSubmissionSet: SubmissionSet): void => {
         this.setState({ pendingSubmissionSet, showDialog: true });
     };
 
@@ -147,12 +118,6 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
 
     render(): React.ReactNode {
         const { contest, pagination, showDialog, submissionSets } = this.state;
-        const { classes } = this.props;
-
-        const getViewLink = (submissionSet: SubmissionSet): string => {
-            const contestId = contest ? contest.id : '';
-            return `/admin/contest/${contestId}/submission/${submissionSet.id}`;
-        };
 
         return (
             <>
@@ -161,73 +126,29 @@ class SubmissionList extends React.Component<SubmissionListProps, SubmissionList
                 </Typography>
 
                 <Grid item xs={12}>
-                    <TableContainer component={Paper}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Submited</TableCell>
-                                    <TableCell>Number of submissons</TableCell>
-                                    <TableCell />
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {submissionSets.map((submissionSet) => (
-                                    <TableRow key={submissionSet.id}>
-                                        <TableCell component="th" scope="row">
-                                            {this.getSubmissionSetAuthor(submissionSet)}
-                                        </TableCell>
-                                        <TableCell>
-                                            {new Date(submissionSet.created).toLocaleString()}
-                                        </TableCell>
-                                        <TableCell>{submissionSet.submissions.length}</TableCell>
-                                        <TableCell align="right">
-                                            <Link
-                                                component={CustomButton}
-                                                to={getViewLink(submissionSet)}
-                                                className={classes.button}
-                                                color="primary"
-                                            >
-                                                View
-                                            </Link>
-                                            <Button
-                                                variant="text"
-                                                className={classes.button}
-                                                color="secondary"
-                                                onClick={this.openDialog(submissionSet)}
-                                            >
-                                                Delete
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                            <TableFooter>
-                                <TableRow>
-                                    <TablePagination
-                                        rowsPerPageOptions={[20, 50, 100]}
-                                        count={pagination.count}
-                                        rowsPerPage={pagination.pageSize}
-                                        page={pagination.page}
-                                        onChangePage={this.changePage}
-                                        onChangeRowsPerPage={this.changePageSize}
-                                    />
-                                </TableRow>
-                            </TableFooter>
-                        </Table>
-                    </TableContainer>
-                    <ConfirmDialog
-                        open={showDialog}
-                        title="Delete confirmation"
-                        onClose={this.closeDialog}
-                        onConfirm={this.processDelete}
-                    >
-                        Do you really want to delete the submission?
-                    </ConfirmDialog>
+                    <SubmissionSetTable
+                        contestId={contest ? contest.id : 0}
+                        submissionSets={submissionSets}
+                        count={pagination.count}
+                        pageSize={pagination.pageSize}
+                        page={pagination.page}
+                        onChangePage={this.changePage}
+                        onChangePageSize={this.changePageSize}
+                        onDelete={this.handleDelete}
+                    />
                 </Grid>
+
+                <ConfirmDialog
+                    open={showDialog}
+                    title="Delete confirmation"
+                    onClose={this.closeDialog}
+                    onConfirm={this.processDelete}
+                >
+                    Do you really want to delete the submission?
+                </ConfirmDialog>
             </>
         );
     }
 }
 
-export default withStyles(editListStyles)(withRouter(SubmissionList));
+export default withStyles(editListStyles)(withRouter(SubmissionSetList));
