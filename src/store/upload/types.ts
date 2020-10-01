@@ -4,11 +4,14 @@ import { ContestModel, ImageMeta, InputChange, SubmissionMeta } from '../../type
 export interface UploadState {
     contest: ContestModel;
     redirect: boolean;
+    uploading: boolean;
 }
 
 export const UPLOAD_INIT = 'UPLOAD_INIT';
 export const UPLOAD_SET_CONTEST = 'UPLOAD_SET_CONTEST';
 export const UPLOAD_SET_REDIRECT = 'UPLOAD_SET_REDIRECT';
+export const UPLOAD_SET_UPLOADING = 'UPLOAD_SET_UPLOADING';
+export const UPLOAD_UNSET_UPLOADING = 'UPLOAD_UNSET_UPLOADING';
 export const AUTHOR_UPDATE = 'AUTHOR_UPDATE';
 export const THEME_INIT = 'THEME_INIT';
 export const SUBMISSION_INIT = 'SUBMISSION_INIT';
@@ -28,6 +31,14 @@ interface UploadSetContestAction {
 
 interface UploadSetRedirectAction {
     type: typeof UPLOAD_SET_REDIRECT;
+}
+
+interface UploadStartUploadingAction {
+    type: typeof UPLOAD_SET_UPLOADING;
+}
+
+interface UploadStopUploadingAction {
+    type: typeof UPLOAD_UNSET_UPLOADING;
 }
 
 interface AuthorUpdateAction {
@@ -69,6 +80,8 @@ export type UploadActionTypes =
     | UploadInitAction
     | UploadSetContestAction
     | UploadSetRedirectAction
+    | UploadStartUploadingAction
+    | UploadStopUploadingAction
     | AuthorUpdateAction
     | ThemeInitAction
     | SubmissionInitAction

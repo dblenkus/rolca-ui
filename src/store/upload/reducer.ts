@@ -2,6 +2,8 @@ import {
     UPLOAD_INIT,
     UPLOAD_SET_CONTEST,
     UPLOAD_SET_REDIRECT,
+    UPLOAD_SET_UPLOADING,
+    UPLOAD_UNSET_UPLOADING,
     UploadActionTypes,
     UploadState,
 } from './types';
@@ -13,6 +15,7 @@ import { themeInit } from './actions';
 const initialState: UploadState = {
     contest: getEmptyContest(),
     redirect: false,
+    uploading: false,
 };
 
 const reducer = (state = initialState, action: UploadActionTypes): UploadState => {
@@ -38,6 +41,10 @@ const reducer = (state = initialState, action: UploadActionTypes): UploadState =
             return { ...state, contest: action.payload };
         case UPLOAD_SET_REDIRECT:
             return { ...state, redirect: true };
+        case UPLOAD_SET_UPLOADING:
+            return { ...state, uploading: true };
+        case UPLOAD_UNSET_UPLOADING:
+            return { ...state, uploading: false };
         default:
             let { themes } = state.contest;
             if ('theme_id' in action) {

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, CircularProgress, Grid, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 import { uploadFormStyles } from '../../../styles/general';
@@ -23,6 +23,7 @@ interface ContestFieldProps extends WithStyles<typeof uploadFormStyles> {
         payload: { file: File | undefined },
     ) => void;
     handleSubmit: () => void;
+    uploading: boolean;
 }
 
 class ContestField extends React.Component<ContestFieldProps> {
@@ -35,6 +36,7 @@ class ContestField extends React.Component<ContestFieldProps> {
             handleSubmissionChange,
             handleImageChange,
             handleSubmit,
+            uploading,
         } = this.props;
 
         const handleClick = (event: React.FormEvent): void => {
@@ -88,15 +90,21 @@ class ContestField extends React.Component<ContestFieldProps> {
                                 Please fix errors before uploading.
                             </Alert>
                         )}
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submitButton}
-                        >
-                            Upload
-                        </Button>
+                        {uploading ? (
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <CircularProgress />
+                            </div>
+                        ) : (
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submitButton}
+                            >
+                                Upload
+                            </Button>
+                        )}
                     </form>
                 </Grid>
             </Grid>

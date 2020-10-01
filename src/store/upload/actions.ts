@@ -15,6 +15,8 @@ import {
     UPLOAD_INIT,
     UPLOAD_SET_CONTEST,
     UPLOAD_SET_REDIRECT,
+    UPLOAD_SET_UPLOADING,
+    UPLOAD_UNSET_UPLOADING,
     UploadActionTypes,
     IMAGE_STORE,
 } from './types';
@@ -27,6 +29,8 @@ export const uploadInit = (payload: Contest): UploadActionTypes => ({
 export const uploadSubmit = (): AppThunk => async (dispatch, getState) => {
     const { contest } = getState().upload;
 
+    dispatch(uploadSetUploading());
+
     const newContest = await validate(contest);
     if (!newContest.errors.hasError) {
         await upload(contest);
@@ -34,6 +38,8 @@ export const uploadSubmit = (): AppThunk => async (dispatch, getState) => {
     } else {
         dispatch(uploadSetContest(newContest));
     }
+
+    dispatch(uploadUnsetUploading());
 };
 
 export const uploadSetContest = (payload: ContestModel): UploadActionTypes => ({
@@ -43,6 +49,14 @@ export const uploadSetContest = (payload: ContestModel): UploadActionTypes => ({
 
 export const uploadSetRedirect = (): UploadActionTypes => ({
     type: UPLOAD_SET_REDIRECT,
+});
+
+export const uploadSetUploading = (): UploadActionTypes => ({
+    type: UPLOAD_SET_UPLOADING,
+});
+
+export const uploadUnsetUploading = (): UploadActionTypes => ({
+    type: UPLOAD_UNSET_UPLOADING,
 });
 
 export const authorUpdate = (payload: InputChange): UploadActionTypes => ({

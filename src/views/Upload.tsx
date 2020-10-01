@@ -42,6 +42,7 @@ class UploadView extends React.Component<UploadViewProps> {
             handleImageChange,
             handleSubmit,
             redirect,
+            uploading,
         } = this.props;
         const { contestId } = this.props.match.params;
 
@@ -56,6 +57,7 @@ class UploadView extends React.Component<UploadViewProps> {
                 handleSubmissionChange={handleSubmissionChange}
                 handleImageChange={handleImageChange}
                 handleSubmit={handleSubmit}
+                uploading={uploading}
             />
         );
     }
