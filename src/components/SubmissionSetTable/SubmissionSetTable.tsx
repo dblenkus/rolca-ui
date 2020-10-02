@@ -49,6 +49,7 @@ const SubmissionSetTable: React.FC<SubmissionSetTableProps> = ({
                         <TableRow>
                             <TableCell>Name</TableCell>
                             <TableCell>Submited</TableCell>
+                            <TableCell>Number of themes</TableCell>
                             <TableCell>Number of submissons</TableCell>
                             <TableCell>Paid?</TableCell>
                             <TableCell />

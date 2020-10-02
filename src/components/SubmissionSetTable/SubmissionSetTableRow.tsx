@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { Link } from 'react-router-dom';
 
 import { Button, Checkbox, TableCell, TableRow } from '@material-ui/core';
@@ -49,12 +50,15 @@ const SubmissionSetTableRow: React.FC<SubmissionSetTableRowProps> = ({
         onPaidChange(submissionSet.id, event.target.checked);
     };
 
+    const themeNumber = _(submissionSet.submissions).groupBy('theme').size();
+
     return (
         <TableRow>
             <TableCell component="th" scope="row">
                 {getSubmissionSetAuthor(submissionSet)}
             </TableCell>
             <TableCell>{new Date(submissionSet.created).toLocaleString()}</TableCell>
+            <TableCell>{themeNumber}</TableCell>
             <TableCell>{submissionSet.submissions.length}</TableCell>
             <TableCell>
                 <Checkbox
