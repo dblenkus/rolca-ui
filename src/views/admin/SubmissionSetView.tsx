@@ -58,6 +58,7 @@ class SubmissionList extends React.Component<
 
     render(): React.ReactNode {
         const { contest, submissionSet } = this.state;
+        console.log(contest?.themes);
         return (
             <>
                 <Grid item xs={12}>
@@ -67,31 +68,38 @@ class SubmissionList extends React.Component<
                     <br />
                     <br />
                 </Grid>
-                {submissionSet?.submissions.map((submission) => (
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Card raised>
-                            <img
-                                alt={submission.title}
-                                src={submission.files[0].file}
-                                style={{
-                                    border: '1px solid #ddd',
-                                    borderRadius: '4px',
-                                    maxHeight: '100%',
-                                    padding: '5px',
-                                    width: '100%',
-                                }}
-                            />
-                            <br />
-                            <b>Title:</b> {submission.title}
-                            {submission.description && (
-                                <>
+                <Grid container spacing={2}>
+                    {submissionSet?.submissions.map((submission) => {
+                        const theme = contest?.themes.find((t) => t.id === submission.theme);
+                        return (
+                            <Grid key={submission.id} item xs={12} sm={6} md={4}>
+                                <Card raised>
+                                    <img
+                                        alt={submission.title}
+                                        src={submission.files[0].file}
+                                        style={{
+                                            border: '1px solid #ddd',
+                                            borderRadius: '4px',
+                                            maxHeight: '100%',
+                                            padding: '5px',
+                                            width: '100%',
+                                        }}
+                                    />
                                     <br />
-                                    <b>Description:</b> {submission.description}
-                                </>
-                            )}
-                        </Card>
-                    </Grid>
-                ))}
+                                    <b>Title:</b> {submission.title}
+                                    <br />
+                                    <b>Theme:</b> {theme?.title}
+                                    {submission.description && (
+                                        <>
+                                            <br />
+                                            <b>Description:</b> {submission.description}
+                                        </>
+                                    )}
+                                </Card>
+                            </Grid>
+                        );
+                    })}
+                </Grid>
             </>
         );
     }
