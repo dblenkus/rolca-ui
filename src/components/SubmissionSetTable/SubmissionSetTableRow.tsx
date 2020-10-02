@@ -1,15 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Button, TableCell, TableRow } from '@material-ui/core';
+import { Button, Checkbox, TableCell, TableRow } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import MoneyOffIcon from '@material-ui/icons/MoneyOff';
 
 import { editListStyles } from '../../styles/general';
-import { SubmissionSet } from '../../types/api';
+import { Payment, SubmissionSet } from '../../types/api';
 
 interface SubmissionSetTableRowProps {
     contestId: number;
     submissionSet: SubmissionSet;
+    payment: Payment | undefined;
+    onPaidChange: (submissionSetId: number, paid: boolean) => void;
     onDelete: (submissionSet: SubmissionSet) => void;
 }
 
@@ -35,9 +39,15 @@ const useStyles = makeStyles(editListStyles);
 const SubmissionSetTableRow: React.FC<SubmissionSetTableRowProps> = ({
     contestId,
     submissionSet,
+    payment,
+    onPaidChange,
     onDelete,
 }: SubmissionSetTableRowProps) => {
     const classes = useStyles();
+
+    const handlePaidChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        onPaidChange(submissionSet.id, event.target.checked);
+    };
 
     return (
         <TableRow>
@@ -46,6 +56,14 @@ const SubmissionSetTableRow: React.FC<SubmissionSetTableRowProps> = ({
             </TableCell>
             <TableCell>{new Date(submissionSet.created).toLocaleString()}</TableCell>
             <TableCell>{submissionSet.submissions.length}</TableCell>
+            <TableCell>
+                <Checkbox
+                    checked={payment && payment.paid}
+                    icon={<MoneyOffIcon color="secondary" />}
+                    checkedIcon={<AttachMoneyIcon color="primary" />}
+                    onChange={handlePaidChange}
+                />
+            </TableCell>
             <TableCell align="right">
                 <Link
                     component={CustomButton}

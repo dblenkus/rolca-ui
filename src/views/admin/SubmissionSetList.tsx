@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 
@@ -10,7 +11,8 @@ import ConfirmDialog from '../../components/Notifications/ConfirmDialog';
 import { editListStyles } from '../../styles/general';
 import SubmissionSetService from '../../services/SubmissionSetService';
 import ContestService from '../../services/ContestService';
-import { Contest, SubmissionSet } from '../../types/api';
+import PaymentService from '../../services/PaymentService';
+import { Contest, Payment, SubmissionSet } from '../../types/api';
 import SubmissionSetTable from '../../components/SubmissionSetTable/SubmissionSetTable';
 
 interface RouteMatchParams {
@@ -26,6 +28,7 @@ interface PaginationState {
 interface SubmissionSetListState {
     contest: Contest | null;
     submissionSets: SubmissionSet[];
+    payments: Payment[];
     pagination: PaginationState;
     pendingSubmissionSet: SubmissionSet | null;
     showDialog: boolean;
@@ -42,6 +45,7 @@ class SubmissionSetList extends React.Component<SubmissionSetListProps, Submissi
         this.state = {
             contest: null,
             submissionSets: [],
+            payments: [],
             pagination: {
                 count: 0,
                 page: 0,
@@ -67,19 +71,27 @@ class SubmissionSetList extends React.Component<SubmissionSetListProps, Submissi
         } = this.state;
 
         const { data: contest } = await ContestService.getContest(contestId);
-        const { data: response } = await SubmissionSetService.getByContest(
+        const { data: submissionSets } = await SubmissionSetService.getByContest(
             contestId,
             page + 1,
             pageSize,
         );
+
+        const submissionSetIds = _.map(submissionSets.results, 'id');
+
+        const {
+            data: { results: payments },
+        } = await PaymentService.getBySubmissionSets(submissionSetIds);
+
         this.setState((state) => ({
             contest,
-            submissionSets: response.results,
-            pagination: { ...state.pagination, count: response.count },
+            submissionSets: submissionSets.results,
+            payments,
+            pagination: { ...state.pagination, count: submissionSets.count },
         }));
     };
 
-    changePage = (_: React.MouseEvent<HTMLButtonElement> | null, page: number): void => {
+    changePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number): void => {
         this.setState(
             (state) => ({
                 pagination: { ...state.pagination, page },
@@ -102,6 +114,11 @@ class SubmissionSetList extends React.Component<SubmissionSetListProps, Submissi
         );
     };
 
+    updatePaid = async (submissionSetId: number, paid: boolean): Promise<void> => {
+        await PaymentService.updatePayment(submissionSetId, paid);
+        await this.fetchData();
+    };
+
     handleDelete = (pendingSubmissionSet: SubmissionSet): void => {
         this.setState({ pendingSubmissionSet, showDialog: true });
     };
@@ -117,7 +134,7 @@ class SubmissionSetList extends React.Component<SubmissionSetListProps, Submissi
     };
 
     render(): React.ReactNode {
-        const { contest, pagination, showDialog, submissionSets } = this.state;
+        const { contest, pagination, showDialog, submissionSets, payments } = this.state;
 
         return (
             <>
@@ -129,11 +146,13 @@ class SubmissionSetList extends React.Component<SubmissionSetListProps, Submissi
                     <SubmissionSetTable
                         contestId={contest ? contest.id : 0}
                         submissionSets={submissionSets}
+                        payments={payments}
                         count={pagination.count}
                         pageSize={pagination.pageSize}
                         page={pagination.page}
                         onChangePage={this.changePage}
                         onChangePageSize={this.changePageSize}
+                        onPaidChange={this.updatePaid}
                         onDelete={this.handleDelete}
                     />
                 </Grid>

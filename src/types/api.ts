@@ -50,3 +50,11 @@ export interface Contest {
     notice_html: string;
     header_image: string | null;
 }
+
+export interface Payment {
+    id: number;
+    created: string;
+    modified: string;
+    submissionset: number;
+    paid: boolean;
+}
