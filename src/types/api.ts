@@ -5,20 +5,23 @@ export interface PaginatedResponse<R> {
     previous: string | null;
 }
 
-export interface Image {
+export interface BaseResource {
     id: number;
+    created: string;
+    modified: string;
+}
+
+export interface Image extends BaseResource {
     file: string;
 }
 
-export interface Author {
-    id: number;
+export interface Author extends BaseResource {
     first_name: string;
     last_name: string;
     email: string;
 }
 
-export interface Submission {
-    id: number;
+export interface Submission extends BaseResource {
     theme: number;
     author: Author;
     title: string;
@@ -26,22 +29,17 @@ export interface Submission {
     files: Image[];
 }
 
-export interface SubmissionSet {
-    id: number;
-    created: string;
-    modified: string;
+export interface SubmissionSet extends BaseResource {
     submissions: Submission[];
 }
 
-export interface Theme {
-    id: number;
+export interface Theme extends BaseResource {
     title: string;
     is_series: boolean;
     n_photos: number;
 }
 
-export interface Contest {
-    id: number;
+export interface Contest extends BaseResource {
     title: string;
     description: string;
     themes: Theme[];
@@ -51,10 +49,7 @@ export interface Contest {
     header_image: string | null;
 }
 
-export interface Payment {
-    id: number;
-    created: string;
-    modified: string;
+export interface Payment extends BaseResource {
     submissionset: number;
     paid: boolean;
 }
