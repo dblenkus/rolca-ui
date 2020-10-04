@@ -62,7 +62,7 @@ const SubmissionSetTableRow: React.FC<SubmissionSetTableRowProps> = ({
             <TableCell>{submissionSet.submissions.length}</TableCell>
             <TableCell>
                 <Checkbox
-                    checked={payment && payment.paid}
+                    checked={!!payment && payment.paid}
                     icon={<MoneyOffIcon color="secondary" />}
                     checkedIcon={<AttachMoneyIcon color="primary" />}
                     onChange={handlePaidChange}
