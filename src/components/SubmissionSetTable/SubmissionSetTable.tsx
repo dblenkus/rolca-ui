@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { AxiosPromise } from 'axios';
 import _ from 'lodash';
 
 import {
@@ -13,34 +14,60 @@ import {
     TableRow,
 } from '@material-ui/core';
 
-import { Payment, SubmissionSet } from '../../types/api';
+import { PaginatedResponse, Payment, SubmissionSet } from '../../types/api';
 import SubmissionSetTableRow from './SubmissionSetTableRow';
+import usePagination from '../../services/usePagination';
+import PaymentService from '../../services/PaymentService';
 
 interface SubmissionSetTableProps {
     contestId: number;
-    submissionSets: SubmissionSet[];
-    payments: Payment[];
-    count: number;
-    pageSize: number;
-    page: number;
-    onChangePage: (_: React.MouseEvent<HTMLButtonElement> | null, page: number) => void;
-    onChangePageSize: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-    onPaidChange: (submissionSetId: number, paid: boolean) => void;
+    dataSource: (page: number, pageSize: number) => AxiosPromise<PaginatedResponse<SubmissionSet>>;
     onDelete: (submissionSet: SubmissionSet) => void;
 }
 
 const SubmissionSetTable: React.FC<SubmissionSetTableProps> = ({
     contestId,
-    submissionSets,
-    payments,
-    count,
-    pageSize,
-    page,
-    onChangePage,
-    onChangePageSize,
-    onPaidChange,
+    dataSource,
     onDelete,
 }: SubmissionSetTableProps) => {
+    const [payments, setPayments] = useState<Payment[]>([]);
+    const {
+        data: submissionSets,
+        count,
+        page,
+        pageSize,
+        changePage,
+        changePageSize,
+    } = usePagination<SubmissionSet>({ source: dataSource });
+
+    const fetchPayments = useCallback(async (): Promise<void> => {
+        const submissionSetIds = _.map(submissionSets, 'id');
+        const { data } = await PaymentService.getBySubmissionSets(submissionSetIds);
+        setPayments(data.results);
+    }, [submissionSets]);
+
+    useEffect(() => {
+        fetchPayments();
+    }, [fetchPayments]);
+
+    const handlePageChange = (
+        event: React.MouseEvent<HTMLButtonElement> | null,
+        newPage: number,
+    ): void => {
+        changePage(newPage + 1);
+    };
+
+    const handleChangeRowsPerPage = (
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ): void => {
+        changePageSize(parseInt(event.target.value, 10));
+    };
+
+    const handlePaidChange = async (submissionSetId: number, paid: boolean): Promise<void> => {
+        await PaymentService.updatePayment(submissionSetId, paid);
+        await fetchPayments();
+    };
+
     return (
         <>
             <TableContainer component={Paper}>
@@ -67,7 +94,7 @@ const SubmissionSetTable: React.FC<SubmissionSetTableProps> = ({
                                     contestId={contestId}
                                     submissionSet={submissionSet}
                                     payment={payment}
-                                    onPaidChange={onPaidChange}
+                                    onPaidChange={handlePaidChange}
                                     onDelete={onDelete}
                                 />
                             );
@@ -79,9 +106,9 @@ const SubmissionSetTable: React.FC<SubmissionSetTableProps> = ({
                                 rowsPerPageOptions={[1, 20, 50, 100]}
                                 count={count}
                                 rowsPerPage={pageSize}
-                                page={page}
-                                onChangePage={onChangePage}
-                                onChangeRowsPerPage={onChangePageSize}
+                                page={page - 1}
+                                onChangePage={handlePageChange}
+                                onChangeRowsPerPage={handleChangeRowsPerPage}
                             />
                         </TableRow>
                     </TableFooter>
