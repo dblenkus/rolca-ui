@@ -7,7 +7,7 @@ import {
 } from '../types/models';
 
 import imageReader from './imageReader';
-import { anyImage } from './image';
+import { anyImage, countImages } from './image';
 import { asyncMap } from './async';
 
 interface BaseError {
@@ -60,11 +60,18 @@ const validateImage = async (image: ImageModel): Promise<ImageModel> => {
 
 const validateSubmission = async (submission: SubmissionModel): Promise<SubmissionModel> => {
     const { title, description } = submission;
-    const { titleRequired, descriptionRequired } = submission.meta;
+    const { titleRequired, descriptionRequired, isSeries } = submission.meta;
     const images = await asyncMap(submission.images, validateImage);
 
     if ((title || description) && !anyImage(images)) {
         images[0].errors.file = 'Please select an image';
+        images[0].errors.hasError = true;
+    }
+
+    console.log(countImages(images))
+
+    if (isSeries && anyImage(images) && countImages(images) < 4) {
+        images[0].errors.file = 'Series must contain at least 4 images';
         images[0].errors.hasError = true;
     }
 
