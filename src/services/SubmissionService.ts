@@ -17,7 +17,7 @@ export default {
     deleteSubmission(submissionsId: number): AxiosPromise<Submission[]> {
         return apiClient.delete(`/submission/${submissionsId}`);
     },
-    getSubmissionsByContest(contentiD: number): AxiosPromise<PaginatedResponse<Submission>> {
-        return apiClient.get('/submission', { params: { content: contentiD } });
+    getSubmissionsByContest(contentId: number): AxiosPromise<PaginatedResponse<Submission>> {
+        return apiClient.get('/submission', { params: { contest: contentId } });
     },
 };
