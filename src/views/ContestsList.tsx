@@ -20,9 +20,11 @@ class ContestsListView extends React.Component<ContestsListViewProps> {
         const { contests } = this.props;
 
         return (
-            <Grid item xs={12} sm={6} md={4}>
-                {contests.map((contest: any) => (
-                    <ContestCard key={contest.id} contest={contest} />
+            <Grid container spacing={2}>
+                {contests.map((contest) => (
+                    <Grid key={contest.id} item xs={12} sm={6} md={4}>
+                        <ContestCard contest={contest} />
+                    </Grid>
                 ))}
             </Grid>
         );
