@@ -46,6 +46,7 @@ export interface Contest extends BaseResource {
     start_date: string;
     end_date: string;
     notice_html: string;
+    confirmation_html: string;
     header_image: string | null;
 }
 
