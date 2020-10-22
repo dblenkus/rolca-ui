@@ -13,6 +13,7 @@ import SubmissionSetService from '../../services/SubmissionSetService';
 import ContestService from '../../services/ContestService';
 import { Contest, PaginatedResponse, SubmissionSet } from '../../types/api';
 import SubmissionSetTable from '../../components/SubmissionSetTable/SubmissionSetTable';
+import LoadingProgress from '../../components/LoadingProgress';
 
 interface RouteMatchParams {
     contestId: string;
@@ -72,15 +73,13 @@ class SubmissionSetList extends React.Component<SubmissionSetListProps, Submissi
     render(): React.ReactNode {
         const { contest, showDialog } = this.state;
 
+        if (!contest) return <LoadingProgress />;
+
         const dataSource = (
             page: number,
             pageSize: number,
         ): AxiosPromise<PaginatedResponse<SubmissionSet>> =>
-            SubmissionSetService.getByContest(
-                contest ? contest.id.toString() : '-1',
-                page,
-                pageSize,
-            );
+            SubmissionSetService.getByContest(contest.id.toString(), page, pageSize);
 
         return (
             <>

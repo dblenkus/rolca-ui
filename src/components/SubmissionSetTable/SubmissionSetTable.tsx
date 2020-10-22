@@ -41,6 +41,11 @@ const SubmissionSetTable: React.FC<SubmissionSetTableProps> = ({
     } = usePagination<SubmissionSet>({ source: dataSource });
 
     const fetchPayments = useCallback(async (): Promise<void> => {
+        if (submissionSets.length === 0) {
+            setPayments([]);
+            return;
+        }
+
         const submissionSetIds = _.map(submissionSets, 'id');
         const { data } = await PaymentService.getBySubmissionSets(submissionSetIds);
         setPayments(data.results);
