@@ -30,6 +30,8 @@ export interface Submission extends BaseResource {
 }
 
 export interface SubmissionSet extends BaseResource {
+    contest: number;
+    author: Author;
     submissions: Submission[];
 }
 

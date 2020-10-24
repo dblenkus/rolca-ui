@@ -25,9 +25,7 @@ const CustomButton = ({ navigate, ...rest }: { navigate: Function }): React.Reac
 };
 
 const getSubmissionSetAuthor = (submissionSet: SubmissionSet): string => {
-    if (!submissionSet.submissions.length) return '';
-
-    const { first_name: firstName, last_name: lastName } = submissionSet.submissions[0].author;
+    const { first_name: firstName, last_name: lastName } = submissionSet.author;
     return `${firstName} ${lastName}`;
 };
 
