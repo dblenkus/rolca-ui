@@ -13,6 +13,7 @@ export interface BaseResource {
 
 export interface Image extends BaseResource {
     file: string;
+    thumbnail: string;
 }
 
 export interface Author extends BaseResource {
@@ -39,6 +40,11 @@ export interface Theme extends BaseResource {
     title: string;
     is_series: boolean;
     n_photos: number;
+    submissions_number: number;
+}
+
+export interface JuryTheme extends Theme {
+    ratings_number: number;
 }
 
 export interface Contest extends BaseResource {
@@ -52,7 +58,16 @@ export interface Contest extends BaseResource {
     header_image: string | null;
 }
 
+export interface JuryContest extends Contest {
+    themes: JuryTheme[];
+}
+
 export interface Payment extends BaseResource {
     submissionset: number;
     paid: boolean;
+}
+
+export interface Rating extends BaseResource {
+    submission: number;
+    rating: number;
 }

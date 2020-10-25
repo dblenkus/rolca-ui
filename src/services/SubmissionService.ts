@@ -20,4 +20,7 @@ export default {
     getSubmissionsByContest(contentId: number): AxiosPromise<PaginatedResponse<Submission>> {
         return apiClient.get('/submission', { params: { contest: contentId } });
     },
+    getSubmissionsByTheme(themeId: number): AxiosPromise<PaginatedResponse<Submission>> {
+        return apiClient.get('/submission', { params: { theme: themeId } });
+    },
 };
