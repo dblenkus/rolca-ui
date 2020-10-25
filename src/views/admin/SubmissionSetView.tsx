@@ -38,8 +38,12 @@ class SubmissionList extends React.Component<
     getSubmissionSetAuthor = (submissionSet: SubmissionSet): string => {
         if (!submissionSet.submissions.length) return '';
 
-        const { first_name: firstName, last_name: lastName } = submissionSet.submissions[0].author;
-        return `${firstName} ${lastName}`;
+        const {
+            first_name: firstName,
+            last_name: lastName,
+            email,
+        } = submissionSet.submissions[0].author;
+        return `${firstName} ${lastName}, ${email}`;
     };
 
     async fetchData(): Promise<void> {
@@ -58,7 +62,7 @@ class SubmissionList extends React.Component<
 
     render(): React.ReactNode {
         const { contest, submissionSet } = this.state;
-        console.log(contest?.themes);
+
         return (
             <>
                 <Grid item xs={12}>
