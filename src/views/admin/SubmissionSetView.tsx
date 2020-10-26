@@ -78,17 +78,19 @@ class SubmissionList extends React.Component<
                         return (
                             <Grid key={submission.id} item xs={12} sm={6} md={4}>
                                 <Card raised>
-                                    <img
-                                        alt={submission.title}
-                                        src={submission.files[0].file}
-                                        style={{
-                                            border: '1px solid #ddd',
-                                            borderRadius: '4px',
-                                            maxHeight: '100%',
-                                            padding: '5px',
-                                            width: '100%',
-                                        }}
-                                    />
+                                    {submission.files.map((file) => (
+                                        <img
+                                            alt={submission.title}
+                                            src={file.file}
+                                            style={{
+                                                border: '1px solid #ddd',
+                                                borderRadius: '4px',
+                                                maxHeight: '100%',
+                                                padding: '5px',
+                                                width: '100%',
+                                            }}
+                                        />
+                                    ))}
                                     <br />
                                     <b>Title:</b> {submission.title}
                                     <br />
