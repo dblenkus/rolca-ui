@@ -9,7 +9,7 @@ export default {
         return apiClient.get('/rating', { params: { submission: submissionId } });
     },
     getForTheme(themeId: number): AxiosPromise<PaginatedResponse<Rating>> {
-        return apiClient.get('/rating', { params: { theme: themeId, page_size: 1000 } });
+        return apiClient.get('/rating', { params: { theme: themeId } });
     },
     updateForSubmission(submissionId: number, rating: number): AxiosPromise<Rating> {
         return apiClient.post('/rating', { submission: submissionId, rating });

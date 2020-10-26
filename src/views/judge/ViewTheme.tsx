@@ -11,6 +11,7 @@ import LoadingProgress from '../../components/LoadingProgress';
 import ThemeGallery from '../../components/Jury/ThemeGallery';
 import RatingService from '../../services/RatingService';
 import { Rating } from '../../types/api';
+import fetchAll from '../../utils/fetchAll';
 
 interface RouteMatchParams {
     contestId: string;
@@ -36,8 +37,8 @@ const ViewTheme: React.FC<PropsFromRedux> = ({
     // Fetch ratings.
     useEffect(() => {
         const fetchRatings = async (): Promise<void> => {
-            const { data } = await RatingService.getForTheme(parseInt(themeId, 10));
-            setRatings(data.results);
+            const ratingResource = () => RatingService.getForTheme(parseInt(themeId, 10));
+            setRatings(await fetchAll(ratingResource));
         };
         fetchRatings();
     }, [themeId]);

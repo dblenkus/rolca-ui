@@ -3,6 +3,7 @@ import { AppState, AppThunk } from '..';
 import ContestService from '../../services/ContestService';
 import JudgeSubmissionService from '../../services/JudgeSubmissionService';
 import { Contest, Submission, Theme } from '../../types/api';
+import fetchAll from '../../utils/fetchAll';
 
 import {
     JuryActionTypes,
@@ -37,17 +38,17 @@ export const initializeStore = (
     const { data: contest } = await ContestService.getContest(contestId);
     const theme = contest.themes.find((t) => t.id.toString() === themeId);
 
-    const { data: submissions } = await JudgeSubmissionService.getSubmissionsByTheme(
-        parseInt(themeId, 10),
-    );
+    const submissionResource = () =>
+        JudgeSubmissionService.getSubmissionsByTheme(parseInt(themeId, 10));
+    const submissions = await fetchAll(submissionResource);
 
     let currentIndex = 0;
     if (submissionId) {
-        currentIndex = _.findIndex(submissions.results, (s) => s.id === submissionId);
+        currentIndex = _.findIndex(submissions, (s) => s.id === submissionId);
         if (currentIndex === -1) currentIndex = 0;
     }
 
-    if (theme) dispatch(performInitialize(contest, theme, submissions.results, currentIndex));
+    if (theme) dispatch(performInitialize(contest, theme, submissions, currentIndex));
 };
 
 export const getCurrentSubmission = (state: AppState): Submission | null => {
