@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as Sentry from '@sentry/browser';
+import * as Sentry from "@sentry/react";
 
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -34,6 +34,8 @@ import PrivateRoute from './components/Auth/PrivateRoute';
 
 import store from './store';
 
+Sentry.init({ dsn: 'https://0d870d17fdb1421b8545267fc711b19a@o84586.ingest.sentry.io/5272406' });
+
 const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: theme.spacing(2),
@@ -45,8 +47,6 @@ const useStyles = makeStyles((theme) => ({
         minHeight: '100vh',
     },
 }));
-
-Sentry.init({ dsn: 'https://59015e5be11d4433af471cfd3a8d194d@o74924.ingest.sentry.io/190302' });
 
 const App = () => {
     const classes = useStyles();
