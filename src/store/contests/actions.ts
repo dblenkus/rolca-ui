@@ -10,6 +10,6 @@ export const storeContests = (contests: Contest[]): ContestsActionTypes => ({
 });
 
 export const loadContests = (): Function => async (dispatch: Dispatch) => {
-    const resp = await ContestService.getContests();
+    const resp = await ContestService.getActiveContests();
     dispatch(storeContests(resp.data.results));
 };

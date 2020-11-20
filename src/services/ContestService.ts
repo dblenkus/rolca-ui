@@ -9,7 +9,7 @@ export default {
         return apiClient.get('/contest');
     },
     getActiveContests(): AxiosPromise<PaginatedResponse<Contest>> {
-        return apiClient.get('/contest', { params: { active: true } });
+        return apiClient.get('/contest', { params: { is_active: true } });
     },
     getContest(id: string): AxiosPromise<Contest> {
         return apiClient.get(`/contest/${id}`);
