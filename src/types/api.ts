@@ -30,6 +30,10 @@ export interface Submission extends BaseResource {
     files: Image[];
 }
 
+export interface ResultsSubmission extends Submission {
+    rating: number;
+}
+
 export interface SubmissionSet extends BaseResource {
     contest: number;
     author: Author;
@@ -45,6 +49,10 @@ export interface Theme extends BaseResource {
 
 export interface JuryTheme extends Theme {
     ratings_number: number;
+}
+
+export interface ResultsTheme extends Theme {
+    submissions: ResultsSubmission[];
 }
 
 export interface Contest extends BaseResource {

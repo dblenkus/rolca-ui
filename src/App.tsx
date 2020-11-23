@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as Sentry from "@sentry/react";
+import * as Sentry from '@sentry/react';
 
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -33,6 +33,7 @@ import Notifications from './components/Notifications/Notifications';
 import PrivateRoute from './components/Auth/PrivateRoute';
 
 import store from './store';
+import ThemeOverview from './views/judge/ThemeOverview';
 
 Sentry.init({ dsn: 'https://0d870d17fdb1421b8545267fc711b19a@o84586.ingest.sentry.io/5272406' });
 
@@ -98,6 +99,10 @@ const App = () => {
                                 <PrivateRoute
                                     path="/judge/contest/:contestId/theme/:themeId/rate"
                                     component={RateSubmissionView}
+                                />
+                                <PrivateRoute
+                                    path="/judge/contest/:contestId/theme/:themeId/overview"
+                                    component={ThemeOverview}
                                 />
 
                                 <PrivateRoute
