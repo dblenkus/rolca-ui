@@ -44,7 +44,7 @@ const ThemeResults: React.FC = () => {
             />
         );
 
-    if (!submissionsByAuthor) return <LoadingProgress />;
+    if (!submissionsByAuthor.length) return <LoadingProgress />;
 
     return (
         <>
