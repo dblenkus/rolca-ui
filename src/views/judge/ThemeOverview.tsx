@@ -38,7 +38,7 @@ const ThemeOverview: React.FC = () => {
                         />
                         <Typography align="center">
                             Title: {submission.title}, Points: {submission.rating}, Author:{' '}
-                            {submission.author.id}
+                            {submission.author.id}, Submission id: {submission.id}
                             <br />
                             <br />
                         </Typography>
