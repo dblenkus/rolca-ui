@@ -34,6 +34,9 @@ import PrivateRoute from './components/Auth/PrivateRoute';
 
 import store from './store';
 import ThemeOverview from './views/judge/ThemeOverview';
+import ThemeResultsView from './views/results/ThemeResults';
+import SelectResultsThemeView from './views/results/SelectTheme';
+import SubmissionResultsView from './views/results/SubmissionResults';
 
 Sentry.init({ dsn: 'https://0d870d17fdb1421b8545267fc711b19a@o84586.ingest.sentry.io/5272406' });
 
@@ -88,7 +91,20 @@ const App = () => {
                                 />
                                 <Route exact path="/register" component={RegisterView} />
                                 <Route path="/register/activate" component={RegisterActivateView} />
-                                <Route path="/results" component={ResultsListView} />
+                                <Route path="/results" component={ResultsListView} exact />
+
+                                <Route
+                                    path="/results/contest/:contestId/theme/:themeId/submission/:submissionId"
+                                    component={SubmissionResultsView}
+                                />
+                                <Route
+                                    path="/results/contest/:contestId/theme/:themeId"
+                                    component={ThemeResultsView}
+                                />
+                                <Route
+                                    path="/results/contest/:contestId"
+                                    component={SelectResultsThemeView}
+                                />
 
                                 <PrivateRoute exact path="/judge" component={SelectThemeView} />
                                 <PrivateRoute
