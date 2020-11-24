@@ -21,7 +21,13 @@ const ThemeResults: React.FC = () => {
     useEffect(() => {
         const fetch = async (): Promise<void> => {
             const { data } = await ResultsThemeService.getResults(themeId);
-            setSubmissionsByAuthor(_.values(_.groupBy(data.submissions, 'author.id')));
+            setSubmissionsByAuthor(
+                _.chain(data.submissions)
+                    .groupBy('author.id')
+                    .values()
+                    .orderBy(['0.author.last_name', '0.author.first_name'])
+                    .value(),
+            );
         };
         fetch();
     }, [themeId]);
