@@ -119,8 +119,11 @@ const ThemeResults: React.FC = () => {
                                                 isAccepted(submission) && setRedirect(submission.id)
                                             }
                                         >
-                                            <TableCell padding="checkbox" />
-                                            <TableCell>
+                                            <TableCell
+                                                padding="checkbox"
+                                                style={getRewardStyle(submission)}
+                                            />
+                                            <TableCell style={getRewardStyle(submission)}>
                                                 <Typography>{submission.title}</Typography>
                                             </TableCell>
                                             <TableCell
