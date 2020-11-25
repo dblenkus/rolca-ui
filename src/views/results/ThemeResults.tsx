@@ -35,7 +35,7 @@ const ThemeResults: React.FC = () => {
     const getAuthor = (submissions: ResultsSubmission[]): ResultsAuthor => submissions[0].author;
 
     const getReward = (submission: ResultsSubmission): string => {
-        if (submission.reward) return submission.reward;
+        if (submission.reward_kind) return submission.reward_kind;
         if (submission.accepted) return 'Accepted';
         return '';
     };

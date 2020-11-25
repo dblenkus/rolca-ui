@@ -37,7 +37,7 @@ export interface Submission extends BaseResource {
 export interface ResultsSubmission extends Submission {
     author: ResultsAuthor;
     rating: number;
-    reward: string;
+    reward_kind: string;
     accepted: boolean;
 }
 
