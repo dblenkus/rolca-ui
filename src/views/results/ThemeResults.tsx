@@ -6,7 +6,7 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@m
 
 import LoadingProgress from '../../components/LoadingProgress';
 import ResultsThemeService from '../../services/ResultsThemeService';
-import { Author, ResultsSubmission } from '../../types/api';
+import { ResultsAuthor, ResultsSubmission } from '../../types/api';
 
 interface RouteMatchParams {
     contestId: string;
@@ -32,7 +32,7 @@ const ThemeResults: React.FC = () => {
         fetch();
     }, [themeId]);
 
-    const getAuthor = (submissions: ResultsSubmission[]): Author => submissions[0].author;
+    const getAuthor = (submissions: ResultsSubmission[]): ResultsAuthor => submissions[0].author;
 
     const getReward = (submission: ResultsSubmission): string => {
         if (submission.reward) return submission.reward;
@@ -62,8 +62,11 @@ const ThemeResults: React.FC = () => {
                             return (
                                 <React.Fragment key={author.id}>
                                     <TableRow>
-                                        <TableCell colSpan={3}>
+                                        <TableCell colSpan={2}>
                                             <b>{`${author.first_name} ${author.last_name}`}</b>
+                                        </TableCell>
+                                        <TableCell colSpan={2} align="right">
+                                            <b>{author.reward || ''}</b>
                                         </TableCell>
                                     </TableRow>
                                     {submissions.map((submission) => (

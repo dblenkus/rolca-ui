@@ -22,6 +22,10 @@ export interface Author extends BaseResource {
     email: string;
 }
 
+export interface ResultsAuthor extends Author {
+    reward: string | null;
+}
+
 export interface Submission extends BaseResource {
     theme: number;
     author: Author;
@@ -31,6 +35,7 @@ export interface Submission extends BaseResource {
 }
 
 export interface ResultsSubmission extends Submission {
+    author: ResultsAuthor;
     rating: number;
     reward: string;
     accepted: boolean;
