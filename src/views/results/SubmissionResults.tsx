@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 
 import LoadingProgress from '../../components/LoadingProgress';
 import ResultsSubmissionService from '../../services/ResultsSubmissionService';
@@ -51,7 +51,11 @@ const SubmissionResults: React.FC = () => {
             <div className={classes.flex}>
                 <img className={classes.image} src={file} alt={title} />
                 <div className={classes.title}>
-                    <b>{title}</b>, {author.first_name} {author.last_name}
+                    <Typography align="center">
+                        <b>{title}</b>, {author.first_name} {author.last_name}
+                        <br />
+                        {submission.reward_label}
+                    </Typography>
                 </div>
             </div>
         </>
