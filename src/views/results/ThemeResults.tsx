@@ -42,6 +42,10 @@ const ThemeResults: React.FC = () => {
 
     const getAuthor = (submissions: ResultsSubmission[]): ResultsAuthor => submissions[0].author;
 
+    const getAuthorReward = (author: ResultsAuthor): string => {
+        if (author.reward_theme?.toString(10) !== themeId) return '';
+        return author.reward || '';
+    };
     const getReward = (submission: ResultsSubmission): string => {
         if (submission.reward_label) return submission.reward_label;
         if (submission.accepted) return 'Accepted';
@@ -49,7 +53,7 @@ const ThemeResults: React.FC = () => {
     };
 
     const getRewardStyle = (submission: ResultsSubmission): CSSProperties => {
-        const style: CSSProperties = { width: '100px' };
+        const style: CSSProperties = {};
 
         if (submission.reward_kind === 'Gold') {
             style.backgroundColor = '#FEE101';
@@ -103,7 +107,7 @@ const ThemeResults: React.FC = () => {
                                         </TableCell>
                                         <TableCell colSpan={2} align="right">
                                             <Typography>
-                                                <b>{author.reward || ''}</b>
+                                                <b>{getAuthorReward(author)}</b>
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
