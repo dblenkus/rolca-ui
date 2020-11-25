@@ -1,8 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import _ from 'lodash';
 
-import { Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
+import {
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    Typography,
+} from '@material-ui/core';
 
 import LoadingProgress from '../../components/LoadingProgress';
 import ResultsThemeService from '../../services/ResultsThemeService';
@@ -35,9 +43,35 @@ const ThemeResults: React.FC = () => {
     const getAuthor = (submissions: ResultsSubmission[]): ResultsAuthor => submissions[0].author;
 
     const getReward = (submission: ResultsSubmission): string => {
-        if (submission.reward_kind) return submission.reward_kind;
+        if (submission.reward_label) return submission.reward_label;
         if (submission.accepted) return 'Accepted';
         return '';
+    };
+
+    const getRewardStyle = (submission: ResultsSubmission): CSSProperties => {
+        const style: CSSProperties = { width: '100px' };
+
+        if (submission.reward_kind === 'Gold') {
+            style.backgroundColor = '#FEE101';
+        }
+        if (submission.reward_kind === 'Silver') {
+            style.backgroundColor = '#A7A7AD';
+        }
+        if (submission.reward_kind === 'Bronze') {
+            style.backgroundColor = '#A77044';
+        }
+
+        return style;
+    };
+
+    const getRewardTextStyle = (submission: ResultsSubmission): CSSProperties => {
+        const style: CSSProperties = {};
+
+        if (submission.reward_kind === 'Honorable Mention') {
+            style.fontWeight = 'bolder';
+        }
+
+        return style;
     };
 
     const isAccepted = (submission: ResultsSubmission): boolean => submission.accepted;
@@ -63,10 +97,14 @@ const ThemeResults: React.FC = () => {
                                 <React.Fragment key={author.id}>
                                     <TableRow>
                                         <TableCell colSpan={2}>
-                                            <b>{`${author.first_name} ${author.last_name}`}</b>
+                                            <Typography>
+                                                <b>{`${author.first_name} ${author.last_name}`}</b>
+                                            </Typography>
                                         </TableCell>
                                         <TableCell colSpan={2} align="right">
-                                            <b>{author.reward || ''}</b>
+                                            <Typography>
+                                                <b>{author.reward || ''}</b>
+                                            </Typography>
                                         </TableCell>
                                     </TableRow>
                                     {submissions.map((submission) => (
@@ -78,9 +116,17 @@ const ThemeResults: React.FC = () => {
                                             }
                                         >
                                             <TableCell padding="checkbox" />
-                                            <TableCell>{submission.title}</TableCell>
-                                            <TableCell align="right">
-                                                {getReward(submission)}
+                                            <TableCell>
+                                                <Typography>{submission.title}</Typography>
+                                            </TableCell>
+                                            <TableCell
+                                                align="right"
+                                                padding="default"
+                                                style={getRewardStyle(submission)}
+                                            >
+                                                <Typography style={getRewardTextStyle(submission)}>
+                                                    {getReward(submission)}
+                                                </Typography>
                                             </TableCell>
                                         </TableRow>
                                     ))}

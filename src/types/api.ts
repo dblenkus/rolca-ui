@@ -37,7 +37,8 @@ export interface Submission extends BaseResource {
 export interface ResultsSubmission extends Submission {
     author: ResultsAuthor;
     rating: number;
-    reward_kind: string;
+    reward_kind: 'Gold' | 'Silver' | 'Bronze' | 'Honorable Mention';
+    reward_label: string;
     accepted: boolean;
 }
 
