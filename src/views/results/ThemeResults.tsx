@@ -102,7 +102,10 @@ const ThemeResults: React.FC = () => {
                                     <TableRow>
                                         <TableCell colSpan={2}>
                                             <Typography>
-                                                <b>{`${author.first_name} ${author.last_name}`}</b>
+                                                <b>
+                                                    {author.last_name}, {author.first_name}
+                                                </b>{' '}
+                                                ({author.country})
                                             </Typography>
                                         </TableCell>
                                         <TableCell colSpan={2} align="right">

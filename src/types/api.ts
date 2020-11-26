@@ -25,6 +25,7 @@ export interface Author extends BaseResource {
 export interface ResultsAuthor extends Author {
     reward: string | null;
     reward_theme: number | null;
+    country: string | null;
 }
 
 export interface Submission extends BaseResource {

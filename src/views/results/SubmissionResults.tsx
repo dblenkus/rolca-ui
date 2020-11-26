@@ -52,7 +52,7 @@ const SubmissionResults: React.FC = () => {
                 <img className={classes.image} src={file} alt={title} />
                 <div className={classes.title}>
                     <Typography align="center">
-                        <b>{title}</b>, {author.first_name} {author.last_name}
+                        <b>{title}</b>, {author.first_name} {author.last_name} ({author.country})
                         <br />
                         {submission.reward_label}
                     </Typography>
