@@ -56,13 +56,13 @@ const ThemeResults: React.FC = () => {
         const style: CSSProperties = {};
 
         if (submission.reward_kind === 'Gold') {
-            style.backgroundColor = '#FEE101';
+            style.backgroundColor = 'rgb(254, 225, 1, 0.5)';
         }
         if (submission.reward_kind === 'Silver') {
-            style.backgroundColor = '#A7A7AD';
+            style.backgroundColor = 'rgb(167, 167, 173, 0.5)';
         }
         if (submission.reward_kind === 'Bronze') {
-            style.backgroundColor = '#A77044';
+            style.backgroundColor = 'rgb(167, 112, 68, 0.5)';
         }
 
         return style;
