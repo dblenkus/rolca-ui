@@ -54,9 +54,36 @@ const ThemeGallery: React.FC<ThemeGalleryProps> = ({
         <Grid container spacing={2}>
             {submissions.map(({ id, files, title }) => {
                 const rating = ratings.find((r) => r.submission === id);
-                return (
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    <Grid item key={id} {...containerWidth}>
+                return isSeries ? (
+                    <Grid item key={id} xs={12}>
+                        <Card raised className={classes.card} onClick={() => handleClick(id)}>
+                            <div className={classes.wrapOut}>
+                                <div className={classes.wrapIn}>
+                                    {files.map((file) => (
+                                        <img
+                                            key={file.id}
+                                            className={classes.image}
+                                            src={file.thumbnail}
+                                            alt={title}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                            <div className={classes.title}>
+                                <b>{title}</b>
+                            </div>
+                            <div className={classes.rating}>
+                                <Rating
+                                    max={10}
+                                    value={rating?.rating || 0}
+                                    size="small"
+                                    disabled
+                                />
+                            </div>
+                        </Card>
+                    </Grid>
+                ) : (
+                    <Grid item key={id} xs={6} sm={4} md={3} lg={3}>
                         <Card raised className={classes.card} onClick={() => handleClick(id)}>
                             <div className={classes.wrapOut}>
                                 <div className={classes.wrapIn}>
