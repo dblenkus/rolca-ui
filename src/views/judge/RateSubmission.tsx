@@ -27,6 +27,7 @@ interface RouteMatchParams {
 
 const RateSubmission: React.FC<PropsFromRedux> = ({
     submission,
+    theme,
     isLoading,
     isPrevious,
     isNext,
@@ -91,16 +92,19 @@ const RateSubmission: React.FC<PropsFromRedux> = ({
     if (isLoading || !submission) return <LoadingProgress />;
 
     return (
-        <SubmissionRater
-            submission={submission}
-            rating={rating}
-            close={handleClose}
-            isPrevious={isPrevious}
-            isNext={isNext}
-            previousSubmission={previousSubmission}
-            nextSubmission={nextSubmission}
-            updateRating={updateRating}
-        />
+        <div style={{ position: 'absolute', width: '100%', left: 0, right: 0 }}>
+            <SubmissionRater
+                submission={submission}
+                rating={rating}
+                isSeries={theme?.is_series || false}
+                close={handleClose}
+                isPrevious={isPrevious}
+                isNext={isNext}
+                previousSubmission={previousSubmission}
+                nextSubmission={nextSubmission}
+                updateRating={updateRating}
+            />
+        </div>
     );
 };
 

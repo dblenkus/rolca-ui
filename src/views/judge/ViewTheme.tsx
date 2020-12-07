@@ -57,7 +57,12 @@ const ViewTheme: React.FC<PropsFromRedux> = ({
             <Typography variant="h3" align="center" paragraph>
                 {theme?.title}
             </Typography>
-            <ThemeGallery submissions={submissions} ratings={ratings} handleClick={handleClick} />
+            <ThemeGallery
+                submissions={submissions}
+                isSeries={theme?.is_series || false}
+                ratings={ratings}
+                handleClick={handleClick}
+            />
         </>
     );
 };

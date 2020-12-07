@@ -6,57 +6,68 @@ import Rating from './Rating';
 
 interface ThemeGalleryProps {
     submissions: Submission[];
+    isSeries: boolean;
     ratings: RatingModel[];
     handleClick: (submissionId: number) => void;
 }
 
-const useStyles = makeStyles({
-    card: { cursor: 'pointer' },
-    wrapOut: {
-        width: '100%',
-        paddingBottom: '100%',
-        position: 'relative',
-    },
-    wrapIn: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    image: {
-        maxHeight: '100%',
-        maxWidth: '100%',
-        padding: '5px',
-    },
-    title: { textAlign: 'center' },
-    rating: { textAlign: 'center' },
-});
-
 const ThemeGallery: React.FC<ThemeGalleryProps> = ({
     submissions,
+    isSeries,
     ratings,
     handleClick,
 }: ThemeGalleryProps) => {
+    const useStyles = makeStyles({
+        card: { cursor: 'pointer' },
+        wrapOut: {
+            width: '100%',
+            paddingBottom: isSeries ? '10%' : '100%',
+            position: 'relative',
+        },
+        wrapIn: {
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minWidth: '0',
+        },
+        image: {
+            maxHeight: '100%',
+            maxWidth: '100%',
+            padding: '5px',
+        },
+        title: { textAlign: 'center' },
+        rating: { textAlign: 'center' },
+    });
+
     const classes = useStyles();
+
+    const containerWidth: { xs?: 6 | 12; sm?: 4; md?: 3; lg?: 3 } = isSeries
+        ? { xs: 12 }
+        : { xs: 6, sm: 4, md: 3, lg: 3 };
 
     return (
         <Grid container spacing={2}>
             {submissions.map(({ id, files, title }) => {
                 const rating = ratings.find((r) => r.submission === id);
                 return (
-                    <Grid item key={id} xs={6} sm={4} md={3} lg={3}>
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    <Grid item key={id} {...containerWidth}>
                         <Card raised className={classes.card} onClick={() => handleClick(id)}>
                             <div className={classes.wrapOut}>
                                 <div className={classes.wrapIn}>
-                                    <img
-                                        className={classes.image}
-                                        src={files[0].thumbnail}
-                                        alt={title}
-                                    />
+                                    {files.map((file) => (
+                                        <img
+                                            key={file.id}
+                                            className={classes.image}
+                                            src={file.thumbnail}
+                                            alt={title}
+                                        />
+                                    ))}
                                 </div>
                             </div>
                             <div className={classes.title}>

@@ -9,6 +9,7 @@ import Rating from './Rating';
 interface SubmissionRaterProps {
     submission: Submission;
     rating: number;
+    isSeries: boolean;
     isPrevious: boolean;
     isNext: boolean;
     close: () => void;
@@ -17,33 +18,10 @@ interface SubmissionRaterProps {
     updateRating: (value: number) => void;
 }
 
-const useStyles = makeStyles({
-    mainFlex: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    imageFlex: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    image: {
-        maxWidth: '100%',
-        maxHeight: '80vh',
-    },
-    iconsFlex: {
-        alignSelf: 'stretch',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-    },
-    invisibleIcon: { visibility: 'hidden' },
-});
-
 const SubmissionRater: React.FC<SubmissionRaterProps> = ({
     submission,
     rating,
+    isSeries,
     isPrevious,
     isNext,
     close,
@@ -51,9 +29,39 @@ const SubmissionRater: React.FC<SubmissionRaterProps> = ({
     nextSubmission,
     updateRating,
 }: SubmissionRaterProps) => {
+    const useStyles = makeStyles({
+        mainFlex: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+        },
+        imageFlex: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        image: {
+            maxWidth: isSeries ? '30%' : '100%',
+            margin: isSeries ? '5px' : '0',
+            maxHeight: isSeries ? '40vh' : '80vh',
+            flexShrink: 1,
+        },
+        iconsFlex: {
+            alignSelf: 'stretch',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+        },
+        invisibleIcon: { visibility: 'hidden' },
+        textFlex: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+        },
+    });
+
     const classes = useStyles();
-    const { file } = submission.files[0];
-    const { title } = submission;
+    const { description, files, title } = submission;
 
     return (
         <div className={classes.mainFlex}>
@@ -61,7 +69,22 @@ const SubmissionRater: React.FC<SubmissionRaterProps> = ({
                 <IconButton disabled={!isPrevious} onClick={() => previousSubmission()}>
                     <NavigateBefore />
                 </IconButton>
-                <img className={classes.image} src={file} alt={title} />
+                <div>
+                    <div
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        {files.slice(0, 3).map((file) => (
+                            <img className={classes.image} src={file.file} alt={title} />
+                        ))}
+                    </div>
+                    <div
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        {files.slice(3, 6).map((file) => (
+                            <img className={classes.image} src={file.file} alt={title} />
+                        ))}
+                    </div>
+                </div>
                 <div className={classes.iconsFlex}>
                     <IconButton onClick={() => close()}>
                         <Close />
@@ -76,8 +99,12 @@ const SubmissionRater: React.FC<SubmissionRaterProps> = ({
                 </div>
             </div>
 
-            <div>
-                <b>Title:</b> {title}
+            <div className={classes.textFlex}>
+                <div>
+                    <b>Title:</b> {title}
+                </div>
+                <b>Description:</b>
+                {description}
             </div>
             <div>
                 <Rating max={10} value={rating} onChange={(value) => updateRating(value)} />
