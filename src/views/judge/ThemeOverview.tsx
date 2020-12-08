@@ -43,6 +43,7 @@ const ThemeOverview: React.FC = () => {
                                     style={{ maxWidth: '30%', margin: '5px' }}
                                     src={file.file}
                                     alt={submission.title}
+                                    onClick={() => window.open(file.file)}
                                 />
                             ))}
                         </div>
@@ -58,6 +59,7 @@ const ThemeOverview: React.FC = () => {
                                     style={{ maxWidth: '30%', margin: '5px' }}
                                     src={file.file}
                                     alt={submission.title}
+                                    onClick={() => window.open(file.file)}
                                 />
                             ))}
                         </div>
