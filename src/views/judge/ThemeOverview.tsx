@@ -31,11 +31,36 @@ const ThemeOverview: React.FC = () => {
             {submissions.map((submission) => {
                 return (
                     <Grid item xs={12}>
-                        <img
-                            src={submission.files[0].file}
-                            alt={submission.title}
-                            style={{ maxWidth: '100%', maxHeight: '80vh' }}
-                        />
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            {submission.files.slice(0, 3).map((file) => (
+                                <img
+                                    style={{ maxWidth: '30%', margin: '5px' }}
+                                    src={file.file}
+                                    alt={submission.title}
+                                />
+                            ))}
+                        </div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            {submission.files.slice(3, 6).map((file) => (
+                                <img
+                                    style={{ maxWidth: '30%', margin: '5px' }}
+                                    src={file.file}
+                                    alt={submission.title}
+                                />
+                            ))}
+                        </div>
                         <Typography align="center">
                             Title: {submission.title}, Points: {submission.rating}, Author:{' '}
                             {submission.author.id}, Submission id: {submission.id}
