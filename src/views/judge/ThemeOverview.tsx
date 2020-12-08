@@ -62,8 +62,16 @@ const ThemeOverview: React.FC = () => {
                             ))}
                         </div>
                         <Typography align="center">
-                            Title: {submission.title}, Points: {submission.rating}, Author:{' '}
-                            {submission.author.id}, Submission id: {submission.id}
+                            <b>{submission.title}</b>
+                            <br />
+                            {submission.description && (
+                                <>
+                                    {submission.description}
+                                    <br />
+                                </>
+                            )}
+                            Points: {submission.rating}, Author: {submission.author.id}, Submission
+                            id: {submission.id}
                             <br />
                             <br />
                         </Typography>
