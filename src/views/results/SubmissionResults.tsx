@@ -43,18 +43,64 @@ const SubmissionResults: React.FC = () => {
 
     if (!submission) return <LoadingProgress />;
 
-    const { file } = submission.files[0];
-    const { title, author } = submission;
+    const { files, title, author } = submission;
 
     return (
         <>
             <div className={classes.flex}>
-                <img className={classes.image} src={file} alt={title} />
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    {files.slice(0, 3).map((file) => (
+                        <img
+                            style={{
+                                maxWidth: files.length === 1 ? '100%' : '30%',
+                                maxHeight: files.length === 1 ? '85vh' : '40vh',
+                                margin: '5px',
+                            }}
+                            src={file.file}
+                            alt={submission.title}
+                        />
+                    ))}
+                </div>
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    {files.slice(3, 6).map((file) => (
+                        <img
+                            style={{
+                                maxWidth: '30%',
+                                maxHeight: '40vh',
+                                margin: '5px',
+                            }}
+                            src={file.file}
+                            alt={submission.title}
+                        />
+                    ))}
+                </div>
                 <div className={classes.title}>
                     <Typography align="center">
                         <b>{title}</b>, {author.first_name} {author.last_name} ({author.country})
-                        <br />
-                        {submission.reward_label}
+                        {submission.reward_label && (
+                            <>
+                                <br />
+                                {submission.reward_label}
+                            </>
+                        )}
+                        {submission.description && (
+                            <>
+                                <br />
+                                {submission.description}
+                            </>
+                        )}
                     </Typography>
                 </div>
             </div>
