@@ -1,7 +1,15 @@
 import { flatten, without } from 'lodash';
+import { DateTime } from 'luxon';
 
 import ImageService from '../services/ImageService';
-import { ContestModel, ImageModel, SubmissionModel, ThemeModel } from '../types/models';
+import { Author } from '../types/api';
+import {
+    AuthorModel,
+    ContestModel,
+    ImageModel,
+    SubmissionModel,
+    ThemeModel,
+} from '../types/models';
 import SubmissionService from '../services/SubmissionService';
 import AuthorService from '../services/AuthorService';
 
@@ -38,10 +46,25 @@ const processTheme = async (theme: ThemeModel): Promise<any> => {
     return flatten(submissions).map((submission) => ({ ...submission, theme: theme.meta.id }));
 };
 
+const processAuthor = async (author: AuthorModel): Promise<Author> => {
+    const { first_name, last_name, school, mentor, club, distinction } = author;
+    const dob = author.dob ? DateTime.fromJSDate(author.dob).toFormat('yyyy-MM-dd') : '';
+    const { data } = await AuthorService.create({
+        first_name,
+        last_name,
+        dob,
+        school,
+        mentor,
+        club,
+        distinction,
+    });
+    return data;
+};
+
 export default async (contest: ContestModel): Promise<void> => {
     const themes = await asyncMap(contest.themes, processTheme);
     let submissions = flatten(themes);
-    const { data: author } = await AuthorService.create(contest.author);
+    const author = await processAuthor(contest.author);
     submissions = submissions.map((submission) => ({ ...submission, author }));
     await SubmissionService.createSubmissions(submissions);
 };

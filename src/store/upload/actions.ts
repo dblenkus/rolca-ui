@@ -1,7 +1,13 @@
 import { AppThunk } from '..';
 
 import { Contest, Theme } from '../../types/api';
-import { ContestModel, ImageMeta, InputChange, SubmissionMeta } from '../../types/models';
+import {
+    ContestModel,
+    DateChange,
+    ImageMeta,
+    InputChange,
+    SubmissionMeta,
+} from '../../types/models';
 import imageReader from '../../utils/imageReader';
 import upload from '../../utils/upload';
 import validate from '../../utils/validate';
@@ -59,7 +65,7 @@ export const uploadUnsetUploading = (): UploadActionTypes => ({
     type: UPLOAD_UNSET_UPLOADING,
 });
 
-export const authorUpdate = (payload: InputChange): UploadActionTypes => ({
+export const authorUpdate = (payload: InputChange | DateChange): UploadActionTypes => ({
     type: AUTHOR_UPDATE,
     payload,
 });

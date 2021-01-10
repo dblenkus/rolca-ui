@@ -68,7 +68,7 @@ const validateSubmission = async (submission: SubmissionModel): Promise<Submissi
         images[0].errors.hasError = true;
     }
 
-    console.log(countImages(images))
+    console.log(countImages(images));
 
     if (isSeries && anyImage(images) && countImages(images) < 4) {
         images[0].errors.file = 'Series must contain at least 4 images';
@@ -92,19 +92,36 @@ const validateTheme = async (theme: ThemeModel): Promise<ThemeModel> => {
     return { meta: theme.meta, submissions, errors };
 };
 
-const validateAuthor = (author: AuthorModel, initial: boolean): AuthorModel => {
-    const { first_name, last_name } = author;
+const validateAuthor = (
+    author: AuthorModel,
+    initial: boolean,
+    contest: ContestModel,
+): AuthorModel => {
+    const { first_name, last_name, dob, school } = author;
+    console.log('>>', school);
     const errors = {
         first_name: !first_name && !initial ? 'Please enter the first name.' : null,
         last_name: !last_name && !initial ? 'Please enter the last name.' : null,
-        hasError: !initial && (!first_name || !last_name),
+        dob:
+            contest.meta.dobRequired && !dob && !initial ? 'Please enter the date of birth.' : null,
+        school:
+            contest.meta.schoolRequired && !school && !initial ? 'Please enter the school.' : null,
+        mentor: null,
+        club: null,
+        distinction: null,
+        hasError:
+            !initial &&
+            (!first_name ||
+                !last_name ||
+                (contest.meta.dobRequired && !dob) ||
+                (contest.meta.schoolRequired && !school)),
     };
 
-    return { first_name, last_name, errors };
+    return { ...author, errors };
 };
 
 export default async (contest: ContestModel, initial = false): Promise<ContestModel> => {
-    const author = validateAuthor(contest.author, initial);
+    const author = validateAuthor(contest.author, initial, contest);
     const themes = await asyncMap(contest.themes, validateTheme);
     const errors = { hasError: hasError(themes) || hasError(author) };
 

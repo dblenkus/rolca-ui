@@ -1,5 +1,11 @@
 import { Contest, Theme } from '../../types/api';
-import { ContestModel, ImageMeta, InputChange, SubmissionMeta } from '../../types/models';
+import {
+    ContestModel,
+    DateChange,
+    ImageMeta,
+    InputChange,
+    SubmissionMeta,
+} from '../../types/models';
 
 export interface UploadState {
     contest: ContestModel;
@@ -43,7 +49,7 @@ interface UploadStopUploadingAction {
 
 interface AuthorUpdateAction {
     type: typeof AUTHOR_UPDATE;
-    payload: InputChange;
+    payload: InputChange | DateChange;
 }
 
 interface ThemeInitAction {

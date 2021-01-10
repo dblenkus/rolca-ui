@@ -16,6 +16,11 @@ export interface Image extends BaseResource {
     thumbnail: string;
 }
 
+export interface Institution extends BaseResource {
+    name: string;
+    kind: number;
+}
+
 export interface Author extends BaseResource {
     first_name: string;
     last_name: string;
@@ -74,6 +79,9 @@ export interface Contest extends BaseResource {
     notice_html: string;
     confirmation_html: string;
     header_image: string | null;
+    dob_required: boolean;
+    club_required: boolean;
+    school_required: boolean;
 }
 
 export interface JuryContest extends Contest {

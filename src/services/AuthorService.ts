@@ -6,6 +6,11 @@ import { Author } from '../types/api';
 interface UserCreatePayload {
     first_name: string;
     last_name: string;
+    dob?: string;
+    school?: string;
+    mentor?: string;
+    club?: string;
+    distinction?: string;
 }
 
 export default {

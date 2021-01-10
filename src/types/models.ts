@@ -3,6 +3,11 @@ export interface InputChange {
     value: string;
 }
 
+export interface DateChange {
+    name: string;
+    value: Date;
+}
+
 export interface FileChange {
     file: File;
     url: string;
@@ -69,11 +74,21 @@ export interface AuthorError {
     hasError: boolean;
     first_name: string | null;
     last_name: string | null;
+    dob: string | null;
+    school: string | null;
+    mentor: string | null;
+    club: string | null;
+    distinction: string | null;
 }
 
 export interface AuthorModel {
     first_name: string;
     last_name: string;
+    dob?: Date;
+    school?: string;
+    mentor?: string;
+    club?: string;
+    distinction: string;
     errors: AuthorError;
 }
 
@@ -86,6 +101,9 @@ export interface ContestMeta {
     description: string;
     noticeHtml: string;
     headerImage: string | null;
+    dobRequired: boolean;
+    clubRequired: boolean;
+    schoolRequired: boolean;
 }
 
 export interface ContestModel {

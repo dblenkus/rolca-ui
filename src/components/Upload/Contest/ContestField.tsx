@@ -6,7 +6,7 @@ import { Button, CircularProgress, Grid, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 import { uploadFormStyles } from '../../../styles/general';
-import { InputChange, ContestModel } from '../../../types/models';
+import { InputChange, ContestModel, DateChange } from '../../../types/models';
 
 import HeaderImage from '../../Layout/HeaderImage';
 import AuthorField from '../Author/AuthorField';
@@ -14,7 +14,7 @@ import ThemeField from '../Theme/ThemeField';
 
 interface ContestFieldProps extends WithStyles<typeof uploadFormStyles> {
     contest: ContestModel;
-    handleAuthorChange: (payload: InputChange) => void;
+    handleAuthorChange: (payload: InputChange | DateChange) => void;
     handleSubmissionChange: (theme_id: number, submission_id: number, payload: InputChange) => void;
     handleImageChange: (
         theme_id: number,
@@ -73,6 +73,9 @@ class ContestField extends React.Component<ContestFieldProps> {
                         <AuthorField
                             handleAUthorChange={handleAuthorChange}
                             author={contest.author}
+                            showDob={contest.meta.dobRequired}
+                            showClub={contest.meta.clubRequired}
+                            showSchool={contest.meta.schoolRequired}
                         />
 
                         {contest.themes.map((theme) => {

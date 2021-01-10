@@ -31,6 +31,9 @@ const reducer = (state = initialState, action: UploadActionTypes): UploadState =
                         description: contest.description,
                         noticeHtml: contest.notice_html,
                         headerImage: contest.header_image,
+                        dobRequired: contest.dob_required,
+                        clubRequired: contest.club_required,
+                        schoolRequired: contest.school_required,
                     },
                     themes: contest.themes.map((theme) =>
                         themeReducer(undefined, themeInit(theme)),

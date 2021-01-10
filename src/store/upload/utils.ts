@@ -19,6 +19,11 @@ export const getEmptyAuthorError = (): AuthorError => ({
     hasError: false,
     first_name: null,
     last_name: null,
+    dob: null,
+    school: null,
+    mentor: null,
+    club: null,
+    distinction: null,
 });
 
 export const getEmptyThemeError = (): ThemeError => ({
@@ -42,6 +47,9 @@ export const getEmptyContest = (): ContestModel => ({
         description: '',
         noticeHtml: '',
         headerImage: null,
+        dobRequired: false,
+        clubRequired: false,
+        schoolRequired: false,
     },
     author: getEmptyAuthor(),
     themes: [],
@@ -51,6 +59,11 @@ export const getEmptyContest = (): ContestModel => ({
 export const getEmptyAuthor = (): AuthorModel => ({
     first_name: '',
     last_name: '',
+    dob: undefined,
+    school: '',
+    mentor: '',
+    club: '',
+    distinction: '',
     errors: getEmptyAuthorError(),
 });
 

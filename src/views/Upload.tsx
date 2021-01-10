@@ -14,7 +14,7 @@ import {
 
 import ContestService from '../services/ContestService';
 
-import { InputChange } from '../types/models';
+import { DateChange, InputChange } from '../types/models';
 import { Contest } from '../types/api';
 
 import ContestField from '../components/Upload/Contest/ContestField';
@@ -67,7 +67,7 @@ const mapStateToProps = (state: AppState) => ({ ...state.upload });
 
 const mapDispatchToProps = (dispatch: any) => ({
     uploadInit: (contest: Contest) => dispatch(uploadInit(contest)),
-    handleAuthorChange: (payload: InputChange) => dispatch(authorUpdate(payload)),
+    handleAuthorChange: (payload: InputChange | DateChange) => dispatch(authorUpdate(payload)),
     handleSubmissionChange: (theme_id: number, submission_id: number, payload: InputChange) =>
         dispatch(submissionUpdate(theme_id, submission_id, payload)),
     handleImageChange: (

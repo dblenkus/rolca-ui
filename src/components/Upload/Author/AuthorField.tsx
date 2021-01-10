@@ -7,16 +7,22 @@ import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 import InputField from '../InputField';
 
 import { uploadFormStyles } from '../../../styles/general';
-import { AuthorModel, InputChange } from '../../../types/models';
+import { AuthorModel, DateChange, InputChange } from '../../../types/models';
+import DatePicker from '../DatePicker';
+import AutocompleteField from '../AutocompleteInput';
 
 interface AuthorFieldProps extends WithStyles<typeof uploadFormStyles> {
     author: AuthorModel;
-    handleAUthorChange: (payload: InputChange) => void;
+    showDob: boolean;
+    showClub: boolean;
+    showSchool: boolean;
+    handleAUthorChange: (payload: InputChange | DateChange) => void;
 }
 
+// eslint-disable-next-line react/prefer-stateless-function
 class AuthorField extends React.Component<AuthorFieldProps> {
     render(): React.ReactNode {
-        const { classes, author, handleAUthorChange } = this.props;
+        const { classes, author, showDob, showClub, showSchool, handleAUthorChange } = this.props;
 
         return (
             <Card className={classes.themeCard} raised>
@@ -33,11 +39,13 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                 error={author.errors.first_name}
                                 label="First name"
                                 autoComplete="given-name"
-                                autoFocus={true}
-                                required={true}
+                                autoFocus
+                                required
                                 onChange={handleAUthorChange}
                             />
                         </Grid>
+                    </Grid>
+                    <Grid container justify="center" spacing={2}>
                         <Grid item xs={12} sm={6} md={4}>
                             <InputField
                                 name="last_name"
@@ -45,11 +53,82 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                 error={author.errors.last_name}
                                 label="Last name"
                                 autoComplete="family-name"
-                                required={true}
+                                required
                                 onChange={handleAUthorChange}
                             />
                         </Grid>
                     </Grid>
+                    {showDob && (
+                        <Grid container justify="center" spacing={2}>
+                            <Grid item xs={12} sm={6} md={4}>
+                                <DatePicker
+                                    name="dob"
+                                    label="Date of birth"
+                                    value={author.dob || null}
+                                    error={author.errors.dob}
+                                    required
+                                    autoComplete="bday"
+                                    onChange={handleAUthorChange}
+                                />
+                            </Grid>
+                        </Grid>
+                    )}
+                    {showSchool && (
+                        <Grid container justify="center" spacing={2}>
+                            <Grid item xs={12} sm={6} md={4}>
+                                <AutocompleteField
+                                    name="school"
+                                    label="School"
+                                    value={author.school || ''}
+                                    error={author.errors.school}
+                                    required
+                                    onChange={handleAUthorChange}
+                                />
+                            </Grid>
+                        </Grid>
+                    )}
+                    {showSchool && (
+                        <Grid container justify="center" spacing={2}>
+                            <Grid item xs={12} sm={6} md={4}>
+                                <InputField
+                                    name="mentor"
+                                    value={author.mentor}
+                                    error={author.errors.mentor}
+                                    label="Mentor"
+                                    autoComplete=""
+                                    onChange={handleAUthorChange}
+                                />
+                            </Grid>
+                        </Grid>
+                    )}
+                    {showClub && (
+                        <Grid container justify="center" spacing={2}>
+                            <Grid item xs={12} sm={6} md={4}>
+                                <InputField
+                                    name="club"
+                                    value={author.club}
+                                    error={author.errors.club}
+                                    label="Photo club"
+                                    autoComplete=""
+                                    onChange={handleAUthorChange}
+                                />
+                            </Grid>
+                        </Grid>
+                    )}
+                    {showClub && (
+                        <Grid container justify="center" spacing={2}>
+                            <Grid item xs={12} sm={6} md={4}>
+                                <InputField
+                                    name="distinction"
+                                    value={author.distinction}
+                                    error={author.errors.distinction}
+                                    label="Photo distinction"
+                                    autoComplete=""
+                                    onChange={handleAUthorChange}
+                                />
+                            </Grid>
+                        </Grid>
+                    )}
                 </CardContent>
             </Card>
         );
