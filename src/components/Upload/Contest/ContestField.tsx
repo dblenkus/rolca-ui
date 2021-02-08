@@ -74,8 +74,10 @@ class ContestField extends React.Component<ContestFieldProps> {
                             handleAUthorChange={handleAuthorChange}
                             author={contest.author}
                             showDob={contest.meta.dobRequired}
-                            showClub={contest.meta.clubRequired}
-                            showSchool={contest.meta.schoolRequired}
+                            showClub={contest.meta.clubShow}
+                            requiredClub={contest.meta.clubRequired}
+                            showSchool={contest.meta.schoolShow}
+                            requiredSchool={contest.meta.schoolRequired}
                         />
 
                         {contest.themes.map((theme) => {

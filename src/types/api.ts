@@ -80,7 +80,9 @@ export interface Contest extends BaseResource {
     confirmation_html: string;
     header_image: string | null;
     dob_required: boolean;
+    club_show: boolean;
     club_required: boolean;
+    school_show: boolean;
     school_required: boolean;
 }
 

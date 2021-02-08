@@ -102,7 +102,9 @@ export interface ContestMeta {
     noticeHtml: string;
     headerImage: string | null;
     dobRequired: boolean;
+    clubShow: boolean;
     clubRequired: boolean;
+    schoolShow: boolean;
     schoolRequired: boolean;
 }
 

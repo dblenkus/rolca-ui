@@ -15,14 +15,25 @@ interface AuthorFieldProps extends WithStyles<typeof uploadFormStyles> {
     author: AuthorModel;
     showDob: boolean;
     showClub: boolean;
+    requiredClub: boolean;
     showSchool: boolean;
+    requiredSchool: boolean;
     handleAUthorChange: (payload: InputChange | DateChange) => void;
 }
 
 // eslint-disable-next-line react/prefer-stateless-function
 class AuthorField extends React.Component<AuthorFieldProps> {
     render(): React.ReactNode {
-        const { classes, author, showDob, showClub, showSchool, handleAUthorChange } = this.props;
+        const {
+            classes,
+            author,
+            showDob,
+            showClub,
+            requiredClub,
+            showSchool,
+            requiredSchool,
+            handleAUthorChange,
+        } = this.props;
 
         return (
             <Card className={classes.themeCard} raised>
@@ -81,7 +92,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                     label="School"
                                     value={author.school || ''}
                                     error={author.errors.school}
-                                    required
+                                    required={requiredSchool}
                                     onChange={handleAUthorChange}
                                 />
                             </Grid>
@@ -109,6 +120,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                     value={author.club}
                                     error={author.errors.club}
                                     label="Photo club"
+                                    required={requiredClub}
                                     autoComplete=""
                                     onChange={handleAUthorChange}
                                 />
