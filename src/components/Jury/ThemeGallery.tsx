@@ -46,10 +46,6 @@ const ThemeGallery: React.FC<ThemeGalleryProps> = ({
 
     const classes = useStyles();
 
-    const containerWidth: { xs?: 6 | 12; sm?: 4; md?: 3; lg?: 3 } = isSeries
-        ? { xs: 12 }
-        : { xs: 6, sm: 4, md: 3, lg: 3 };
-
     return (
         <Grid container spacing={2}>
             {submissions.map(({ id, files, title }) => {
