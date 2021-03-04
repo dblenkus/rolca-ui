@@ -31,6 +31,8 @@ export interface ResultsAuthor extends Author {
     reward: string | null;
     reward_theme: number | null;
     country: string | null;
+    school: string | null;
+    club: string | null;
 }
 
 export interface Submission extends BaseResource {

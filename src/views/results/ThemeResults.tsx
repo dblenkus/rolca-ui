@@ -12,9 +12,10 @@ import {
     Typography,
 } from '@material-ui/core';
 
+import ContestService from '../../services/ContestService';
 import LoadingProgress from '../../components/LoadingProgress';
 import ResultsThemeService from '../../services/ResultsThemeService';
-import { ResultsAuthor, ResultsSubmission } from '../../types/api';
+import { Contest, ResultsAuthor, ResultsSubmission } from '../../types/api';
 
 interface RouteMatchParams {
     contestId: string;
@@ -23,6 +24,7 @@ interface RouteMatchParams {
 
 const ThemeResults: React.FC = () => {
     const [submissionsByAuthor, setSubmissionsByAuthor] = useState<ResultsSubmission[][]>([]);
+    const [contest, setContest] = useState<Contest | null>(null);
     const [redirect, setRedirect] = useState<null | number>(null);
     const { contestId, themeId } = useParams<RouteMatchParams>();
 
@@ -39,6 +41,14 @@ const ThemeResults: React.FC = () => {
         };
         fetch();
     }, [themeId]);
+
+    useEffect(() => {
+        const fetchContest = async (): Promise<void> => {
+            const { data } = await ContestService.getContest(contestId);
+            setContest(data);
+        };
+        fetchContest();
+    }, [contestId]);
 
     const getAuthor = (submissions: ResultsSubmission[]): ResultsAuthor => submissions[0].author;
 
@@ -88,7 +98,7 @@ const ThemeResults: React.FC = () => {
             />
         );
 
-    if (!submissionsByAuthor.length) return <LoadingProgress />;
+    if (!submissionsByAuthor.length || !contest) return <LoadingProgress />;
 
     return (
         <>
@@ -97,6 +107,9 @@ const ThemeResults: React.FC = () => {
                     <TableBody>
                         {submissionsByAuthor.map((submissions: ResultsSubmission[]) => {
                             const author = getAuthor(submissions);
+                            let authorDetails = `${author.country}`;
+                            if (contest.school_show) authorDetails = `${author.school || '/'}`;
+                            if (author.club) authorDetails += `, klub: ${author.club || '/'}`;
                             return (
                                 <React.Fragment key={author.id}>
                                     <TableRow>
@@ -105,7 +118,7 @@ const ThemeResults: React.FC = () => {
                                                 <b>
                                                     {author.last_name}, {author.first_name}
                                                 </b>{' '}
-                                                ({author.country})
+                                                ({authorDetails})
                                             </Typography>
                                         </TableCell>
                                         <TableCell colSpan={2} align="right">
