@@ -15,6 +15,12 @@ interface UserCreatePayload {
 
 export default {
     create(user: UserCreatePayload): AxiosPromise<Author> {
+        /* eslint no-param-reassign: ["error", { "props": false }] */
+        if (user.dob === '') delete user.dob;
+        if (user.school === '') delete user.school;
+        if (user.mentor === '') delete user.mentor;
+        if (user.club === '') delete user.club;
+        if (user.distinction === '') delete user.distinction;
         return apiClient.post('/author', user);
     },
 };
