@@ -10,7 +10,7 @@ export default {
     },
     getOverview(themeId: string): AxiosPromise<PaginatedResponse<ResultsSubmission>> {
         return apiClient.get('/results/submission', {
-            params: { ordering: '-rating_sum', page_size: 30, theme: themeId },
+            params: { ordering: '-rating_sum', page_size: 500, theme: themeId },
         });
     },
 };
