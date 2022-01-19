@@ -56,6 +56,17 @@ const ThemeResults: React.FC = () => {
         if (author.reward_theme?.toString(10) !== themeId) return '';
         return author.reward || '';
     };
+
+    const getAuthorStyle = (author: ResultsAuthor): CSSProperties => {
+        const style: CSSProperties = {};
+
+        if (author.reward) {
+            style.backgroundColor = 'rgb(254, 225, 1, 0.5)';
+        }
+
+        return style;
+    };
+
     const getReward = (submission: ResultsSubmission): string => {
         if (submission.reward_label) return submission.reward_label;
         if (submission.accepted) return 'Accepted';
@@ -113,7 +124,7 @@ const ThemeResults: React.FC = () => {
                             return (
                                 <React.Fragment key={author.id}>
                                     <TableRow>
-                                        <TableCell colSpan={2}>
+                                        <TableCell colSpan={2} style={getAuthorStyle(author)}>
                                             <Typography>
                                                 <b>
                                                     {author.last_name}, {author.first_name}
@@ -121,7 +132,11 @@ const ThemeResults: React.FC = () => {
                                                 ({authorDetails})
                                             </Typography>
                                         </TableCell>
-                                        <TableCell colSpan={2} align="right">
+                                        <TableCell
+                                            colSpan={2}
+                                            align="right"
+                                            style={getAuthorStyle(author)}
+                                        >
                                             <Typography>
                                                 <b>{getAuthorReward(author)}</b>
                                             </Typography>
