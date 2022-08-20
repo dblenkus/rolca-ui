@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import Confirm from './utils/Confirm';
 
 interface PasswordResetRequestConfirmProps {
@@ -8,11 +10,11 @@ interface PasswordResetRequestConfirmProps {
 
 const PasswordResetRequestConfirm: React.FC<PasswordResetRequestConfirmProps> = (props) => {
     const { email } = props;
+    const { t } = useTranslation();
 
     return (
-        <Confirm title={'Email sent to ' + email}>
-            To get back into your account, follow the instruction we've sent you to your {email}
-            email address.
+        <Confirm title={t('reset_link_sent_title', { email })}>
+            {t('reset_link_sent', { email })}
         </Confirm>
     );
 };

@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -20,6 +21,7 @@ const useStyles = makeStyles({
 const Dropdown: React.FC = () => {
     const user = React.useContext(userContext);
     const location = useLocation();
+    const { t } = useTranslation();
 
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | Element>(null);
@@ -39,7 +41,7 @@ const Dropdown: React.FC = () => {
 
     const publicMenu = [
         <Link to="/register" className={classes.menuItem} onClick={closeMenu} key="link-1">
-            <MenuItem>Register</MenuItem>
+            <MenuItem>{t('register')}</MenuItem>
         </Link>,
         <Link
             to={{
@@ -50,16 +52,16 @@ const Dropdown: React.FC = () => {
             onClick={closeMenu}
             key="link-2"
         >
-            <MenuItem>Login</MenuItem>
+            <MenuItem>{t('login')}</MenuItem>
         </Link>,
     ];
 
     const privateMenu = [
         <MenuItem key="item-1" onClick={closeMenu}>
-            Profile
+            {t('profile')}
         </MenuItem>,
         <MenuItem key="item-2" onClick={logOut}>
-            Logout
+            {t('logout')}
         </MenuItem>,
     ];
 

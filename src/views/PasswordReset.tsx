@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 import { isString } from 'lodash';
 
 import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
@@ -13,7 +15,7 @@ import { IInputChangeEvent } from '../components/Upload/InputField';
 
 import UserService from '../services/UserService';
 
-interface PasswordResetProps extends RouteComponentProps {}
+interface PasswordResetProps extends RouteComponentProps, WithTranslation {}
 
 interface PasswordResetState {
     fields: Fields;
@@ -68,6 +70,7 @@ class PasswordResetView extends React.Component<PasswordResetProps, PasswordRese
 
     render() {
         const { done, errors, fields, redirect } = this.state;
+        const { t } = this.props;
 
         if (redirect) {
             return <Redirect to="/login" />;
@@ -78,7 +81,7 @@ class PasswordResetView extends React.Component<PasswordResetProps, PasswordRese
                 <Grid item xs={12} sm={6} md={4}>
                     <Card>
                         <CardHeader
-                            title="Password Reset"
+                            title={t('password_reset')}
                             titleTypographyProps={{ align: 'center' }}
                         />
                         <CardContent>
@@ -100,4 +103,4 @@ class PasswordResetView extends React.Component<PasswordResetProps, PasswordRese
     }
 }
 
-export default withRouter(PasswordResetView);
+export default withTranslation()(withRouter(PasswordResetView));

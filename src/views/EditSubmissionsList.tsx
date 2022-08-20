@@ -2,6 +2,7 @@ import React from 'react';
 
 import { groupBy, sum } from 'lodash';
 
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import {
@@ -25,7 +26,7 @@ import SubmissionService from '../services/SubmissionService';
 import { Author, Contest, Submission } from '../types/api';
 import { asyncMap } from '../utils/async';
 
-interface EditSubmissionListProps extends WithStyles<typeof editListStyles> {}
+interface EditSubmissionListProps extends WithStyles<typeof editListStyles>, WithTranslation {}
 
 interface EditSubmissionsListState {
     contests: Contest[];
@@ -88,7 +89,7 @@ class EditSubmissionsList extends React.Component<
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
 
         if (!this.state.submissions.length)
             return (
@@ -113,15 +114,14 @@ class EditSubmissionsList extends React.Component<
 
         return (
             <>
-                {' '}
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Contest</TableCell>
-                                <TableCell>Author</TableCell>
-                                <TableCell>Number of Themes</TableCell>
-                                <TableCell>Number of Photos</TableCell>
+                                <TableCell>{t('contest')}</TableCell>
+                                <TableCell>{t('author')}</TableCell>
+                                <TableCell>{t('n_themes')}</TableCell>
+                                <TableCell>{t('n_photos')}</TableCell>
                                 <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
@@ -142,7 +142,7 @@ class EditSubmissionsList extends React.Component<
                                                     className={classes.button}
                                                     disabled
                                                 >
-                                                    Edit
+                                                    {t('edit')}
                                                 </Button>
                                             </span>
                                         </Tooltip>
@@ -152,7 +152,7 @@ class EditSubmissionsList extends React.Component<
                                             color="secondary"
                                             onClick={this.openDialog(group.submissions)}
                                         >
-                                            Delete
+                                            {t('delete')}
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -162,15 +162,15 @@ class EditSubmissionsList extends React.Component<
                 </TableContainer>
                 <ConfirmDialog
                     open={this.state.showDialog}
-                    title="Delete confirmation"
+                    title={t('delete_confirmation_title')}
                     onClose={this.closeDialog}
                     onConfirm={this.processDelete}
                 >
-                    Do you really want to delete the submission?
+                    {t('delete_confirmation') as React.ReactChild}
                 </ConfirmDialog>
             </>
         );
     }
 }
 
-export default withStyles(editListStyles)(EditSubmissionsList);
+export default withTranslation()(withStyles(editListStyles)(EditSubmissionsList));

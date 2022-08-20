@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { Button } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,6 +32,7 @@ const useStyles = makeStyles(authStyles);
 
 const PasswordResetForm: React.FC<PasswordReserFormProps> = (props) => {
     const classes = useStyles();
+    const { t } = useTranslation();
     const { errors, fields, onChange, onSubmit } = props;
 
     const getError = (field: string): string => {
@@ -45,7 +48,7 @@ const PasswordResetForm: React.FC<PasswordReserFormProps> = (props) => {
         <form onSubmit={handleSubmit}>
             <InputField
                 name="new_password"
-                label="New password"
+                label={t('new_password')}
                 value={fields.new_password}
                 error={getError('new_password')}
                 autoComplete="new-password"
@@ -67,7 +70,7 @@ const PasswordResetForm: React.FC<PasswordReserFormProps> = (props) => {
                 color="primary"
                 className={classes.submit}
             >
-                Reset Password
+                {t('password_reset')}
             </Button>
         </form>
     );

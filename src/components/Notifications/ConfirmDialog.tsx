@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 
 interface ConfirmDialogProps {
@@ -13,6 +15,8 @@ interface ConfirmDialogProps {
 const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
     const { title, children, open, onClose, onConfirm } = props;
 
+    const { t } = useTranslation();
+
     const handleConfirm = () => {
         onClose();
         onConfirm();
@@ -24,10 +28,10 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
             <DialogContent>{children}</DialogContent>
             <DialogActions>
                 <Button variant="contained" onClick={onClose} color="secondary">
-                    No
+                    {t('no')}
                 </Button>
                 <Button variant="contained" onClick={handleConfirm} color="primary">
-                    Yes
+                    {t('yes')}
                 </Button>
             </DialogActions>
         </Dialog>

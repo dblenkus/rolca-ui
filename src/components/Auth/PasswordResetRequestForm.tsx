@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -22,6 +24,7 @@ const useStyles = makeStyles(authStyles);
 
 const PasswordResetRequestForm: React.FC<PasswordResetRequestFormProps> = (props) => {
     const classes = useStyles();
+    const { t } = useTranslation();
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -32,7 +35,7 @@ const PasswordResetRequestForm: React.FC<PasswordResetRequestFormProps> = (props
         <form onSubmit={handleSubmit}>
             <InputField
                 name="email"
-                label="Email"
+                label={t('email')}
                 value={props.fields.email}
                 autoComplete="email"
                 autoFocus
@@ -46,7 +49,7 @@ const PasswordResetRequestForm: React.FC<PasswordResetRequestFormProps> = (props
                 color="primary"
                 className={classes.submit}
             >
-                Request Password Reset
+                {t('send_reset_link')}
             </Button>
         </form>
     );

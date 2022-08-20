@@ -2,6 +2,8 @@ import React from 'react';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 
+import { useTranslation } from 'react-i18next';
+
 import { Button, Checkbox, TableCell, TableRow } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
@@ -43,6 +45,7 @@ const SubmissionSetTableRow: React.FC<SubmissionSetTableRowProps> = ({
     onDelete,
 }: SubmissionSetTableRowProps) => {
     const classes = useStyles();
+    const { t } = useTranslation();
 
     const handlePaidChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         onPaidChange(submissionSet.id, event.target.checked);
@@ -73,7 +76,7 @@ const SubmissionSetTableRow: React.FC<SubmissionSetTableRowProps> = ({
                     className={classes.button}
                     color="primary"
                 >
-                    View
+                    {t('view')}
                 </Link>
                 <Button
                     variant="text"
@@ -83,7 +86,7 @@ const SubmissionSetTableRow: React.FC<SubmissionSetTableRowProps> = ({
                         onDelete(submissionSet);
                     }}
                 >
-                    Delete
+                    {t('delete')}
                 </Button>
             </TableCell>
         </TableRow>

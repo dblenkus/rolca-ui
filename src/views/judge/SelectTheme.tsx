@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {
     Button,
@@ -21,6 +22,7 @@ const CustomButton = ({ navigate, ...rest }: { navigate: Function }) => {
 
 const SelectTheme: React.FC = () => {
     const [contests, setContests] = useState<JuryContest[]>([]);
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchContests = async (): Promise<void> => {
@@ -54,7 +56,7 @@ const SelectTheme: React.FC = () => {
                                             component={CustomButton}
                                             color="primary"
                                         >
-                                            Open
+                                            {t('open')}
                                         </Link>
                                     </TableCell>
                                 </TableRow>

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { IconButton, makeStyles } from '@material-ui/core';
 import { Close, NavigateBefore, NavigateNext } from '@material-ui/icons';
 
@@ -61,6 +63,7 @@ const SubmissionRater: React.FC<SubmissionRaterProps> = ({
     });
 
     const classes = useStyles();
+    const { t } = useTranslation();
     const { description, files, title } = submission;
 
     return (
@@ -101,9 +104,9 @@ const SubmissionRater: React.FC<SubmissionRaterProps> = ({
 
             <div className={classes.textFlex}>
                 <div>
-                    <b>Title:</b> {title}
+                    <b>{t('title')}:</b> {title}
                 </div>
-                <b>Description:</b>
+                <b>{t('description')}:</b>
                 {description}
             </div>
             <div>

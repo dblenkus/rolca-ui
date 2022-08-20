@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -32,6 +33,7 @@ const useStyles = makeStyles(authStyles);
 
 const LoginForm: React.FC<LoginFormProps> = (props) => {
     const classes = useStyles();
+    const { t } = useTranslation();
     const { errors, fields, onChange, onSubmit } = props;
 
     const getError = (field: string): string => {
@@ -47,7 +49,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
         <form onSubmit={handleSubmit}>
             <InputField
                 name="email"
-                label="Email"
+                label={t('email')}
                 value={fields.email}
                 error={getError('email')}
                 autoComplete="email"
@@ -57,7 +59,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
             />
             <InputField
                 name="password"
-                label="Password"
+                label={t('password')}
                 value={fields.password}
                 error={getError('password')}
                 autoComplete="current-password"
@@ -79,7 +81,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
                 color="primary"
                 className={classes.submit}
             >
-                Sign In
+                {t('login')}
             </Button>
         </form>
     );

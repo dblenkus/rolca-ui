@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { WithTranslation, withTranslation } from 'react-i18next';
+
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
@@ -11,7 +13,7 @@ import { AuthorModel, DateChange, InputChange } from '../../../types/models';
 import DatePicker from '../DatePicker';
 import AutocompleteField from '../AutocompleteInput';
 
-interface AuthorFieldProps extends WithStyles<typeof uploadFormStyles> {
+interface AuthorFieldProps extends WithStyles<typeof uploadFormStyles>, WithTranslation {
     author: AuthorModel;
     showDob: boolean;
     showClub: boolean;
@@ -33,12 +35,13 @@ class AuthorField extends React.Component<AuthorFieldProps> {
             showSchool,
             requiredSchool,
             handleAUthorChange,
+            t,
         } = this.props;
 
         return (
             <Card className={classes.themeCard} raised>
                 <CardHeader
-                    title="Author"
+                    title={t('author')}
                     titleTypographyProps={{ align: 'center', variant: 'h3' }}
                 />
                 <CardContent>
@@ -48,7 +51,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                 name="first_name"
                                 value={author.first_name}
                                 error={author.errors.first_name}
-                                label="First name"
+                                label={t('first_name')}
                                 autoComplete="given-name"
                                 autoFocus
                                 required
@@ -62,7 +65,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                 name="last_name"
                                 value={author.last_name}
                                 error={author.errors.last_name}
-                                label="Last name"
+                                label={t('last_name')}
                                 autoComplete="family-name"
                                 required
                                 onChange={handleAUthorChange}
@@ -74,7 +77,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                             <Grid item xs={12} sm={6} md={4}>
                                 <DatePicker
                                     name="dob"
-                                    label="Date of birth"
+                                    label={t('date_of_birth')}
                                     value={author.dob || null}
                                     error={author.errors.dob}
                                     required
@@ -89,7 +92,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                             <Grid item xs={12} sm={6} md={4}>
                                 <AutocompleteField
                                     name="school"
-                                    label="School"
+                                    label={t('school')}
                                     value={author.school || ''}
                                     error={author.errors.school}
                                     required={requiredSchool}
@@ -105,7 +108,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                     name="mentor"
                                     value={author.mentor}
                                     error={author.errors.mentor}
-                                    label="Mentor"
+                                    label={t('mentor')}
                                     autoComplete=""
                                     onChange={handleAUthorChange}
                                 />
@@ -119,7 +122,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                     name="club"
                                     value={author.club}
                                     error={author.errors.club}
-                                    label="Photo club"
+                                    label={t('photo_club')}
                                     required={requiredClub}
                                     autoComplete=""
                                     onChange={handleAUthorChange}
@@ -134,7 +137,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                     name="distinction"
                                     value={author.distinction}
                                     error={author.errors.distinction}
-                                    label="Photo distinction"
+                                    label={t('photo_distinction')}
                                     autoComplete=""
                                     onChange={handleAUthorChange}
                                 />
@@ -147,4 +150,4 @@ class AuthorField extends React.Component<AuthorFieldProps> {
     }
 }
 
-export default withStyles(uploadFormStyles)(AuthorField);
+export default withTranslation()(withStyles(uploadFormStyles)(AuthorField));

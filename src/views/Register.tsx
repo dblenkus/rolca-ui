@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 import { Link as RouterLink } from 'react-router-dom';
 
 import { Card, CardContent, CardHeader, Grid, Link } from '@material-ui/core';
@@ -10,13 +12,15 @@ import { IInputChangeEvent } from '../components/Upload/InputField';
 
 import UserService from '../services/UserService';
 
+interface RegisterViewProps extends WithTranslation {}
+
 interface RegisterViewState {
     fields: Fields;
     errors: Errors;
     done: boolean;
 }
 
-class RegisterView extends React.Component<{}, RegisterViewState> {
+class RegisterView extends React.Component<RegisterViewProps, RegisterViewState> {
     state = {
         fields: {
             first_name: '',
@@ -65,12 +69,16 @@ class RegisterView extends React.Component<{}, RegisterViewState> {
 
     render() {
         const { errors, done, fields } = this.state;
+        const { t } = this.props;
 
         return (
             <Grid container justify="center">
                 <Grid item xs={12} sm={6} md={4}>
                     <Card>
-                        <CardHeader title="Register" titleTypographyProps={{ align: 'center' }} />
+                        <CardHeader
+                            title={t('register')}
+                            titleTypographyProps={{ align: 'center' }}
+                        />
                         <CardContent>
                             {done ? (
                                 <RegisterConfirm email={fields.email} />
@@ -89,7 +97,7 @@ class RegisterView extends React.Component<{}, RegisterViewState> {
                                                 to="/login"
                                                 variant="body2"
                                             >
-                                                Already have an account? Log in
+                                                {t('already_have_account')}
                                             </Link>
                                         </Grid>
                                     </Grid>
@@ -103,4 +111,4 @@ class RegisterView extends React.Component<{}, RegisterViewState> {
     }
 }
 
-export default RegisterView;
+export default withTranslation()(RegisterView);

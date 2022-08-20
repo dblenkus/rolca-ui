@@ -1,5 +1,7 @@
 import React, { ReactChild } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Button, Grid } from '@material-ui/core';
@@ -37,18 +39,20 @@ const StyledButton: React.FC<StyledButtonProps> = (props) => {
 
 const ImageButtons: React.FC<ImageButtonsProps> = (props) => {
     const { handleChange, handleRemove, imageSelected } = props;
+    const { t } = useTranslation();
+
     const buttonWidth = imageSelected ? 6 : 12;
 
     return (
         <Grid container spacing={1}>
             <Grid item xs={buttonWidth}>
                 <StyledButton onClick={handleChange}>
-                    {imageSelected ? 'Change' : 'Select'}
+                    {imageSelected ? (t('change') as string) : (t('select') as string)}
                 </StyledButton>
             </Grid>
             {imageSelected && (
                 <Grid item xs={buttonWidth}>
-                    <StyledButton onClick={handleRemove}>Remove</StyledButton>
+                    <StyledButton onClick={handleRemove}>{t('remove') as string}</StyledButton>
                 </Grid>
             )}
         </Grid>

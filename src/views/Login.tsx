@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 import { Link as RouterLink, Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { Card, CardContent, CardHeader, Grid, Link } from '@material-ui/core';
@@ -8,7 +10,7 @@ import { userContext } from '../components/Auth/AuthProvider';
 import LoginForm, { Errors, Fields } from '../components/Auth/LoginForm';
 import { IInputChangeEvent } from '../components/Upload/InputField';
 
-interface LoginViewProps extends RouteComponentProps {}
+interface LoginViewProps extends RouteComponentProps, WithTranslation {}
 
 interface LoginViewState {
     fields: Fields;
@@ -65,11 +67,13 @@ class LoginView extends React.Component<LoginViewProps, LoginViewState> {
             return <Redirect to={from} />;
         }
 
+        const { t } = this.props;
+
         return (
             <Grid container justify="center">
                 <Grid item xs={12} sm={6} md={4}>
                     <Card>
-                        <CardHeader title="Login" titleTypographyProps={{ align: 'center' }} />
+                        <CardHeader title={t('login')} titleTypographyProps={{ align: 'center' }} />
                         <CardContent>
                             <LoginForm
                                 fields={fields}
@@ -84,12 +88,12 @@ class LoginView extends React.Component<LoginViewProps, LoginViewState> {
                                         to="/password-reset/request"
                                         variant="body2"
                                     >
-                                        Forgot password?
+                                        {t('forgot_password')}
                                     </Link>
                                 </Grid>
                                 <Grid item>
                                     <Link component={RouterLink} to="/register" variant="body2">
-                                        Don't have an account? Register
+                                        {t('new_registration')}
                                     </Link>
                                 </Grid>
                             </Grid>
@@ -101,4 +105,4 @@ class LoginView extends React.Component<LoginViewProps, LoginViewState> {
     }
 }
 
-export default withRouter(LoginView);
+export default withTranslation()(withRouter(LoginView));

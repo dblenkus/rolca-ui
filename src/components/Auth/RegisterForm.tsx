@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { Button, Grid } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -44,6 +46,7 @@ const useStyles = makeStyles(authStyles);
 
 const RegisterForm: React.FC<RegisterFormProps> = (props) => {
     const classes = useStyles();
+    const { t } = useTranslation();
     const { errors, fields, onChange, onSubmit } = props;
 
     const getError = (field: string): string => {
@@ -61,7 +64,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
                 <Grid item xs={12} sm={6}>
                     <InputField
                         name="first_name"
-                        label="First name"
+                        label={t('first_name')}
                         value={fields.first_name}
                         error={getError('first_name')}
                         autoComplete="given-name"
@@ -73,7 +76,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
                 <Grid item xs={12} sm={6}>
                     <InputField
                         name="last_name"
-                        label="Last name"
+                        label={t('last_name')}
                         value={fields.last_name}
                         error={getError('last_name')}
                         autoComplete="family-name"
@@ -84,7 +87,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
                 <Grid item xs={12}>
                     <InputField
                         name="email"
-                        label="Email"
+                        label={t('email')}
                         value={fields.email}
                         error={getError('email')}
                         autoComplete="email"
@@ -95,7 +98,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
                 <Grid item xs={12}>
                     <InputField
                         name="password"
-                        label="Password"
+                        label={t('password')}
                         value={fields.password}
                         error={getError('password')}
                         autoComplete="new-password"
@@ -107,7 +110,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
                 <Grid item xs={12}>
                     <InputField
                         name="address"
-                        label="Address"
+                        label={t('address')}
                         value={fields.address}
                         error={getError('address')}
                         autoComplete="street-address"
@@ -118,7 +121,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
                 <Grid item xs={12}>
                     <InputField
                         name="city"
-                        label="City"
+                        label={t('city')}
                         value={fields.city}
                         error={getError('city')}
                         autoComplete="address-level2"
@@ -129,7 +132,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
                 <Grid item xs={12}>
                     <InputField
                         name="postal_code"
-                        label="Postal code"
+                        label={t('postal_code')}
                         value={fields.postal_code}
                         error={getError('postal_code')}
                         autoComplete="postal-code"
@@ -140,7 +143,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
                 <Grid item xs={12}>
                     <InputField
                         name="country"
-                        label="Country"
+                        label={t('country')}
                         value={fields.country}
                         error={getError('country')}
                         autoComplete="country-name"
@@ -163,7 +166,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
                 color="primary"
                 className={classes.submit}
             >
-                Register
+                {t('register')}
             </Button>
         </form>
     );

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { Link } from 'react-router-dom';
 
 import {
@@ -25,8 +27,10 @@ const CustomButton = ({ navigate, ...rest }: { navigate: Function }) => {
 };
 
 const ContestCard: React.FC<ContestCardProps> = (props) => {
+    const { t } = useTranslation();
+
     const { contest } = props;
-    console.log(contest);
+
     return (
         <Card>
             <CardMedia
@@ -52,7 +56,7 @@ const ContestCard: React.FC<ContestCardProps> = (props) => {
                         component={CustomButton}
                         color="primary"
                     >
-                        Open
+                        {t('open')}
                     </Link>
                 </Grid>
             </CardActions>

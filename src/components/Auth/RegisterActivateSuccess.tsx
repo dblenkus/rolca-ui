@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import Success from './utils/Success';
 
 interface RegisterActivateSuccessProps {
@@ -8,9 +10,10 @@ interface RegisterActivateSuccessProps {
 
 const RegisterActivateSuccess: React.FC<RegisterActivateSuccessProps> = (props) => {
     const { onClick } = props;
+    const { t } = useTranslation();
 
     return (
-        <Success title="Your account is now active!" buttonText="Go to Log in" onClick={onClick} />
+        <Success title={t('activation_succeeded')} buttonText={t('goto_login')} onClick={onClick} />
     );
 };
 

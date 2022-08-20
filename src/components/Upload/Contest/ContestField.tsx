@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { WithTranslation, withTranslation } from 'react-i18next';
+
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import { Button, CircularProgress, Grid, Typography } from '@material-ui/core';
@@ -12,7 +14,7 @@ import HeaderImage from '../../Layout/HeaderImage';
 import AuthorField from '../Author/AuthorField';
 import ThemeField from '../Theme/ThemeField';
 
-interface ContestFieldProps extends WithStyles<typeof uploadFormStyles> {
+interface ContestFieldProps extends WithStyles<typeof uploadFormStyles>, WithTranslation {
     contest: ContestModel;
     handleAuthorChange: (payload: InputChange | DateChange) => void;
     handleSubmissionChange: (theme_id: number, submission_id: number, payload: InputChange) => void;
@@ -28,7 +30,7 @@ interface ContestFieldProps extends WithStyles<typeof uploadFormStyles> {
 
 class ContestField extends React.Component<ContestFieldProps> {
     render(): React.ReactNode {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
 
         const {
             contest,
@@ -92,7 +94,7 @@ class ContestField extends React.Component<ContestFieldProps> {
                         })}
                         {contest.errors.hasError && (
                             <Alert className={classes.errorAlert} severity="error">
-                                Please fix errors before uploading.
+                                {t('fix_errors')}
                             </Alert>
                         )}
                         {uploading ? (
@@ -107,7 +109,7 @@ class ContestField extends React.Component<ContestFieldProps> {
                                 color="primary"
                                 className={classes.submitButton}
                             >
-                                Upload
+                                {t('upload')}
                             </Button>
                         )}
                     </form>
@@ -117,4 +119,4 @@ class ContestField extends React.Component<ContestFieldProps> {
     }
 }
 
-export default withStyles(uploadFormStyles)(ContestField);
+export default withTranslation()(withStyles(uploadFormStyles)(ContestField));

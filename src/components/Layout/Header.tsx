@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Link } from 'react-router-dom';
 
@@ -24,6 +25,11 @@ const CustomButton = ({ navigate, ...rest }: { navigate: Function }) => {
 
 const Header: React.FC = () => {
     const classes = useStyles();
+    const { i18n, t } = useTranslation();
+
+    const handleLanguageChange = (event: React.MouseEvent<HTMLButtonElement>): void => {
+        i18n.changeLanguage(event.currentTarget.value);
+    };
 
     return (
         <AppBar position="sticky">
@@ -37,7 +43,7 @@ const Header: React.FC = () => {
                     className={classes.menuButton}
                     color="inherit"
                 >
-                    Active contests
+                    {t('active_contests')}
                 </Link>
                 <Link
                     to="/user/submissions"
@@ -45,7 +51,7 @@ const Header: React.FC = () => {
                     className={classes.menuButton}
                     color="inherit"
                 >
-                    Edit submissions
+                    {t('edit_submissions')}
                 </Link>
                 <Link
                     to="/results"
@@ -53,8 +59,19 @@ const Header: React.FC = () => {
                     className={classes.menuButton}
                     color="inherit"
                 >
-                    Results
+                    {t('results')}
                 </Link>
+
+                {i18n.language === 'en' ? (
+                    <Button onClick={handleLanguageChange} value="sl" color="inherit">
+                        SI
+                    </Button>
+                ) : (
+                    <Button onClick={handleLanguageChange} value="en" color="inherit">
+                        EN
+                    </Button>
+                )}
+
                 <Dropdown />
             </Toolbar>
         </AppBar>

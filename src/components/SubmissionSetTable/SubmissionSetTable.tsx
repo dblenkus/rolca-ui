@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AxiosPromise } from 'axios';
 import _ from 'lodash';
 
 import {
+    LabelDisplayedRowsArgs,
     Paper,
     Table,
     TableBody,
@@ -39,6 +41,7 @@ const SubmissionSetTable: React.FC<SubmissionSetTableProps> = ({
         changePage,
         changePageSize,
     } = usePagination<SubmissionSet>({ source: dataSource });
+    const { t } = useTranslation();
 
     const fetchPayments = useCallback(async (): Promise<void> => {
         if (submissionSets.length === 0) {
@@ -73,17 +76,25 @@ const SubmissionSetTable: React.FC<SubmissionSetTableProps> = ({
         await fetchPayments();
     };
 
+    const getLabelDisplayedRows = ({
+        from,
+        to,
+        count: total,
+    }: LabelDisplayedRowsArgs): React.ReactNode => {
+        return t('displayed_rows', { from, to, total });
+    };
+
     return (
         <>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Submited</TableCell>
-                            <TableCell>Number of themes</TableCell>
-                            <TableCell>Number of submissons</TableCell>
-                            <TableCell>Paid?</TableCell>
+                            <TableCell>{t('name')}</TableCell>
+                            <TableCell>{t('submited')}</TableCell>
+                            <TableCell>{t('n_themes')}</TableCell>
+                            <TableCell>{t('n_submissions')}</TableCell>
+                            <TableCell>{t('paid')}</TableCell>
                             <TableCell />
                         </TableRow>
                     </TableHead>
@@ -114,6 +125,8 @@ const SubmissionSetTable: React.FC<SubmissionSetTableProps> = ({
                                 page={page - 1}
                                 onChangePage={handlePageChange}
                                 onChangeRowsPerPage={handleChangeRowsPerPage}
+                                labelRowsPerPage={t('rows_per_page')}
+                                labelDisplayedRows={getLabelDisplayedRows}
                             />
                         </TableRow>
                     </TableFooter>

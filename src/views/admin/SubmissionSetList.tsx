@@ -14,6 +14,7 @@ import ContestService from '../../services/ContestService';
 import { Contest, PaginatedResponse, SubmissionSet } from '../../types/api';
 import SubmissionSetTable from '../../components/SubmissionSetTable/SubmissionSetTable';
 import LoadingProgress from '../../components/LoadingProgress';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 interface RouteMatchParams {
     contestId: string;
@@ -27,6 +28,7 @@ interface SubmissionSetListState {
 
 interface SubmissionSetListProps
     extends WithStyles<typeof editListStyles>,
+        WithTranslation,
         RouteComponentProps<RouteMatchParams> {}
 
 class SubmissionSetList extends React.Component<SubmissionSetListProps, SubmissionSetListState> {
@@ -72,6 +74,7 @@ class SubmissionSetList extends React.Component<SubmissionSetListProps, Submissi
 
     render(): React.ReactNode {
         const { contest, showDialog } = this.state;
+        const { t } = this.props;
 
         if (!contest) return <LoadingProgress />;
 
@@ -97,15 +100,15 @@ class SubmissionSetList extends React.Component<SubmissionSetListProps, Submissi
 
                 <ConfirmDialog
                     open={showDialog}
-                    title="Delete confirmation"
+                    title={t('delete_confirmation_title')}
                     onClose={this.closeDialog}
                     onConfirm={this.processDelete}
                 >
-                    Do you really want to delete the submission?
+                    {t('delete_confirmation') as React.ReactChild}
                 </ConfirmDialog>
             </>
         );
     }
 }
 
-export default withStyles(editListStyles)(withRouter(SubmissionSetList));
+export default withTranslation()(withStyles(editListStyles)(withRouter(SubmissionSetList)));

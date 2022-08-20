@@ -1,6 +1,8 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 import { Card, Grid } from '@material-ui/core';
 
 import { Contest, SubmissionSet } from '../../types/api';
@@ -13,16 +15,15 @@ interface RouteMatchParams {
     submissionSetId: string;
 }
 
+interface SubmissionListProps extends RouteComponentProps<RouteMatchParams>, WithTranslation {}
+
 interface SubmissionListState {
     contest: Contest | null;
     submissionSet: SubmissionSet | null;
 }
 
-class SubmissionList extends React.Component<
-    RouteComponentProps<RouteMatchParams>,
-    SubmissionListState
-> {
-    constructor(props: RouteComponentProps<RouteMatchParams>) {
+class SubmissionList extends React.Component<SubmissionListProps, SubmissionListState> {
+    constructor(props: SubmissionListProps) {
         super(props);
 
         this.state = {
@@ -62,13 +63,15 @@ class SubmissionList extends React.Component<
 
     render(): React.ReactNode {
         const { contest, submissionSet } = this.state;
+        const { t } = this.props;
 
         return (
             <>
                 <Grid item xs={12}>
-                    <b>Contest:</b> {contest?.title}
+                    <b>{t('contest')}:</b> {contest?.title}
                     <br />
-                    <b>Author:</b> {submissionSet ? this.getSubmissionSetAuthor(submissionSet) : ''}
+                    <b>{t('author')}:</b>{' '}
+                    {submissionSet ? this.getSubmissionSetAuthor(submissionSet) : ''}
                     <br />
                     <br />
                 </Grid>
@@ -92,13 +95,13 @@ class SubmissionList extends React.Component<
                                         />
                                     ))}
                                     <br />
-                                    <b>Title:</b> {submission.title}
+                                    <b>{t('title')}:</b> {submission.title}
                                     <br />
-                                    <b>Theme:</b> {theme?.title}
+                                    <b>{t('theme')}:</b> {theme?.title}
                                     {submission.description && (
                                         <>
                                             <br />
-                                            <b>Description:</b> {submission.description}
+                                            <b>{t('description')}:</b> {submission.description}
                                         </>
                                     )}
                                 </Card>
@@ -111,4 +114,4 @@ class SubmissionList extends React.Component<
     }
 }
 
-export default withRouter(SubmissionList);
+export default withTranslation()(withRouter(SubmissionList));

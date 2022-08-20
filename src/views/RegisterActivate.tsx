@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { WithTranslation, withTranslation } from 'react-i18next';
+
 import { isString } from 'lodash';
 
 import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
@@ -12,7 +14,7 @@ import RegisterActivateSuccess from '../components/Auth/RegisterActivateSuccess'
 
 import UserService from '../services/UserService';
 
-interface RegisterActivateViewProps extends RouteComponentProps {}
+interface RegisterActivateViewProps extends RouteComponentProps, WithTranslation {}
 
 interface RegisterActivateViewState {
     succeeded: boolean | null;
@@ -47,6 +49,7 @@ class RegisterActivateView extends React.Component<
 
     render() {
         const { redirect, succeeded } = this.state;
+        const { t } = this.props;
 
         if (redirect) {
             return <Redirect to="/login" />;
@@ -61,7 +64,7 @@ class RegisterActivateView extends React.Component<
                 <Grid item xs={12} sm={6} md={4}>
                     <Card>
                         <CardHeader
-                            title="Account activation"
+                            title={t('account_activation')}
                             titleTypographyProps={{ align: 'center' }}
                         />
                         <CardContent>
@@ -78,4 +81,4 @@ class RegisterActivateView extends React.Component<
     }
 }
 
-export default withRouter(RegisterActivateView);
+export default withTranslation()(withRouter(RegisterActivateView));
