@@ -62,13 +62,14 @@ class ContestField extends React.Component<ContestFieldProps> {
         return (
             <Grid container>
                 <Grid item xs={12}>
-                    {contest.meta.headerImage ? (
+                    {/* {contest.meta.headerImage ? (
                         <HeaderImage src={contest.meta.headerImage} />
                     ) : (
-                        <Typography align="center" variant="h2">
-                            {contest.meta.title}
-                        </Typography>
-                    )}
+                        <></>
+                    )} */}
+                    <Typography align="center" variant="h2">
+                        {contest.meta.title}
+                    </Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <form onSubmit={handleClick} noValidate>
