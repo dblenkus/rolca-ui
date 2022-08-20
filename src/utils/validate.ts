@@ -70,8 +70,8 @@ const validateSubmission = async (submission: SubmissionModel): Promise<Submissi
 
     console.log(countImages(images));
 
-    if (isSeries && anyImage(images) && countImages(images) < 4) {
-        images[0].errors.file = 'Series must contain at least 4 images';
+    if (isSeries && anyImage(images) && countImages(images) < 2) {
+        images[0].errors.file = 'Series must contain at least 2 images';
         images[0].errors.hasError = true;
     }
 
