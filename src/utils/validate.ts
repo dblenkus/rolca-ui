@@ -51,8 +51,8 @@ const validateImage = async (image: ImageModel): Promise<ImageModel> => {
             return constructResponse('Invalid file.');
         }
 
-        if (img.height > 3000 || img.width > 3000)
-            return constructResponse('Longe edge should not exceed 3000px.');
+        if (img.height > 3500 || img.width > 3500)
+            return constructResponse('Longe edge should not exceed 3500px.');
     }
 
     return constructResponse(null);
