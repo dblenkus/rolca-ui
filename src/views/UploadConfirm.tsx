@@ -5,6 +5,8 @@ import LoadingProgress from '../components/LoadingProgress';
 import ContestService from '../services/ContestService';
 import { Contest } from '../types/api';
 
+import InnerHTML from 'dangerously-set-html-content';
+
 interface RouteMatchParams {
     contestId: string;
     themeId: string;
@@ -32,7 +34,7 @@ const UploadConfirmView: React.FC = () => {
                 </Typography>
             </Grid>
             <Grid item xs={12}>
-                <div dangerouslySetInnerHTML={{ __html: contest.confirmation_html }} />
+                <InnerHTML html={contest.confirmation_html} />
             </Grid>
         </Grid>
     );
