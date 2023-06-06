@@ -72,6 +72,12 @@ class ContestField extends React.Component<ContestFieldProps> {
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
+                    <Typography align="center" variant="body1">
+                        {contest.meta.description}
+                    </Typography>
+                </Grid>
+
+                <Grid item xs={12}>
                     <form onSubmit={handleClick} noValidate>
                         <AuthorField
                             handleAUthorChange={handleAuthorChange}
