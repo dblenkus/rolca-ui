@@ -122,7 +122,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                     name="club"
                                     value={author.club}
                                     error={author.errors.club}
-                                    label={t('school')}
+                                    label={t('photo_club')}
                                     required={requiredClub}
                                     autoComplete=""
                                     onChange={handleAUthorChange}
@@ -130,7 +130,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                             </Grid>
                         </Grid>
                     )}
-                    {/* {showClub && (
+                    {showClub && (
                         <Grid container justify="center" spacing={2}>
                             <Grid item xs={12} sm={6} md={4}>
                                 <InputField
@@ -143,7 +143,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                                 />
                             </Grid>
                         </Grid>
-                    )} */}
+                    )}
                 </CardContent>
             </Card>
         );
