@@ -31,7 +31,15 @@ const processImage = async (image: ImageModel): Promise<any> => {
 };
 
 const processSubmission = async (submission: SubmissionModel): Promise<any> => {
-    let files = await asyncMap(submission.images, processImage);
+    // let files = await asyncMap(submission.images, processImage);
+    let files = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const image of submission.images) {
+        // eslint-disable-next-line no-await-in-loop
+        const result = await processImage(image);
+        files.push(result);
+    }
+
     files = without(files, undefined);
     const { title, description } = submission;
 
