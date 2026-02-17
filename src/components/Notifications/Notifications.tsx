@@ -6,7 +6,6 @@ import Alert from '@material-ui/lab/Alert';
 
 import { deleteMessage, deleteMessageWithDelay } from '../../store/notifications/actions';
 import { Notification } from '../../store/notifications/types';
-import { isUndefined } from 'util';
 
 const Notifications: React.FC = () => {
     const dispatch = useDispatch();
@@ -22,9 +21,9 @@ const Notifications: React.FC = () => {
         dispatch(deleteMessage(notification?.id || -1));
     };
 
-    return !isUndefined(notification) ? (
+    return notification !== undefined ? (
         <Snackbar
-            open={!isUndefined(notification)}
+            open={notification !== undefined}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             transitionDuration={{ enter: 500 }}
             // This is required to trigger the animation on the following notification.

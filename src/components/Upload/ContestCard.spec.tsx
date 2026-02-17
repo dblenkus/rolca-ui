@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { shallow, ShallowWrapper } from 'enzyme';
-
 import { contestMock } from '../../utils/tests/mocks';
 
 import ContestCard from './ContestCard';

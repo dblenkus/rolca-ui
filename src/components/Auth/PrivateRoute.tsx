@@ -1,23 +1,25 @@
 import React from 'react';
-import { Route, RouteProps, Redirect } from 'react-router-dom';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
 
 import { userContext } from '../../components/Auth/AuthProvider';
 
-const PrivateRoute: React.FC<RouteProps> = ({ children, component, ...rest }) => {
+const PrivateRoute: React.FC<RouteProps> = ({ component: Component, ...rest }) => {
     const user = React.useContext(userContext);
 
     return (
         <Route
             {...rest}
-            render={({ location }) =>
+            render={(props) =>
                 // fakeAuth.isAuthenticated ? (
                 user.isLoggedIn() ? (
-                    React.createElement(component || '')
+                    Component ? (
+                        React.createElement(Component as React.ComponentType<any>, props as any)
+                    ) : null
                 ) : (
                     <Redirect
                         to={{
                             pathname: '/login',
-                            state: { from: location },
+                            state: { from: props.location },
                         }}
                     />
                 )

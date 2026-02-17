@@ -123,8 +123,8 @@ const SubmissionSetTable: React.FC<SubmissionSetTableProps> = ({
                                 count={count}
                                 rowsPerPage={pageSize}
                                 page={page - 1}
-                                onChangePage={handlePageChange}
-                                onChangeRowsPerPage={handleChangeRowsPerPage}
+                                onPageChange={handlePageChange}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
                                 labelRowsPerPage={t('rows_per_page')}
                                 labelDisplayedRows={getLabelDisplayedRows}
                             />

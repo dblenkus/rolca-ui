@@ -5,7 +5,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { isString } from 'lodash';
 
 import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
-import { parse } from 'query-string';
+import queryString from 'query-string';
 
 import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 
@@ -32,7 +32,7 @@ class RegisterActivateView extends React.Component<
 
     async componentDidMount() {
         const { location } = this.props;
-        const token = parse(location.search)['token'] || '';
+        const token = queryString.parse(location.search)['token'] || '';
         if (isString(token)) {
             try {
                 await UserService.activateUser({ token });

@@ -1,4 +1,9 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
+import axios, {
+    AxiosError,
+    AxiosInstance,
+    AxiosRequestConfig,
+    InternalAxiosRequestConfig,
+} from 'axios';
 
 import store from '../store/index';
 import { addNotificationError } from '../store/notifications/actions';
@@ -15,15 +20,18 @@ let config: AxiosRequestConfig = {
 
 const apiClient: AxiosInstance = axios.create(config);
 
-const authInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig => {
+const authInterceptor = (
+    requestConfig: InternalAxiosRequestConfig,
+): InternalAxiosRequestConfig => {
     const tokenString = localStorage.getItem('token');
     if (tokenString) {
         const token: { token: string; expires: string } = JSON.parse(tokenString);
         if (!!token) {
-            config.headers['Authorization'] = `Token ${token['token']}`;
+            requestConfig.headers = requestConfig.headers ?? {};
+            requestConfig.headers.Authorization = `Token ${token.token}`;
         }
     }
-    return config;
+    return requestConfig;
 };
 
 const notificationsInterceptor = (error: AxiosError) => {

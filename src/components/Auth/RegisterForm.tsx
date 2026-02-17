@@ -49,7 +49,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
     const { t } = useTranslation();
     const { errors, fields, onChange, onSubmit } = props;
 
-    const getError = (field: string): string => {
+    const getError = (field: string): string | null => {
         return errors[field] ? errors[field].join(' ') : null;
     };
 

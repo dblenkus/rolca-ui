@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams, Redirect } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import _ from 'lodash';
-import { parse } from 'query-string';
+import queryString from 'query-string';
 
 import SubmissionRater from '../../components/Jury/SubmissionRater';
 
@@ -41,7 +41,9 @@ const RateSubmission: React.FC<PropsFromRedux> = ({
     const { contestId, themeId } = useParams<RouteMatchParams>();
     const history = useHistory();
     const submissionId = useRef(
-        parse(history.location.search, { parseNumbers: true }).submission as number | undefined,
+        queryString.parse(history.location.search, { parseNumbers: true }).submission as
+            | number
+            | undefined,
     );
 
     const fetchRaiting = useCallback(async (): Promise<void> => {
