@@ -1,13 +1,12 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
-
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { IconButton, Menu, MenuItem } from '@material-ui/core';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import { makeStyles } from '@material-ui/core/styles';
+import { IconButton, Menu, MenuItem } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import { makeStyles } from 'tss-react/mui-compat';
 
 import { userContext } from '../Auth/AuthProvider';
 
@@ -44,10 +43,8 @@ const Dropdown: React.FC = () => {
             <MenuItem>{t('register')}</MenuItem>
         </Link>,
         <Link
-            to={{
-                pathname: '/login',
-                state: { from: location },
-            }}
+            to="/login"
+            state={{ from: location }}
             className={classes.menuItem}
             onClick={closeMenu}
             key="link-2"

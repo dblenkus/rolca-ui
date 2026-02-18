@@ -1,5 +1,7 @@
 import React from 'react';
-import { Card, Grid, makeStyles } from '@material-ui/core';
+import { Card } from '@mui/material';
+import { makeStyles } from 'tss-react/mui-compat';
+import Grid from '@mui/material/GridLegacy';
 
 import { Rating as RatingModel, Submission } from '../../types/api';
 import Rating from './Rating';

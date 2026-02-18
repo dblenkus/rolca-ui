@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
-import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { AppBar, Button, Toolbar, Typography } from '@mui/material';
+import { makeStyles } from 'tss-react/mui-compat';
 
 import Dropdown from './Dropdown';
 
@@ -16,12 +16,6 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
 }));
-
-const CustomButton = ({ navigate, ...rest }: { navigate: Function }) => {
-    // Rendering element with the 'navigate' prop raises an error, so we have
-    // to strip it: Warning: Invalid value for prop `navigate` on <a> tag.
-    return React.createElement(Button, rest);
-};
 
 const Header: React.FC = () => {
     const classes = useStyles();
@@ -37,30 +31,30 @@ const Header: React.FC = () => {
                 <Typography variant="h6" className={classes.title}>
                     Rolca
                 </Typography>
-                <Link
+                <Button
+                    component={RouterLink}
                     to="/contests"
-                    component={CustomButton}
                     className={classes.menuButton}
                     color="inherit"
                 >
                     {t('active_contests')}
-                </Link>
-                <Link
+                </Button>
+                <Button
+                    component={RouterLink}
                     to="/user/submissions"
-                    component={CustomButton}
                     className={classes.menuButton}
                     color="inherit"
                 >
                     {t('edit_submissions')}
-                </Link>
-                <Link
+                </Button>
+                <Button
+                    component={RouterLink}
                     to="/results"
-                    component={CustomButton}
                     className={classes.menuButton}
                     color="inherit"
                 >
                     {t('results')}
-                </Link>
+                </Button>
 
                 {i18n.language === 'en' ? (
                     <Button onClick={handleLanguageChange} value="sl" color="inherit">

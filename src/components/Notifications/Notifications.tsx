@@ -1,21 +1,24 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import { deleteMessage, deleteMessageWithDelay } from '../../store/notifications/actions';
 import { Notification } from '../../store/notifications/types';
+import { AppDispatch, AppState } from '../../store';
 
 const Notifications: React.FC = () => {
-    const dispatch = useDispatch();
-    const notification: Notification | undefined = useSelector((store: any) => {
+    const dispatch = useDispatch<AppDispatch>();
+    const notification: Notification | undefined = useSelector((store: AppState) => {
         const { notifications } = store;
         return notifications[notifications.length - 1];
     });
-    if (notification) {
+
+    React.useEffect(() => {
+        if (!notification) return;
         dispatch(deleteMessageWithDelay(notification.id));
-    }
+    }, [dispatch, notification]);
 
     const handleClose = () => {
         dispatch(deleteMessage(notification?.id || -1));

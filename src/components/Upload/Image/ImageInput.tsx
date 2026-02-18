@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui-compat';
 
 import { uploadFormStyles } from '../../../styles/general';
 
 export interface ImageButtonsProps {
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    imageRef: React.RefObject<HTMLInputElement>;
+    imageRef: React.RefObject<HTMLInputElement | null>;
 }
 
 const useStyles = makeStyles(uploadFormStyles);

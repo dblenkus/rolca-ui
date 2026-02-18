@@ -2,8 +2,9 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { IconButton, makeStyles } from '@material-ui/core';
-import { Close, NavigateBefore, NavigateNext } from '@material-ui/icons';
+import { IconButton } from '@mui/material';
+import { makeStyles } from 'tss-react/mui-compat';
+import { Close, NavigateBefore, NavigateNext } from '@mui/icons-material';
 
 import { Submission } from '../../types/api';
 import Rating from './Rating';
@@ -77,14 +78,24 @@ const SubmissionRater: React.FC<SubmissionRaterProps> = ({
                         style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     >
                         {files.slice(0, 3).map((file) => (
-                            <img className={classes.image} src={file.file} alt={title} />
+                            <img
+                                key={file.id}
+                                className={classes.image}
+                                src={file.file}
+                                alt={title}
+                            />
                         ))}
                     </div>
                     <div
                         style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     >
                         {files.slice(3, 6).map((file) => (
-                            <img className={classes.image} src={file.file} alt={title} />
+                            <img
+                                key={file.id}
+                                className={classes.image}
+                                src={file.file}
+                                alt={title}
+                            />
                         ))}
                     </div>
                 </div>

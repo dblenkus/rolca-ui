@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui-compat';
 
 import { SubmissionModel, InputChange } from '../../../types/models';
 import { uploadFormStyles } from '../../../styles/general';

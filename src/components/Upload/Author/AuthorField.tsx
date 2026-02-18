@@ -2,9 +2,10 @@ import React from 'react';
 
 import { WithTranslation, withTranslation } from 'react-i18next';
 
-import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from 'tss-react/mui-compat';
 
-import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
+import { Card, CardContent, CardHeader } from '@mui/material';
+import Grid from '@mui/material/GridLegacy';
 
 import InputField from '../InputField';
 
@@ -23,7 +24,6 @@ interface AuthorFieldProps extends WithStyles<typeof uploadFormStyles>, WithTran
     handleAUthorChange: (payload: InputChange | DateChange) => void;
 }
 
-// eslint-disable-next-line react/prefer-stateless-function
 class AuthorField extends React.Component<AuthorFieldProps> {
     render(): React.ReactNode {
         const {
@@ -45,7 +45,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                     titleTypographyProps={{ align: 'center', variant: 'h3' }}
                 />
                 <CardContent>
-                    <Grid container justify="center" spacing={2}>
+                    <Grid container justifyContent="center" spacing={2}>
                         <Grid item xs={12} sm={6} md={4}>
                             <InputField
                                 name="first_name"
@@ -59,7 +59,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                             />
                         </Grid>
                     </Grid>
-                    <Grid container justify="center" spacing={2}>
+                    <Grid container justifyContent="center" spacing={2}>
                         <Grid item xs={12} sm={6} md={4}>
                             <InputField
                                 name="last_name"
@@ -73,7 +73,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                         </Grid>
                     </Grid>
                     {showDob && (
-                        <Grid container justify="center" spacing={2}>
+                        <Grid container justifyContent="center" spacing={2}>
                             <Grid item xs={12} sm={6} md={4}>
                                 <DatePicker
                                     name="dob"
@@ -88,7 +88,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                         </Grid>
                     )}
                     {showSchool && (
-                        <Grid container justify="center" spacing={2}>
+                        <Grid container justifyContent="center" spacing={2}>
                             <Grid item xs={12} sm={6} md={4}>
                                 <AutocompleteField
                                     name="school"
@@ -102,7 +102,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                         </Grid>
                     )}
                     {showSchool && (
-                        <Grid container justify="center" spacing={2}>
+                        <Grid container justifyContent="center" spacing={2}>
                             <Grid item xs={12} sm={6} md={4}>
                                 <InputField
                                     name="mentor"
@@ -116,7 +116,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                         </Grid>
                     )}
                     {showClub && (
-                        <Grid container justify="center" spacing={2}>
+                        <Grid container justifyContent="center" spacing={2}>
                             <Grid item xs={12} sm={6} md={4}>
                                 <InputField
                                     name="club"
@@ -131,7 +131,7 @@ class AuthorField extends React.Component<AuthorFieldProps> {
                         </Grid>
                     )}
                     {/* {showClub && (
-                        <Grid container justify="center" spacing={2}>
+                        <Grid container justifyContent="center" spacing={2}>
                             <Grid item xs={12} sm={6} md={4}>
                                 <InputField
                                     name="distinction"

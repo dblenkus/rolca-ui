@@ -1,35 +1,31 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
-import { shallow, ShallowWrapper } from 'enzyme';
 import { contestMock } from '../../utils/tests/mocks';
-
 import ContestCard from './ContestCard';
 
 describe('ContestCard', () => {
-    let wrapper: ShallowWrapper;
-    beforeEach(() => {
-        wrapper = shallow(<ContestCard contest={contestMock} />);
+    it('renders title and description', () => {
+        render(
+            <MemoryRouter>
+                <ContestCard contest={contestMock} />
+            </MemoryRouter>,
+        );
+
+        expect(screen.getByText(contestMock.title)).toBeTruthy();
+        expect(screen.getByText(contestMock.description)).toBeTruthy();
     });
 
-    it('should contain title', () => {
-        expect(wrapper.text()).toMatch(contestMock.title);
-    });
-    it('should contain description', () => {
-        expect(wrapper.text()).toMatch(contestMock.description);
-    });
+    it('renders open link to contest details', () => {
+        render(
+            <MemoryRouter>
+                <ContestCard contest={contestMock} />
+            </MemoryRouter>,
+        );
 
-    describe('Open button', () => {
-        let links: ShallowWrapper<any>;
-        beforeEach(() => {
-            links = wrapper.find(Link);
-        });
-        it('should have an Open button', () => {
-            expect(links).toHaveLength(1);
-            expect(links.props().children).toEqual('Open');
-        });
-        it('should redirect to contest details', () => {
-            expect(links.props().to).toEqual(`/contest/${contestMock.id}/details`);
-        });
+        const openLink = screen.getByRole('link', { name: 'Open' });
+        expect(openLink).toBeTruthy();
+        expect(openLink.getAttribute('href')).toBe(`/contest/${contestMock.id}/details`);
     });
 });

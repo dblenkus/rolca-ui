@@ -1,10 +1,11 @@
-import React, { ReactChild } from 'react';
+import React, { ReactNode } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui-compat';
 
-import { Button, Grid } from '@material-ui/core';
+import { Button } from '@mui/material';
+import Grid from '@mui/material/GridLegacy';
 import { uploadFormStyles } from '../../../styles/general';
 
 export interface ImageButtonsProps {
@@ -15,7 +16,7 @@ export interface ImageButtonsProps {
 
 interface StyledButtonProps {
     onClick: () => void;
-    children: ReactChild;
+    children: ReactNode;
 }
 
 const useStyles = makeStyles(uploadFormStyles);

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { CircularProgress, TextField } from '@material-ui/core';
+import Autocomplete from '@mui/material/Autocomplete';
+import { CircularProgress, TextField } from '@mui/material';
 
 import { InputChange } from '../../types/models';
 import { Institution } from '../../types/api';
@@ -30,8 +30,7 @@ const AutocompleteField: React.FC<AutocompleteFieldProps> = ({
     const [options, setOptions] = React.useState<Institution[]>([]);
     const loading = open && options.length === 0;
 
-    const handleChange = (event: React.ChangeEvent<{}>, institution: Institution | null): void => {
-        console.log('>', institution, { name, value: institution ? institution.name : '' });
+    const handleChange = (_event: React.SyntheticEvent, institution: Institution | null): void => {
         onChange({ name, value: institution ? institution.name : '' });
     };
 
@@ -68,7 +67,7 @@ const AutocompleteField: React.FC<AutocompleteFieldProps> = ({
             onClose={(): void => {
                 setOpen(false);
             }}
-            getOptionSelected={(option, selected): boolean => option.name === selected.name}
+            isOptionEqualToValue={(option, selected): boolean => option.name === selected.name}
             getOptionLabel={(option): string => option.name}
             options={options}
             loading={loading}

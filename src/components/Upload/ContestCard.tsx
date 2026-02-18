@@ -2,29 +2,16 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
-import {
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    CardMedia,
-    Grid,
-    Typography,
-} from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import Grid from '@mui/material/GridLegacy';
 
 import { Contest } from '../../store/contests/types';
 
 interface ContestCardProps {
     contest: Contest;
 }
-
-const CustomButton = ({ navigate, ...rest }: { navigate: Function }) => {
-    // Rendering element with the 'navigate' prop raises an error, so we have
-    // to strip it: Warning: Invalid value for prop `navigate` on <a> tag.
-    return React.createElement(Button, rest);
-};
 
 const ContestCard: React.FC<ContestCardProps> = (props) => {
     const { t } = useTranslation();
@@ -35,9 +22,9 @@ const ContestCard: React.FC<ContestCardProps> = (props) => {
         <Card>
             <CardMedia
                 component="img"
-                image={contest.header_image || `${process.env.PUBLIC_URL}/img/no-photo.png`}
+                image={contest.header_image || '/img/no-photo.png'}
                 width="100%"
-                max-height="210"
+                sx={{ maxHeight: 210 }}
                 title="Contemplative Reptile"
             />
             <CardContent>
@@ -49,14 +36,14 @@ const ContestCard: React.FC<ContestCardProps> = (props) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Grid container alignItems="flex-start" justify="flex-end" direction="row">
-                    <Link
+                <Grid container alignItems="flex-start" justifyContent="flex-end" direction="row">
+                    <Button
+                        component={RouterLink}
                         to={`/contest/${contest.id}/details`}
-                        component={CustomButton}
                         color="primary"
                     >
                         {t('open')}
-                    </Link>
+                    </Button>
                 </Grid>
             </CardActions>
         </Card>

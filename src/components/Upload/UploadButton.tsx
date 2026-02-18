@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui-compat';
 
 import { Link } from 'react-router-dom';
 
-import { Button, Grid } from '@material-ui/core';
+import { Button } from '@mui/material';
+import Grid from '@mui/material/GridLegacy';
 
 interface UploadButtonProps {
     contestId: number;
@@ -24,7 +25,7 @@ const UploadButton: React.FC<UploadButtonProps> = ({ contestId }) => {
     const classes = useStyles();
 
     return (
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
             <Link to={`/contest/${contestId}/upload`} className={classes.link}>
                 <Button className={classes.button} color="primary" size="large" variant="contained">
                     Upload Photos

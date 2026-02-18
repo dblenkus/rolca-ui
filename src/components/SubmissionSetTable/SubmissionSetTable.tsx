@@ -14,7 +14,7 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import { PaginatedResponse, Payment, SubmissionSet } from '../../types/api';
 import SubmissionSetTableRow from './SubmissionSetTableRow';

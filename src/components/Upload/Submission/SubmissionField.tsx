@@ -21,8 +21,10 @@ class SubmissionField extends React.Component<SubmissionFieldProps> {
 
         const onSubmissionChange = (payload: InputChange): void => handleSubmissionChange(payload);
 
-        const onImageChange = (image_id: number) => (payload: { file: File | undefined }): void =>
-            handleImageChange(image_id, payload);
+        const onImageChange =
+            (image_id: number) =>
+            (payload: { file: File | undefined }): void =>
+                handleImageChange(image_id, payload);
 
         const titleField = <TitleField submission={submission} onChange={onSubmissionChange} />;
         const descriptionField = (

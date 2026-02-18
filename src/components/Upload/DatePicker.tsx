@@ -1,8 +1,10 @@
 import React from 'react';
 
-import LuxonUtils from '@date-io/luxon';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { DateTime } from 'luxon';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
+import { DatePicker as MuiDatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import TextField from '@mui/material/TextField';
 
 export interface DateChangeEvent {
     name: string;
@@ -30,36 +32,32 @@ const DatePicker: React.FC<DatePickerProps> = ({
     autoFocus = false,
     onChange,
 }: DatePickerProps) => {
-    const handleDateChange = (date: MaterialUiPickersDate): void => {
+    const handleDateChange = (date: DateTime | null): void => {
         if (date) onChange({ name, value: date.toJSDate() });
     };
 
     return (
-        <MuiPickersUtilsProvider utils={LuxonUtils}>
-            <KeyboardDatePicker
-                name={name}
-                variant="inline"
-                inputVariant="outlined"
-                fullWidth
-                margin="normal"
-                openTo="year"
-                views={['year', 'month', 'date']}
-                format="dd. MM. yyyy"
-                autoOk
+        <LocalizationProvider dateAdapter={AdapterLuxon}>
+            <MuiDatePicker
                 label={label}
-                required={required}
-                disableToolbar
-                autoComplete={autoComplete}
-                autoFocus={autoFocus}
-                value={value}
+                value={value ? DateTime.fromJSDate(value) : null}
                 onChange={handleDateChange}
-                KeyboardButtonProps={{
-                    'aria-label': 'change date',
+                views={['year', 'month', 'day']}
+                slotProps={{
+                    textField: {
+                        name,
+                        variant: 'outlined',
+                        margin: 'normal',
+                        fullWidth: true,
+                        required,
+                        autoComplete,
+                        autoFocus,
+                        error: error !== null,
+                        helperText: error || '',
+                    } as React.ComponentProps<typeof TextField>,
                 }}
-                error={error !== null}
-                helperText={error || ''}
             />
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
     );
 };
 

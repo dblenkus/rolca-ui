@@ -2,15 +2,15 @@ import React from 'react';
 
 import { WithTranslation, withTranslation } from 'react-i18next';
 
-import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from 'tss-react/mui-compat';
 
-import { Button, CircularProgress, Grid, Typography } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import { Button, CircularProgress, Typography } from '@mui/material';
+import Grid from '@mui/material/GridLegacy';
+import { Alert } from '@mui/material';
 
 import { uploadFormStyles } from '../../../styles/general';
 import { InputChange, ContestModel, DateChange } from '../../../types/models';
 
-import HeaderImage from '../../Layout/HeaderImage';
 import AuthorField from '../Author/AuthorField';
 import ThemeField from '../Theme/ThemeField';
 
@@ -46,18 +46,20 @@ class ContestField extends React.Component<ContestFieldProps> {
             handleSubmit();
         };
 
-        const onSubmissionChange = (theme_id: number) => (
-            submission_id: number,
-            payload: { name: string; value: string },
-        ): void => handleSubmissionChange(theme_id, submission_id, payload);
+        const onSubmissionChange =
+            (theme_id: number) =>
+            (submission_id: number, payload: { name: string; value: string }): void =>
+                handleSubmissionChange(theme_id, submission_id, payload);
 
-        const onImageChange = (theme_id: number) => (
-            submission_id: number,
-            image_id: number,
-            payload: { file: File | undefined },
-        ): void => {
-            handleImageChange(theme_id, submission_id, image_id, payload);
-        };
+        const onImageChange =
+            (theme_id: number) =>
+            (
+                submission_id: number,
+                image_id: number,
+                payload: { file: File | undefined },
+            ): void => {
+                handleImageChange(theme_id, submission_id, image_id, payload);
+            };
 
         return (
             <Grid container>

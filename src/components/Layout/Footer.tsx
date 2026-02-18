@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui-compat';
 
 import Copyright from './Copyright';
 
@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(3, 2),
         marginTop: 'auto',
         backgroundColor:
-            theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
+            theme.palette.mode === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
     },
 }));
 

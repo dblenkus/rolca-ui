@@ -19,13 +19,15 @@ class ThemeField extends React.Component<ThemeFieldProps> {
     render(): React.ReactNode {
         const { handleSubmissionChange, handleImageChange, theme } = this.props;
 
-        const onSubmissionChange = (submission_id: number) => (payload: InputChange): void =>
-            handleSubmissionChange(submission_id, payload);
+        const onSubmissionChange =
+            (submission_id: number) =>
+            (payload: InputChange): void =>
+                handleSubmissionChange(submission_id, payload);
 
-        const onImageChange = (submission_id: number) => (
-            image_id: number,
-            payload: { file: File | undefined },
-        ): void => handleImageChange(submission_id, image_id, payload);
+        const onImageChange =
+            (submission_id: number) =>
+            (image_id: number, payload: { file: File | undefined }): void =>
+                handleImageChange(submission_id, image_id, payload);
 
         return (
             <ThemeCard title={theme.meta.title}>
