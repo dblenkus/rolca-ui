@@ -1,5 +1,5 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
-import { Redirect, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import _ from 'lodash';
 
 import {
@@ -10,26 +10,22 @@ import {
     TableContainer,
     TableRow,
     Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import ContestService from '../../services/ContestService';
 import LoadingProgress from '../../components/LoadingProgress';
 import ResultsThemeService from '../../services/ResultsThemeService';
 import { Contest, ResultsAuthor, ResultsSubmission } from '../../types/api';
 
-interface RouteMatchParams {
-    contestId: string;
-    themeId: string;
-}
-
 const ThemeResults: React.FC = () => {
     const [submissionsByAuthor, setSubmissionsByAuthor] = useState<ResultsSubmission[][]>([]);
     const [contest, setContest] = useState<Contest | null>(null);
     const [redirect, setRedirect] = useState<null | number>(null);
-    const { contestId, themeId } = useParams<RouteMatchParams>();
+    const { contestId, themeId } = useParams<'contestId' | 'themeId'>();
 
     useEffect(() => {
         const fetch = async (): Promise<void> => {
+            if (!themeId) return;
             const { data } = await ResultsThemeService.getResults(themeId);
             setSubmissionsByAuthor(
                 _.chain(data.submissions)
@@ -44,6 +40,7 @@ const ThemeResults: React.FC = () => {
 
     useEffect(() => {
         const fetchContest = async (): Promise<void> => {
+            if (!contestId) return;
             const { data } = await ContestService.getContest(contestId);
             setContest(data);
         };
@@ -101,11 +98,11 @@ const ThemeResults: React.FC = () => {
 
     const isAccepted = (submission: ResultsSubmission): boolean => submission.accepted;
 
-    if (redirect)
+    if (redirect && contestId && themeId)
         return (
-            <Redirect
+            <Navigate
                 to={`/results/contest/${contestId}/theme/${themeId}/submission/${redirect}`}
-                push
+                replace={false}
             />
         );
 
@@ -159,7 +156,7 @@ const ThemeResults: React.FC = () => {
                                             </TableCell>
                                             <TableCell
                                                 align="right"
-                                                padding="default"
+                                                padding="normal"
                                                 style={getRewardStyle(submission)}
                                             >
                                                 <Typography style={getRewardTextStyle(submission)}>

@@ -1,7 +1,7 @@
-import React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 
 import ContestService from '../services/ContestService';
 import { Contest } from '../types/api';
@@ -10,54 +10,37 @@ import HeaderImage from '../components/Layout/HeaderImage';
 import NoticeHtml from '../components/Upload/NoticeHtml';
 import UploadButton from '../components/Upload/UploadButton';
 
-interface RouteMatchParams {
-    contestId: string;
-}
+const ContestDetails: React.FC = () => {
+    const { contestId } = useParams<'contestId'>();
+    const [contest, setContest] = useState<Contest | null>(null);
 
-interface ContestDetailsProps extends RouteComponentProps<RouteMatchParams> {}
+    useEffect(() => {
+        const fetchContest = async (): Promise<void> => {
+            if (!contestId) return;
+            const { data } = await ContestService.getContest(contestId);
+            setContest(data);
+        };
+        fetchContest();
+    }, [contestId]);
 
-interface ContestDetailsState {
-    contest: Contest | null;
-}
+    if (contest === null) return null;
 
-class ContestDetails extends React.Component<ContestDetailsProps, ContestDetailsState> {
-    state = {
-        contest: null,
-    };
+    const { header_image: headerImage, notice_html: noticeHtml, title, id } = contest;
 
-    async componentDidMount() {
-        const { contestId } = this.props.match.params;
-        const { data: contest } = await ContestService.getContest(contestId);
-        this.setState({ contest });
-    }
+    return (
+        <>
+            {headerImage ? (
+                <HeaderImage src={headerImage} />
+            ) : (
+                <Typography align="center" variant="h2">
+                    {title}
+                </Typography>
+            )}
+            <UploadButton contestId={id} />
+            <NoticeHtml notice={noticeHtml} />
+            <UploadButton contestId={id} />
+        </>
+    );
+};
 
-    render(): React.ReactNode {
-        const { contest } = this.state;
-
-        if (contest === null) return null;
-
-        const {
-            header_image: headerImage,
-            notice_html: noticeHtml,
-            title,
-            id: contestId,
-        } = (contest as unknown) as Contest;
-
-        return (
-            <>
-                {headerImage ? (
-                    <HeaderImage src={headerImage} />
-                ) : (
-                    <Typography align="center" variant="h2">
-                        {title}
-                    </Typography>
-                )}
-                <UploadButton contestId={contestId} />
-                <NoticeHtml notice={noticeHtml} />
-                <UploadButton contestId={contestId} />
-            </>
-        );
-    }
-}
-
-export default withRouter(ContestDetails);
+export default ContestDetails;

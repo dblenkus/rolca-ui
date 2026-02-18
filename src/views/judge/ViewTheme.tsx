@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 
 import { AppState, AppDispatch } from '../../store';
 
@@ -13,11 +13,6 @@ import RatingService from '../../services/RatingService';
 import { Rating } from '../../types/api';
 import fetchAll from '../../utils/fetchAll';
 
-interface RouteMatchParams {
-    contestId: string;
-    themeId: string;
-}
-
 const ViewTheme: React.FC<PropsFromRedux> = ({
     initialize,
     setSubmission,
@@ -27,25 +22,26 @@ const ViewTheme: React.FC<PropsFromRedux> = ({
 }: PropsFromRedux) => {
     const [ratings, setRatings] = useState<Rating[]>([]);
     const [redirect, setRedirect] = useState<string | null>(null);
-    const { contestId, themeId } = useParams<RouteMatchParams>();
+    const { contestId, themeId } = useParams<'contestId' | 'themeId'>();
 
-    // Initialize the store.
     useEffect(() => {
+        if (!contestId || !themeId) return;
         initialize(contestId, themeId);
     }, [contestId, themeId, initialize]);
 
-    // Fetch ratings.
     useEffect(() => {
         const fetchRatings = async (): Promise<void> => {
+            if (!themeId) return;
             const ratingResource = () => RatingService.getForTheme(parseInt(themeId, 10));
             setRatings(await fetchAll(ratingResource));
         };
         fetchRatings();
     }, [themeId]);
 
-    if (redirect) return <Redirect to={redirect} push />;
+    if (redirect) return <Navigate to={redirect} replace={false} />;
 
     const handleClick = (submissionId: number): void => {
+        if (!contestId || !themeId) return;
         setSubmission(submissionId);
         setRedirect(`/judge/contest/${contestId}/theme/${themeId}/rate?submission=${submissionId}`);
     };

@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { makeStyles, Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
+import { makeStyles } from 'tss-react/mui-compat';
 
 import LoadingProgress from '../../components/LoadingProgress';
 import ResultsSubmissionService from '../../services/ResultsSubmissionService';
 import { ResultsSubmission } from '../../types/api';
-
-interface RouteMatchParams {
-    submissionId: string;
-}
 
 const useStyles = makeStyles({
     flex: {
@@ -31,10 +28,11 @@ const SubmissionResults: React.FC = () => {
     const classes = useStyles();
 
     const [submission, setSubmission] = useState<null | ResultsSubmission>(null);
-    const { submissionId } = useParams<RouteMatchParams>();
+    const { submissionId } = useParams<'submissionId'>();
 
     useEffect(() => {
         const fetch = async (): Promise<void> => {
+            if (!submissionId) return;
             const { data } = await ResultsSubmissionService.get(submissionId);
             setSubmission(data);
         };
@@ -57,6 +55,7 @@ const SubmissionResults: React.FC = () => {
                 >
                     {files.slice(0, 3).map((file) => (
                         <img
+                            key={file.id}
                             style={{
                                 maxWidth: files.length === 1 ? '100%' : '30%',
                                 maxHeight: files.length === 1 ? '85vh' : '40vh',
@@ -76,6 +75,7 @@ const SubmissionResults: React.FC = () => {
                 >
                     {files.slice(3, 6).map((file) => (
                         <img
+                            key={file.id}
                             style={{
                                 maxWidth: '30%',
                                 maxHeight: '40vh',

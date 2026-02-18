@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory, useParams, Redirect } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import _ from 'lodash';
 import queryString from 'query-string';
@@ -20,11 +20,6 @@ import RatingService from '../../services/RatingService';
 import useKeyPress from '../../hooks/useKeyPress';
 import LoadingProgress from '../../components/LoadingProgress';
 
-interface RouteMatchParams {
-    contestId: string;
-    themeId: string;
-}
-
 const RateSubmission: React.FC<PropsFromRedux> = ({
     submission,
     theme,
@@ -38,15 +33,14 @@ const RateSubmission: React.FC<PropsFromRedux> = ({
     const [rating, setRating] = useState(0);
     const [close, setClose] = useState(false);
 
-    const { contestId, themeId } = useParams<RouteMatchParams>();
-    const history = useHistory();
+    const { contestId, themeId } = useParams<'contestId' | 'themeId'>();
+    const navigate = useNavigate();
+    const location = useLocation();
     const submissionId = useRef(
-        queryString.parse(history.location.search, { parseNumbers: true }).submission as
-            | number
-            | undefined,
+        queryString.parse(location.search, { parseNumbers: true }).submission as number | undefined,
     );
 
-    const fetchRaiting = useCallback(async (): Promise<void> => {
+    const fetchRating = useCallback(async (): Promise<void> => {
         if (!submission) return;
         const { data: ratings } = await RatingService.getForSubmission(submission.id);
         setRating(ratings.results[0]?.rating || 0);
@@ -59,22 +53,21 @@ const RateSubmission: React.FC<PropsFromRedux> = ({
         if (isNext) nextSubmission();
     };
 
-    // Initialize the store.
     useEffect(() => {
+        if (!contestId || !themeId) return;
         initialize(contestId, themeId, submissionId.current);
     }, [contestId, themeId, initialize]);
 
-    // Store submission id in url.
     useEffect(() => {
         if (submission && submissionId.current !== submission.id) {
-            history.push(`?submission=${submission.id}`);
+            navigate(`?submission=${submission.id}`);
             submissionId.current = submission.id;
         }
-    }, [history, submission]);
+    }, [navigate, submission]);
 
     useEffect(() => {
-        fetchRaiting();
-    }, [fetchRaiting]);
+        fetchRating();
+    }, [fetchRating]);
 
     useKeyPress((value: string) => {
         const parsedNumber = parseInt(value, 10);
@@ -89,7 +82,9 @@ const RateSubmission: React.FC<PropsFromRedux> = ({
 
     const handleClose = () => setClose(true);
 
-    if (close) return <Redirect to={`/judge/contest/${contestId}/theme/${themeId}`} push />;
+    if (close && contestId && themeId) {
+        return <Navigate to={`/judge/contest/${contestId}/theme/${themeId}`} replace={false} />;
+    }
 
     if (isLoading || !submission) return <LoadingProgress />;
 

@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Grid, Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
+import Grid from '@mui/material/GridLegacy';
 import LoadingProgress from '../../components/LoadingProgress';
 import ResultsSubmissionService from '../../services/ResultsSubmissionService';
 import { ResultsSubmission } from '../../types/api';
 
-interface RouteMatchParams {
-    contestId: string;
-    themeId: string;
-}
-
 const ThemeOverview: React.FC = () => {
-    const { themeId } = useParams<RouteMatchParams>();
+    const { themeId } = useParams<'themeId'>();
     const [submissions, setSubmissions] = useState<null | ResultsSubmission[]>();
 
     // Initialize the state.
     useEffect(() => {
         const fetch = async (): Promise<void> => {
+            if (!themeId) return;
             const { data } = await ResultsSubmissionService.getOverview(themeId);
             setSubmissions(data.results);
         };
@@ -30,7 +27,7 @@ const ThemeOverview: React.FC = () => {
         <Grid container>
             {submissions.map((submission) => {
                 return (
-                    <Grid item xs={12}>
+                    <Grid key={submission.id} item xs={12}>
                         <div
                             style={{
                                 display: 'flex',
@@ -40,6 +37,7 @@ const ThemeOverview: React.FC = () => {
                         >
                             {submission.files.slice(0, 3).map((file) => (
                                 <img
+                                    key={file.id}
                                     style={{ maxWidth: '30%', margin: '5px' }}
                                     src={file.file}
                                     alt={submission.title}
@@ -56,6 +54,7 @@ const ThemeOverview: React.FC = () => {
                         >
                             {submission.files.slice(3, 6).map((file) => (
                                 <img
+                                    key={file.id}
                                     style={{ maxWidth: '30%', margin: '5px' }}
                                     src={file.file}
                                     alt={submission.title}

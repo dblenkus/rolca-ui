@@ -2,7 +2,7 @@ import React from 'react';
 
 import { connect, ConnectedProps } from 'react-redux';
 
-import { Grid } from '@material-ui/core';
+import Grid from '@mui/material/GridLegacy';
 
 import ContestCard from '../components/Upload/ContestCard';
 

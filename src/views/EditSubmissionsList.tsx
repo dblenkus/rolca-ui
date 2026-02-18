@@ -3,7 +3,7 @@ import React from 'react';
 import { groupBy, sum } from 'lodash';
 
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from 'tss-react/mui-compat';
 
 import {
     Button,
@@ -16,7 +16,7 @@ import {
     TableRow,
     Tooltip,
     Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import ConfirmDialog from '../components/Notifications/ConfirmDialog';
 
@@ -94,7 +94,7 @@ class EditSubmissionsList extends React.Component<
         if (!this.state.submissions.length)
             return (
                 <Typography align="center" variant="h3">
-                    You don't have any active submission to edit.
+                    You do not have any active submission to edit.
                 </Typography>
             );
 
@@ -103,7 +103,7 @@ class EditSubmissionsList extends React.Component<
             const contestSubmissions = this.getSubmissionsForContest(contest);
             const submissionsByAuthor = groupBy(contestSubmissions, 'author.id');
 
-            for (let submissions of Object.values(submissionsByAuthor)) {
+            for (const submissions of Object.values(submissionsByAuthor)) {
                 const author = submissions[0].author;
                 const submissions_n = Object.keys(groupBy(submissions, 'theme')).length;
                 const photos_n = sum(submissions.map((submission) => submission.files.length));
@@ -166,7 +166,7 @@ class EditSubmissionsList extends React.Component<
                     onClose={this.closeDialog}
                     onConfirm={this.processDelete}
                 >
-                    {t('delete_confirmation') as React.ReactChild}
+                    {t('delete_confirmation') as React.ReactNode}
                 </ConfirmDialog>
             </>
         );

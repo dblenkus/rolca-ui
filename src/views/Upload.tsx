@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { withRouter, RouteComponentProps } from 'react-router';
-import { Redirect } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
 import { AppState } from '../store';
 import {
@@ -19,49 +18,44 @@ import { Contest } from '../types/api';
 
 import ContestField from '../components/Upload/Contest/ContestField';
 
-interface RouteMatchParams {
-    contestId: string;
-}
+const UploadView: React.FC<PropsFromRedux> = ({
+    contest,
+    handleAuthorChange,
+    handleSubmissionChange,
+    handleImageChange,
+    handleSubmit,
+    redirect,
+    uploading,
+    uploadInit,
+}: PropsFromRedux) => {
+    const { contestId } = useParams<'contestId'>();
 
-interface UploadViewProps extends PropsFromRedux, RouteComponentProps<RouteMatchParams> {}
+    useEffect(() => {
+        const fetchContest = async (): Promise<void> => {
+            if (!contestId) return;
+            const { data } = await ContestService.getContest(contestId);
+            uploadInit(data);
+        };
+        fetchContest();
+    }, [contestId, uploadInit]);
 
-class UploadView extends React.Component<UploadViewProps> {
-    async componentDidMount() {
-        const { uploadInit } = this.props;
-        const { contestId } = this.props.match.params;
-        const { data: contest } = await ContestService.getContest(contestId);
+    if (!contestId) return null;
 
-        uploadInit(contest);
+    if (redirect) {
+        return <Navigate to={`/contest/${contestId}/confirm`} replace />;
     }
 
-    render(): React.ReactNode {
-        const {
-            contest,
-            handleAuthorChange,
-            handleSubmissionChange,
-            handleImageChange,
-            handleSubmit,
-            redirect,
-            uploading,
-        } = this.props;
-        const { contestId } = this.props.match.params;
-
-        if (redirect) {
-            return <Redirect to={`/contest/${contestId}/confirm`} />;
-        }
-
-        return (
-            <ContestField
-                contest={contest}
-                handleAuthorChange={handleAuthorChange}
-                handleSubmissionChange={handleSubmissionChange}
-                handleImageChange={handleImageChange}
-                handleSubmit={handleSubmit}
-                uploading={uploading}
-            />
-        );
-    }
-}
+    return (
+        <ContestField
+            contest={contest}
+            handleAuthorChange={handleAuthorChange}
+            handleSubmissionChange={handleSubmissionChange}
+            handleImageChange={handleImageChange}
+            handleSubmit={handleSubmit}
+            uploading={uploading}
+        />
+    );
+};
 
 const mapStateToProps = (state: AppState) => ({ ...state.upload });
 
@@ -83,4 +77,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(withRouter(UploadView));
+export default connector(UploadView);

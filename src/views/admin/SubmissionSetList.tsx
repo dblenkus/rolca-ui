@@ -1,114 +1,85 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AxiosPromise } from 'axios';
-import { withRouter, RouteComponentProps } from 'react-router';
+import { useParams } from 'react-router-dom';
 
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-
-import { Grid, Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
+import Grid from '@mui/material/GridLegacy';
+import { useTranslation } from 'react-i18next';
 
 import ConfirmDialog from '../../components/Notifications/ConfirmDialog';
 
-import { editListStyles } from '../../styles/general';
 import SubmissionSetService from '../../services/SubmissionSetService';
 import ContestService from '../../services/ContestService';
 import { Contest, PaginatedResponse, SubmissionSet } from '../../types/api';
 import SubmissionSetTable from '../../components/SubmissionSetTable/SubmissionSetTable';
 import LoadingProgress from '../../components/LoadingProgress';
-import { WithTranslation, withTranslation } from 'react-i18next';
 
-interface RouteMatchParams {
-    contestId: string;
-}
+const SubmissionSetList: React.FC = () => {
+    const { t } = useTranslation();
+    const { contestId } = useParams<'contestId'>();
+    const [contest, setContest] = useState<Contest | null>(null);
+    const [pendingSubmissionSet, setPendingSubmissionSet] = useState<SubmissionSet | null>(null);
+    const [showDialog, setShowDialog] = useState(false);
 
-interface SubmissionSetListState {
-    contest: Contest | null;
-    pendingSubmissionSet: SubmissionSet | null;
-    showDialog: boolean;
-}
+    const fetchData = useCallback(async (): Promise<void> => {
+        if (!contestId) return;
+        const { data } = await ContestService.getContest(contestId);
+        setContest(data);
+    }, [contestId]);
 
-interface SubmissionSetListProps
-    extends WithStyles<typeof editListStyles>,
-        WithTranslation,
-        RouteComponentProps<RouteMatchParams> {}
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
-class SubmissionSetList extends React.Component<SubmissionSetListProps, SubmissionSetListState> {
-    constructor(props: SubmissionSetListProps) {
-        super(props);
-
-        this.state = {
-            contest: null,
-            pendingSubmissionSet: null,
-            showDialog: false,
-        };
-    }
-
-    async componentDidMount(): Promise<void> {
-        await this.fetchData();
-    }
-
-    fetchData = async (): Promise<void> => {
-        const {
-            match: {
-                params: { contestId },
-            },
-        } = this.props;
-
-        const { data: contest } = await ContestService.getContest(contestId);
-
-        this.setState({ contest });
+    const handleDelete = (toDelete: SubmissionSet): void => {
+        setPendingSubmissionSet(toDelete);
+        setShowDialog(true);
     };
 
-    handleDelete = (pendingSubmissionSet: SubmissionSet): void => {
-        this.setState({ pendingSubmissionSet, showDialog: true });
+    const closeDialog = (): void => {
+        setPendingSubmissionSet(null);
+        setShowDialog(false);
     };
 
-    closeDialog = (): void => this.setState({ pendingSubmissionSet: null, showDialog: false });
-
-    processDelete = async (): Promise<void> => {
-        const { pendingSubmissionSet } = this.state;
+    const processDelete = async (): Promise<void> => {
         if (!pendingSubmissionSet) return;
-
         await SubmissionSetService.deleteSubmissionSet(pendingSubmissionSet.id);
-        await this.fetchData();
+        closeDialog();
+        await fetchData();
     };
 
-    render(): React.ReactNode {
-        const { contest, showDialog } = this.state;
-        const { t } = this.props;
+    if (!contest) return <LoadingProgress />;
 
-        if (!contest) return <LoadingProgress />;
+    const dataSource = (
+        page: number,
+        pageSize: number,
+    ): AxiosPromise<PaginatedResponse<SubmissionSet>> =>
+        SubmissionSetService.getByContest(contest.id.toString(), page, pageSize);
 
-        const dataSource = (
-            page: number,
-            pageSize: number,
-        ): AxiosPromise<PaginatedResponse<SubmissionSet>> =>
-            SubmissionSetService.getByContest(contest.id.toString(), page, pageSize);
+    return (
+        <>
+            <Typography align="center" variant="h2">
+                {contest.title}
+            </Typography>
 
-        return (
-            <>
-                <Typography align="center" variant="h2">
-                    {contest?.title}
-                </Typography>
+            <Grid item xs={12}>
+                <SubmissionSetTable
+                    contestId={contest.id}
+                    dataSource={dataSource}
+                    onDelete={handleDelete}
+                />
+            </Grid>
 
-                <Grid item xs={12}>
-                    <SubmissionSetTable
-                        contestId={contest ? contest.id : 0}
-                        dataSource={dataSource}
-                        onDelete={this.handleDelete}
-                    />
-                </Grid>
+            <ConfirmDialog
+                open={showDialog}
+                title={t('delete_confirmation_title')}
+                onClose={closeDialog}
+                onConfirm={processDelete}
+            >
+                {t('delete_confirmation') as React.ReactNode}
+            </ConfirmDialog>
+        </>
+    );
+};
 
-                <ConfirmDialog
-                    open={showDialog}
-                    title={t('delete_confirmation_title')}
-                    onClose={this.closeDialog}
-                    onConfirm={this.processDelete}
-                >
-                    {t('delete_confirmation') as React.ReactChild}
-                </ConfirmDialog>
-            </>
-        );
-    }
-}
-
-export default withTranslation()(withStyles(editListStyles)(withRouter(SubmissionSetList)));
+export default SubmissionSetList;
