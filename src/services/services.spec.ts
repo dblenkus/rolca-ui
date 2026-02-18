@@ -14,19 +14,19 @@ import UserService from './UserService';
 
 import { apiClient } from './Base';
 
-jest.mock('./Base', () => ({
+vi.mock('./Base', () => ({
     apiClient: {
-        get: jest.fn(),
-        post: jest.fn(),
-        delete: jest.fn(),
+        get: vi.fn(),
+        post: vi.fn(),
+        delete: vi.fn(),
     },
 }));
 
-const mockedApiClient = apiClient as jest.Mocked<typeof apiClient>;
+const mockedApiClient = apiClient as vi.Mocked<typeof apiClient>;
 
 describe('services', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it('calls contest endpoints', () => {

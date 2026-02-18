@@ -92,13 +92,15 @@ export const imageStore = (
     payload: { file: File | undefined; url: string },
 ): UploadActionTypes => ({ type: IMAGE_STORE, theme_id, submission_id, image_id, payload });
 
-export const imageUpdate = (
-    theme_id: number,
-    submission_id: number,
-    image_id: number,
-    payload: { file: File | undefined },
-): AppThunk => async (dispatch) => {
-    const { file } = payload;
-    const url = !file ? '' : (await imageReader(file)).src;
-    dispatch(imageStore(theme_id, submission_id, image_id, { file, url }));
-};
+export const imageUpdate =
+    (
+        theme_id: number,
+        submission_id: number,
+        image_id: number,
+        payload: { file: File | undefined },
+    ): AppThunk =>
+    async (dispatch) => {
+        const { file } = payload;
+        const url = !file ? '' : (await imageReader(file)).src;
+        dispatch(imageStore(theme_id, submission_id, image_id, { file, url }));
+    };

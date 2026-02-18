@@ -29,8 +29,10 @@ export const deleteMessage = (notificationId: number): NotificationsActionTypes 
     meta: { notificationId },
 });
 
-export const deleteMessageWithDelay = (notificationId: number): AppThunk => (dispatch) => {
-    setTimeout(() => {
-        dispatch(deleteMessage(notificationId));
-    }, 5000);
-};
+export const deleteMessageWithDelay =
+    (notificationId: number): AppThunk =>
+    (dispatch) => {
+        setTimeout(() => {
+            dispatch(deleteMessage(notificationId));
+        }, 5000);
+    };

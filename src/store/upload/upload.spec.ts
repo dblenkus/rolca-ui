@@ -41,26 +41,30 @@ import imageReader from '../../utils/imageReader';
 import upload from '../../utils/upload';
 import validate from '../../utils/validate';
 
-jest.mock('../../utils/imageReader', () => ({
+vi.mock('../../utils/imageReader', () => ({
     __esModule: true,
-    default: jest.fn(),
+    default: vi.fn(),
 }));
 
-jest.mock('../../utils/upload', () => ({
+vi.mock('../../utils/upload', () => ({
     __esModule: true,
-    default: jest.fn(),
+    default: vi.fn(),
 }));
 
-jest.mock('../../utils/validate', () => ({
+vi.mock('../../utils/validate', () => ({
     __esModule: true,
-    default: jest.fn(),
+    default: vi.fn(),
 }));
 
-const mockedImageReader = imageReader as jest.Mock;
-const mockedUpload = upload as jest.Mock;
-const mockedValidate = validate as jest.Mock;
+const mockedImageReader = imageReader as vi.Mock;
+const mockedUpload = upload as vi.Mock;
+const mockedValidate = validate as vi.Mock;
 
 describe('upload store', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
     it('builds simple actions', () => {
         expect(uploadSetRedirect()).toEqual({ type: UPLOAD_SET_REDIRECT });
         expect(uploadSetUploading()).toEqual({ type: UPLOAD_SET_UPLOADING });
@@ -184,15 +188,23 @@ describe('upload store', () => {
         expect(initialized.contest.meta.title).toBe('Contest');
         expect(initialized.contest.themes).toHaveLength(1);
 
-        const newContest = { ...initialized.contest, meta: { ...initialized.contest.meta, title: 'New' } };
+        const newContest = {
+            ...initialized.contest,
+            meta: { ...initialized.contest.meta, title: 'New' },
+        };
         const replaced = reducer(initialized, uploadSetContest(newContest));
         expect(replaced.contest.meta.title).toBe('New');
 
         expect(reducer(replaced, uploadSetRedirect()).redirect).toBe(true);
         expect(reducer(replaced, uploadSetUploading()).uploading).toBe(true);
-        expect(reducer({ ...replaced, uploading: true }, uploadUnsetUploading()).uploading).toBe(false);
+        expect(reducer({ ...replaced, uploading: true }, uploadUnsetUploading()).uploading).toBe(
+            false,
+        );
 
-        const authorUpdated = reducer(replaced, authorUpdate({ name: 'first_name', value: 'Lana' }));
+        const authorUpdated = reducer(
+            replaced,
+            authorUpdate({ name: 'first_name', value: 'Lana' }),
+        );
         expect(authorUpdated.contest.author.first_name).toBe('Lana');
 
         const withImage = reducer(
@@ -210,7 +222,7 @@ describe('upload store', () => {
         mockedValidate.mockResolvedValue({ ...contest, errors: { hasError: false } });
         mockedUpload.mockResolvedValue(undefined);
 
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const getState = () => ({ upload: { contest } });
 
         await uploadSubmit()(dispatch as any, getState as any);
@@ -228,7 +240,7 @@ describe('upload store', () => {
         const validatedContest = { ...contest, errors: { hasError: true } };
         mockedValidate.mockResolvedValue(validatedContest);
 
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const getState = () => ({ upload: { contest } });
 
         await uploadSubmit()(dispatch as any, getState as any);
@@ -242,7 +254,7 @@ describe('upload store', () => {
 
     it('runs imageUpdate thunk with and without file', async () => {
         mockedImageReader.mockResolvedValue({ src: 'blob:123' });
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
 
         const file = new File(['x'], 'x.jpg', { type: 'image/jpeg' });
         await imageUpdate(1, 2, 3, { file })(dispatch as any);
@@ -280,6 +292,9 @@ describe('upload store', () => {
                 value: 'Some text',
             },
         });
-        expect(uploadInit({ title: 't' } as any)).toEqual({ type: UPLOAD_INIT, payload: { title: 't' } });
+        expect(uploadInit({ title: 't' } as any)).toEqual({
+            type: UPLOAD_INIT,
+            payload: { title: 't' },
+        });
     });
 });

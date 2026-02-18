@@ -30,26 +30,24 @@ export const setSubmission = (submissionId: number): JuryActionTypes => ({
 export const setPreviousSubmission = (): JuryActionTypes => ({ type: SET_PREVIOUS_SUBMISSION });
 export const setNextSubmission = (): JuryActionTypes => ({ type: SET_NEXT_SUBMISSION });
 
-export const initializeStore = (
-    contestId: string,
-    themeId: string,
-    submissionId: number | undefined,
-): AppThunk => async (dispatch): Promise<void> => {
-    const { data: contest } = await ContestService.getContest(contestId);
-    const theme = contest.themes.find((t) => t.id.toString() === themeId);
+export const initializeStore =
+    (contestId: string, themeId: string, submissionId: number | undefined): AppThunk =>
+    async (dispatch): Promise<void> => {
+        const { data: contest } = await ContestService.getContest(contestId);
+        const theme = contest.themes.find((t) => t.id.toString() === themeId);
 
-    const submissionResource = () =>
-        JudgeSubmissionService.getSubmissionsByTheme(parseInt(themeId, 10));
-    const submissions = await fetchAll(submissionResource);
+        const submissionResource = () =>
+            JudgeSubmissionService.getSubmissionsByTheme(parseInt(themeId, 10));
+        const submissions = await fetchAll(submissionResource);
 
-    let currentIndex = 0;
-    if (submissionId) {
-        currentIndex = _.findIndex(submissions, (s) => s.id === submissionId);
-        if (currentIndex === -1) currentIndex = 0;
-    }
+        let currentIndex = 0;
+        if (submissionId) {
+            currentIndex = _.findIndex(submissions, (s) => s.id === submissionId);
+            if (currentIndex === -1) currentIndex = 0;
+        }
 
-    if (theme) dispatch(performInitialize(contest, theme, submissions, currentIndex));
-};
+        if (theme) dispatch(performInitialize(contest, theme, submissions, currentIndex));
+    };
 
 export const getCurrentSubmission = (state: AppState): Submission | null => {
     const {

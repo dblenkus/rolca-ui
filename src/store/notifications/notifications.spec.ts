@@ -11,11 +11,11 @@ import { ADD_NOTIFICATION, DELETE_NOTIFICATION } from './types';
 
 describe('notifications store', () => {
     beforeEach(() => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
     });
 
     afterEach(() => {
-        jest.useRealTimers();
+        vi.useRealTimers();
     });
 
     it('adds and deletes notifications', () => {
@@ -47,11 +47,11 @@ describe('notifications store', () => {
     });
 
     it('dispatches delayed delete', () => {
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         deleteMessageWithDelay(9)(dispatch as any);
 
         expect(dispatch).not.toHaveBeenCalled();
-        jest.advanceTimersByTime(5000);
+        vi.advanceTimersByTime(5000);
         expect(dispatch).toHaveBeenCalledWith({
             type: DELETE_NOTIFICATION,
             meta: { notificationId: 9 },

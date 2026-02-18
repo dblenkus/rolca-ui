@@ -1,6 +1,11 @@
-import { Action, createStore, combineReducers, applyMiddleware } from 'redux';
-import thunkMiddleware, { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import {
+    AnyAction,
+    applyMiddleware,
+    combineReducers,
+    legacy_createStore as createStore,
+} from 'redux';
+import { thunk, ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { composeWithDevTools } from '@redux-devtools/extension';
 
 import contests from './contests/reducer';
 import notifications from './notifications/reducer';
@@ -16,14 +21,14 @@ const rootReducer = combineReducers({
 
 export type AppState = ReturnType<typeof rootReducer>;
 
-export type AppThunk = ThunkAction<void, AppState, unknown, Action<string>>;
-export type AppDispatch = ThunkDispatch<AppState, unknown, Action<string>>;
+export type AppThunk = ThunkAction<void, AppState, unknown, AnyAction>;
+export type AppDispatch = ThunkDispatch<AppState, unknown, AnyAction>;
 
 const configureStore = () => {
-    const middlewares = [thunkMiddleware];
+    const middlewares = [thunk];
     const middleWareEnhancer = applyMiddleware(...middlewares);
 
-    const store = createStore(rootReducer, composeWithDevTools(middleWareEnhancer));
+    const store = createStore(rootReducer, undefined, composeWithDevTools(middleWareEnhancer));
 
     return store;
 };

@@ -12,10 +12,11 @@ let nextId = 1;
 
 const reducer = (state = initialState, action: NotificationsActionTypes): NotificationsState => {
     switch (action.type) {
-        case ADD_NOTIFICATION:
+        case ADD_NOTIFICATION: {
             const newNotification = { id: nextId, ...action.payload };
             nextId += 1;
             return [...state, newNotification];
+        }
 
         case DELETE_NOTIFICATION:
             return state.filter(

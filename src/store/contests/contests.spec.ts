@@ -4,14 +4,14 @@ import { loadContests, storeContests } from './actions';
 
 import ContestService from '../../services/ContestService';
 
-jest.mock('../../services/ContestService', () => ({
+vi.mock('../../services/ContestService', () => ({
     __esModule: true,
     default: {
-        getActiveContests: jest.fn(),
+        getActiveContests: vi.fn(),
     },
 }));
 
-const mockedContestService = ContestService as jest.Mocked<typeof ContestService>;
+const mockedContestService = ContestService as vi.Mocked<typeof ContestService>;
 
 describe('contests store', () => {
     it('returns initial state', () => {
@@ -30,7 +30,7 @@ describe('contests store', () => {
         mockedContestService.getActiveContests.mockResolvedValue({
             data: { results: [{ id: 7 }] },
         } as any);
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
 
         await loadContests()(dispatch as any);
 

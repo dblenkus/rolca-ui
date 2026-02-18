@@ -47,7 +47,7 @@ const validateImage = async (image: ImageModel): Promise<ImageModel> => {
         let img: HTMLImageElement;
         try {
             img = await imageReader(file);
-        } catch (error) {
+        } catch {
             return constructResponse('Invalid file.');
         }
 
@@ -70,8 +70,6 @@ const validateSubmission = async (submission: SubmissionModel): Promise<Submissi
         images[0].errors.file = 'Please select an image';
         images[0].errors.hasError = true;
     }
-
-    console.log(countImages(images));
 
     if (isSeries && anyImage(images) && countImages(images) < 2) {
         images[0].errors.file = 'Series must contain at least 2 images';
@@ -101,7 +99,6 @@ const validateAuthor = (
     contest: ContestModel,
 ): AuthorModel => {
     const { first_name, last_name, dob, school } = author;
-    console.log('>>', school);
     const errors = {
         first_name: !first_name && !initial ? 'Please enter the first name.' : null,
         last_name: !last_name && !initial ? 'Please enter the last name.' : null,

@@ -6,4 +6,4 @@ export const anyImage: (images: ImageModel[]) => boolean = (images) => {
 
 export const countImages: (images: ImageModel[]) => number = (images) => {
     return images.filter((image) => !!image.file).length;
-}
+};

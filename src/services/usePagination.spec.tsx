@@ -12,7 +12,10 @@ interface Row {
 const PaginationProbe = ({
     source,
 }: {
-    source: (page: number, pageSize: number) => Promise<{ data: { results: Row[]; count: number } }>;
+    source: (
+        page: number,
+        pageSize: number,
+    ) => Promise<{ data: { results: Row[]; count: number } }>;
 }) => {
     const { data, count, page, pageSize, changePage, changePageSize } = usePagination<Row>({
         source: source as any,
@@ -32,14 +35,12 @@ const PaginationProbe = ({
 
 describe('usePagination', () => {
     it('loads data and reacts to page/pageSize changes', async () => {
-        const source = jest
-            .fn()
-            .mockImplementation(async (page: number, pageSize: number) => ({
-                data: {
-                    results: [{ id: page * 100 + pageSize, created: 'x', modified: 'y' }],
-                    count: 77,
-                },
-            }));
+        const source = jest.fn().mockImplementation(async (page: number, pageSize: number) => ({
+            data: {
+                results: [{ id: page * 100 + pageSize, created: 'x', modified: 'y' }],
+                count: 77,
+            },
+        }));
 
         render(<PaginationProbe source={source} />);
 

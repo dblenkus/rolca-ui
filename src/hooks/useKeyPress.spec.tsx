@@ -10,7 +10,7 @@ const Probe = ({ onKey }: { onKey: (key: string) => void }) => {
 
 describe('useKeyPress', () => {
     it('calls handler on keydown and cleans up on unmount', () => {
-        const onKey = jest.fn();
+        const onKey = vi.fn();
         const { unmount } = render(<Probe onKey={onKey} />);
 
         fireEvent.keyDown(window, { key: 'Escape' });

@@ -20,7 +20,7 @@ const initialState: UploadState = {
 
 const reducer = (state = initialState, action: UploadActionTypes): UploadState => {
     switch (action.type) {
-        case UPLOAD_INIT:
+        case UPLOAD_INIT: {
             const contest = action.payload;
             return {
                 ...state,
@@ -42,6 +42,7 @@ const reducer = (state = initialState, action: UploadActionTypes): UploadState =
                     ),
                 },
             };
+        }
         case UPLOAD_SET_CONTEST:
             return { ...state, contest: action.payload };
         case UPLOAD_SET_REDIRECT:
@@ -50,7 +51,7 @@ const reducer = (state = initialState, action: UploadActionTypes): UploadState =
             return { ...state, uploading: true };
         case UPLOAD_UNSET_UPLOADING:
             return { ...state, uploading: false };
-        default:
+        default: {
             let { themes } = state.contest;
             if ('theme_id' in action) {
                 themes = themes.map((theme) => {
@@ -65,6 +66,7 @@ const reducer = (state = initialState, action: UploadActionTypes): UploadState =
                     author: authorReducer(state.contest.author, action),
                 },
             };
+        }
     }
 };
 

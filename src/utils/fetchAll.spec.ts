@@ -1,21 +1,21 @@
 import fetchAll from './fetchAll';
 import { apiClient } from '../services/Base';
 
-jest.mock('../services/Base', () => ({
+vi.mock('../services/Base', () => ({
     apiClient: {
-        get: jest.fn(),
+        get: vi.fn(),
     },
 }));
 
-const mockedGet = apiClient.get as jest.Mock;
+const mockedGet = apiClient.get as vi.Mock;
 
 describe('fetchAll', () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it('fetches all paginated pages', async () => {
-        const resource = jest.fn().mockResolvedValue({
+        const resource = vi.fn().mockResolvedValue({
             data: {
                 count: 3,
                 results: [1],
@@ -40,7 +40,7 @@ describe('fetchAll', () => {
     });
 
     it('returns the first page when there is no next link', async () => {
-        const resource = jest.fn().mockResolvedValue({
+        const resource = vi.fn().mockResolvedValue({
             data: {
                 count: 1,
                 results: [7],

@@ -8,7 +8,7 @@ import axios, {
 import store from '../store/index';
 import { addNotificationError } from '../store/notifications/actions';
 
-const baseURL = `${process.env.REACT_APP_BASE_URL || ''}/api/v1`;
+const baseURL = `${import.meta.env.VITE_BASE_URL || ''}/api/v1`;
 
 let config: AxiosRequestConfig = {
     baseURL,
@@ -20,13 +20,11 @@ let config: AxiosRequestConfig = {
 
 const apiClient: AxiosInstance = axios.create(config);
 
-const authInterceptor = (
-    requestConfig: InternalAxiosRequestConfig,
-): InternalAxiosRequestConfig => {
+const authInterceptor = (requestConfig: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const tokenString = localStorage.getItem('token');
     if (tokenString) {
         const token: { token: string; expires: string } = JSON.parse(tokenString);
-        if (!!token) {
+        if (token) {
             requestConfig.headers = requestConfig.headers ?? {};
             requestConfig.headers.Authorization = `Token ${token.token}`;
         }

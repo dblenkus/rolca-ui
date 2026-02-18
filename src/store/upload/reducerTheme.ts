@@ -11,7 +11,7 @@ const initialState = getEmptyTheme();
 
 const reducer = (state = initialState, action: UploadActionTypes): ThemeModel => {
     switch (action.type) {
-        case THEME_INIT:
+        case THEME_INIT: {
             const { id, is_series: isSeries, n_photos: imageNumber, title } = action.payload;
             const submissionNumber = isSeries ? 1 : imageNumber;
             const submissionMeta = {
@@ -33,6 +33,7 @@ const reducer = (state = initialState, action: UploadActionTypes): ThemeModel =>
                     submissionReducer(undefined, submissionInit({ ...submissionMeta, id })),
                 ),
             };
+        }
         default:
             if ('submission_id' in action) {
                 const submissions = state.submissions.map((submission) => {

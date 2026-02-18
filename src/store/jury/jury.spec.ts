@@ -19,20 +19,20 @@ import {
 import ContestService from '../../services/ContestService';
 import fetchAll from '../../utils/fetchAll';
 
-jest.mock('../../services/ContestService', () => ({
+vi.mock('../../services/ContestService', () => ({
     __esModule: true,
     default: {
-        getContest: jest.fn(),
+        getContest: vi.fn(),
     },
 }));
 
-jest.mock('../../utils/fetchAll', () => ({
+vi.mock('../../utils/fetchAll', () => ({
     __esModule: true,
-    default: jest.fn(),
+    default: vi.fn(),
 }));
 
-const mockedContestService = ContestService as jest.Mocked<typeof ContestService>;
-const mockedFetchAll = fetchAll as jest.Mock;
+const mockedContestService = ContestService as vi.Mocked<typeof ContestService>;
+const mockedFetchAll = fetchAll as vi.Mock;
 
 describe('jury store', () => {
     it('creates simple actions', () => {
@@ -86,7 +86,7 @@ describe('jury store', () => {
         } as any);
         mockedFetchAll.mockResolvedValue([{ id: 100 }, { id: 200 }]);
 
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         await initializeStore('1', '3', 200)(dispatch as any, (() => ({})) as any);
 
         expect(mockedContestService.getContest).toHaveBeenCalledWith('1');
@@ -110,7 +110,7 @@ describe('jury store', () => {
         } as any);
         mockedFetchAll.mockResolvedValue([{ id: 100 }, { id: 200 }]);
 
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         await initializeStore('1', '3', 999)(dispatch as any, (() => ({})) as any);
 
         expect(dispatch).toHaveBeenCalledWith({
@@ -133,7 +133,7 @@ describe('jury store', () => {
         } as any);
         mockedFetchAll.mockResolvedValue([{ id: 100 }]);
 
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         await initializeStore('1', '3', undefined)(dispatch as any, (() => ({})) as any);
 
         expect(dispatch).not.toHaveBeenCalled();
