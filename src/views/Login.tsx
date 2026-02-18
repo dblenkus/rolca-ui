@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 
 import { withTranslation, WithTranslation } from 'react-i18next';
 
-import { Link as RouterLink, Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link as RouterLink, Navigate, useLocation } from 'react-router-dom';
 
-import { Card, CardContent, CardHeader, Grid, Link } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Link } from '@mui/material';
+import Grid from '@mui/material/GridLegacy';
 
 import { userContext } from '../components/Auth/AuthProvider';
 import LoginForm, { Errors, Fields } from '../components/Auth/LoginForm';
 import { IInputChangeEvent } from '../components/Upload/InputField';
-
-interface LoginViewProps extends RouteComponentProps, WithTranslation {}
 
 interface LoginViewState {
     fields: Fields;
@@ -22,10 +21,10 @@ interface LocationState {
     from?: { pathname: string };
 }
 
-class LoginView extends React.Component<LoginViewProps, LoginViewState> {
-    static contextType = userContext;
-
-    state = {
+const LoginView: React.FC<WithTranslation> = ({ t }) => {
+    const user = useContext(userContext);
+    const location = useLocation();
+    const [state, setState] = useState<LoginViewState>({
         fields: {
             email: '',
             password: '',
@@ -36,73 +35,64 @@ class LoginView extends React.Component<LoginViewProps, LoginViewState> {
             non_field_errors: null,
         },
         redirect: false,
-    };
+    });
 
-    handleChange = ({ name, value }: IInputChangeEvent): void => {
-        this.setState((state) => {
-            const fields: Fields = Object.assign({}, state.fields);
-            const errors: Errors = Object.assign({}, state.errors);
-            fields[name] = value;
-            errors[name] = null;
-            errors.non_field_errors = null;
-            return { fields, errors };
+    const handleChange = ({ name, value }: IInputChangeEvent): void => {
+        setState((prev) => {
+            const fields: Fields = { ...prev.fields, [name]: value };
+            const errors: Errors = { ...prev.errors, [name]: null, non_field_errors: null };
+            return { ...prev, fields, errors };
         });
     };
 
-    handleSubmit = async (): Promise<void> => {
+    const handleSubmit = async (): Promise<void> => {
         try {
-            await this.context.login(this.state.fields);
-            this.setState({ redirect: true });
-        } catch (error) {
-            this.setState({ errors: error.response.data });
+            await user.login(state.fields);
+            setState((prev) => ({ ...prev, redirect: true }));
+        } catch (error: any) {
+            setState((prev) => ({ ...prev, errors: error.response.data }));
         }
     };
 
-    render() {
-        const { errors, fields, redirect } = this.state;
-        if (redirect) {
-            const { location } = this.props;
-            const state = location.state as LocationState;
-            const from = state?.from?.pathname || '/';
-            return <Redirect to={from} />;
-        }
-
-        const { t } = this.props;
-
-        return (
-            <Grid container justify="center">
-                <Grid item xs={12} sm={6} md={4}>
-                    <Card>
-                        <CardHeader title={t('login')} titleTypographyProps={{ align: 'center' }} />
-                        <CardContent>
-                            <LoginForm
-                                fields={fields}
-                                errors={errors}
-                                onChange={this.handleChange}
-                                onSubmit={this.handleSubmit}
-                            />
-                            <Grid container>
-                                <Grid item xs>
-                                    <Link
-                                        component={RouterLink}
-                                        to="/password-reset/request"
-                                        variant="body2"
-                                    >
-                                        {t('forgot_password')}
-                                    </Link>
-                                </Grid>
-                                <Grid item>
-                                    <Link component={RouterLink} to="/register" variant="body2">
-                                        {t('new_registration')}
-                                    </Link>
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
-        );
+    if (state.redirect) {
+        const routeState = location.state as LocationState | undefined;
+        const from = routeState?.from?.pathname || '/';
+        return <Navigate to={from} replace />;
     }
-}
 
-export default withTranslation()(withRouter(LoginView));
+    return (
+        <Grid container justifyContent="center">
+            <Grid item xs={12} sm={6} md={4}>
+                <Card>
+                    <CardHeader title={t('login')} titleTypographyProps={{ align: 'center' }} />
+                    <CardContent>
+                        <LoginForm
+                            fields={state.fields}
+                            errors={state.errors}
+                            onChange={handleChange}
+                            onSubmit={handleSubmit}
+                        />
+                        <Grid container>
+                            <Grid item xs>
+                                <Link
+                                    component={RouterLink}
+                                    to="/password-reset/request"
+                                    variant="body2"
+                                >
+                                    {t('forgot_password')}
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link component={RouterLink} to="/register" variant="body2">
+                                    {t('new_registration')}
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Card>
+            </Grid>
+        </Grid>
+    );
+};
+
+export default withTranslation()(LoginView);

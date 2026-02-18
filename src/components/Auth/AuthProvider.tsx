@@ -14,7 +14,7 @@ interface AuthProviderState {
 
 export const userContext = React.createContext({
     user: {},
-    login: (payload: LoginPayload) => {},
+    login: (_payload: LoginPayload) => {},
     logout: () => {},
     isLoggedIn: (): boolean => {
         return false;

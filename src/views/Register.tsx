@@ -4,7 +4,8 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 
 import { Link as RouterLink } from 'react-router-dom';
 
-import { Card, CardContent, CardHeader, Grid, Link } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Link } from '@mui/material';
+import Grid from '@mui/material/GridLegacy';
 
 import RegisterForm, { Errors, Fields } from '../components/Auth/RegisterForm';
 import RegisterConfirm from '../components/Auth/RegisterConfirm';
@@ -72,7 +73,7 @@ class RegisterView extends React.Component<RegisterViewProps, RegisterViewState>
         const { t } = this.props;
 
         return (
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
                 <Grid item xs={12} sm={6} md={4}>
                     <Card>
                         <CardHeader
@@ -90,7 +91,7 @@ class RegisterView extends React.Component<RegisterViewProps, RegisterViewState>
                                         onChange={this.handleChange}
                                         onSubmit={this.handleSubmit}
                                     />
-                                    <Grid container justify="flex-end">
+                                    <Grid container justifyContent="flex-end">
                                         <Grid item>
                                             <Link
                                                 component={RouterLink}

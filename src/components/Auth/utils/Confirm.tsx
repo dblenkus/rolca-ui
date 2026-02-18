@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@mui/material';
+import { makeStyles } from 'tss-react/mui-compat';
 
 import { authStyles } from '../../../styles/general';
 

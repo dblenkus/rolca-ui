@@ -1,31 +1,21 @@
 import React from 'react';
-import { Redirect, Route, RouteProps } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 import { userContext } from '../../components/Auth/AuthProvider';
 
-const PrivateRoute: React.FC<RouteProps> = ({ component: Component, ...rest }) => {
-    const user = React.useContext(userContext);
+interface PrivateRouteProps {
+    component: React.ComponentType<any>;
+}
 
-    return (
-        <Route
-            {...rest}
-            render={(props) =>
-                // fakeAuth.isAuthenticated ? (
-                user.isLoggedIn() ? (
-                    Component ? (
-                        React.createElement(Component as React.ComponentType<any>, props as any)
-                    ) : null
-                ) : (
-                    <Redirect
-                        to={{
-                            pathname: '/login',
-                            state: { from: props.location },
-                        }}
-                    />
-                )
-            }
-        />
-    );
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component }) => {
+    const user = React.useContext(userContext);
+    const location = useLocation();
+
+    if (!user.isLoggedIn()) {
+        return <Navigate to="/login" state={{ from: location }} replace />;
+    }
+
+    return <Component />;
 };
 
 export default PrivateRoute;

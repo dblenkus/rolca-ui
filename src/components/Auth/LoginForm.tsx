@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { Alert } from '@material-ui/lab';
+import { Button } from '@mui/material';
+import { makeStyles } from 'tss-react/mui-compat';
+import { Alert } from '@mui/material';
 
 import InputField, { IInputChangeEvent } from '../Upload/InputField';
 
